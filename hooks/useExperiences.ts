@@ -11,6 +11,7 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
     id: exp.id,
     title: exp.title,
     description: exp.short_description || exp.description,
+    fullDescription: exp.description,
     category: exp.category,
     price: exp.price,
     currency: exp.currency,

@@ -38,6 +38,7 @@ export interface ExperienceDisplay {
   id: string;
   title: string;
   description: string;
+  fullDescription?: string;
   category: string;
   price: number;
   currency: string;
