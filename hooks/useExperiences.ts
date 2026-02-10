@@ -10,7 +10,7 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
   return {
     id: exp.id,
     title: exp.title,
-    description: exp.description,
+    description: exp.short_description || exp.description,
     category: exp.category,
     price: exp.price,
     currency: exp.currency,

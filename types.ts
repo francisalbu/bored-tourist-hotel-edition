@@ -3,6 +3,7 @@ export interface Experience {
   id: string;
   title: string;
   description: string;
+  short_description?: string;
   category: string;
   price: number;
   currency: string;

@@ -154,7 +154,7 @@ export const ChatSection: React.FC = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask anything or @mention a place..."
+            placeholder="What do you want to do?"
             className="w-full bg-slate-50 border-2 border-slate-200 focus:border-black rounded-3xl pl-6 pr-14 py-4 min-h-[60px] max-h-[120px] resize-none outline-none text-slate-900 font-medium placeholder-slate-400 transition-colors shadow-sm focus:shadow-md"
             rows={1}
           />
