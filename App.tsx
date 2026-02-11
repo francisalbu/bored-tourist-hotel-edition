@@ -24,7 +24,7 @@ export default function App() {
       
       {/* DESKTOP: LEFT PANEL - Chat / Concierge */}
       <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200 z-10 shadow-xl">
-        <ChatSection />
+        <ChatSection onExperienceClick={setSelectedExperience} />
       </div>
 
       {/* MOBILE & DESKTOP: Video Feed */}

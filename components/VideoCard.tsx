@@ -44,8 +44,8 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick }) => 
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      {/* Video/Image Container - Shorter aspect ratio for compact view */}
-      <div className="relative aspect-[16/11] overflow-hidden bg-slate-900 rounded-xl shadow-md transition-all duration-300 group-hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] group-hover:-translate-y-1 border-0 ring-1 ring-black/5">
+      {/* Video/Image Container - Compact on mobile, vertical on desktop */}
+      <div className="relative aspect-[16/11] md:aspect-[9/16] overflow-hidden bg-slate-900 rounded-xl shadow-md transition-all duration-300 group-hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] group-hover:-translate-y-1 border-0 ring-1 ring-black/5">
         
         {/* Video Player */}
         {experience.videoUrl && (
