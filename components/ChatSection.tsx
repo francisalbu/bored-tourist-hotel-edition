@@ -30,7 +30,7 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800",
     rating: 4.4,
     category: "Food & Dining",
-    location: "Mercado da Ribeira"
+    location: "Cais do Sodré (Lisboa Centro - 10min from hotel)"
   },
   {
     id: 2,
@@ -39,7 +39,7 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800",
     rating: 4.1,
     category: "Attraction",
-    location: "Various stops"
+    location: "Various stops (Lisboa Centro)"
   },
   {
     id: 3,
@@ -48,7 +48,7 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800",
     rating: 4.5,
     category: "Attraction",
-    location: "Alfama"
+    location: "Alfama (Lisboa Centro - 15min from hotel)"
   },
   {
     id: 4,
@@ -57,7 +57,7 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800",
     rating: 4.6,
     category: "Food & Dining",
-    location: "Belém"
+    location: "Belém (25min from hotel)"
   },
   {
     id: 5,
@@ -66,7 +66,7 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
     rating: 4.6,
     category: "Attraction",
-    location: "Parque das Nações"
+    location: "Parque das Nações (30min from hotel)"
   },
   {
     id: 6,
@@ -75,7 +75,7 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800",
     rating: 4.7,
     category: "Viewpoint",
-    location: "Graça"
+    location: "Graça (Lisboa Centro - 15min from hotel)"
   },
   {
     id: 7,
@@ -84,7 +84,7 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1513342961520-28b8a0d64604?w=800",
     rating: 4.5,
     category: "Attraction",
-    location: "Alcântara"
+    location: "Alcântara (20min from hotel, near Belém)"
   },
   {
     id: 8,
@@ -93,7 +93,7 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1599056095104-4fd9536b7bbf?w=800",
     rating: 4.8,
     category: "Neighborhood",
-    location: "Alfama"
+    location: "Alfama (Lisboa Centro - 15min from hotel)"
   }
 ];
 
@@ -177,24 +177,64 @@ export const ChatSection: React.FC<ChatSectionProps> = ({ onExperienceClick }) =
         `[F${spot.id}] ${spot.title} (${spot.category}) - FREE, ${spot.location}. ${spot.description}`
       ).join('\n');
 
-      const systemPrompt = `You're a local Lisbon concierge. Keep responses ULTRA SHORT - max 2 sentences.
+      // Group experiences by geographic zones for better recommendations
+      const lisboaCentro = experiences.filter(e => 
+        e.location.includes('Alfama') || e.location.includes('Baixa') || 
+        e.location.includes('Bairro Alto') || e.location.includes('Mouraria') ||
+        e.location.includes('Principe Real') || e.location.includes('Chiado') ||
+        e.location.includes('Lisbon') && !e.location.includes('Setúbal') && !e.location.includes('Sintra')
+      );
+      
+      const belem = experiences.filter(e => e.location.includes('Belém'));
+      const sintra = experiences.filter(e => e.location.includes('Sintra'));
+      const arrabida = experiences.filter(e => e.location.includes('Setúbal') || e.location.includes('Arrábida'));
+      const parqueDasNacoes = experiences.filter(e => e.location.includes('Parque das Nações'));
+      
+      const zoneContext = `
+GEOGRAPHIC ZONES (for proximity-based recommendations):
 
-HOTEL: Tv. do Conde da Ponte, 1300-141 Lisboa
+LISBOA CENTRO (5-15 min from hotel):
+${lisboaCentro.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.location}`).join('\n')}
 
-PAID EXPERIENCES:
-${experiencesContext}
+BELÉM (20-30 min from hotel):
+${belem.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.location}`).join('\n')}
+
+PARQUE DAS NAÇÕES (25-35 min from hotel):
+${parqueDasNacoes.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.location}`).join('\n')}
+
+SINTRA (45-60 min from hotel):
+${sintra.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.location}`).join('\n')}
+
+ARRÁBIDA/SETÚBAL (60-90 min from hotel):
+${arrabida.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.location}`).join('\n')}
 
 FREE SPOTS:
-${freeSpotsContext}
+${freeSpotsContext}`;
 
-RULES:
-- First message: Ask ONE question about their vibe
-- Max 1-2 sentences always
-- Only recommend after knowing: who's traveling + interests + style
-- Mix free spots + paid experiences
-- When recommending PAID: end with EXPERIENCE_IDS: [id1, id2]
-- When recommending FREE: end with FREE_SPOT_IDS: [F1, F2, F3]
-- Can mix both: EXPERIENCE_IDS: [123] FREE_SPOT_IDS: [F1, F5]
+      const systemPrompt = `You're a local Lisbon concierge at Vila Galé Opera hotel. Keep responses ULTRA SHORT - max 2 sentences.
+
+HOTEL LOCATION: Tv. do Conde da Ponte, 1300-141 Lisboa (near Campo Pequeno)
+
+${zoneContext}
+
+CRITICAL RULES FOR RECOMMENDATIONS:
+1. NEVER mix far zones in same day - respect travel time
+2. Group by proximity: Lisboa Centro + Belém OK, but NEVER Arrábida + Graça
+3. If morning in Sintra, suggest another Sintra activity - don't send them back to Lisboa Centro
+4. Consider guest's time: far zones (Sintra/Arrábida) need 4+ hours total with travel
+5. First message: Ask ONE question about their vibe
+6. Max 1-2 sentences always
+7. Only recommend after knowing: who's traveling + interests + style + timeframe
+8. When recommending PAID: end with EXPERIENCE_IDS: [id1, id2]
+9. When recommending FREE: end with FREE_SPOT_IDS: [F1, F2, F3]
+10. Can mix both: EXPERIENCE_IDS: [123] FREE_SPOT_IDS: [F1, F5]
+
+SMART GROUPING EXAMPLES:
+✅ GOOD: Alfama walk (F8) + Fado show (Lisboa Centro) + Miradouro da Graça (F6)
+✅ GOOD: Morning in Sintra (45min away) + afternoon Sintra activity
+✅ GOOD: Belém pastéis (F4) + Monument tour (Belém) + LX Factory (F7) nearby
+❌ BAD: Paragliding Arrábida (90min) + Miradouro Graça (Lisboa) - TOO FAR APART
+❌ BAD: Sintra morning + Setúbal afternoon - guest would spend 3h just traveling
 
 Example responses:
 "What kind of vibe are you after - adventure, culture, food?"
