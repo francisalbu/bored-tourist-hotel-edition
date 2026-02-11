@@ -92,12 +92,16 @@ export const ChatSection: React.FC = () => {
       <div className="flex-1 overflow-y-auto px-3 md:px-6 md:px-10 py-2 md:py-4 no-scrollbar hidden md:block">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col justify-center items-center text-center space-y-6">
-            <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4 animate-bounce">
-              <Sparkles size={40} />
+            <div className="w-24 h-24 rounded-full flex items-center justify-center mb-4 overflow-hidden bg-white shadow-lg">
+              <img 
+                src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg" 
+                alt="Vila Gale Opera"
+                className="w-full h-full object-contain p-2"
+              />
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-slate-900 tracking-tighter uppercase leading-[0.9]">
-              Hello, <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Guest?</span>
+            <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight uppercase leading-tight">
+              Welcome to <br/>
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Vila Gale Opera</span>
             </h1>
             <p className="text-slate-500 font-medium max-w-md text-lg">
               I'm your digital concierge. Ask me anything about the city, or let me find your next adventure.
