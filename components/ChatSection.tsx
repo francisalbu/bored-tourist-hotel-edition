@@ -77,19 +77,19 @@ export const ChatSection: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-[50vh] md:h-full bg-white relative">
-      {/* Branding / Header */}
-      <div className="p-6 md:p-10 pb-0">
-        <div className="flex items-center gap-2 mb-8">
-           <div className="w-8 h-8 bg-black rounded flex items-center justify-center text-white text-lg font-black shadow-md">
+    <div className="flex flex-col h-full bg-white relative">
+      {/* Branding / Header - Compact on mobile */}
+      <div className="p-3 md:p-6 md:pb-0 pb-0 border-b md:border-0 border-slate-100">
+        <div className="flex items-center gap-2 mb-2 md:mb-8">
+           <div className="w-6 h-6 md:w-8 md:h-8 bg-black rounded flex items-center justify-center text-white text-sm md:text-lg font-black shadow-md">
                 B
            </div>
-           <span className="text-xl font-black tracking-tighter text-slate-900 uppercase italic">Bored Tourist.</span>
+           <span className="text-base md:text-xl font-black tracking-tighter text-slate-900 uppercase italic">Bored Tourist.</span>
         </div>
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto px-6 md:px-10 py-4 no-scrollbar">
+      <div className="flex-1 overflow-y-auto px-3 md:px-6 md:px-10 py-2 md:py-4 no-scrollbar hidden md:block">
         {messages.length === 0 ? (
           <div className="h-full flex flex-col justify-center items-center text-center space-y-6">
             <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-600 mb-4 animate-bounce">
@@ -148,27 +148,28 @@ export const ChatSection: React.FC = () => {
       </div>
 
       {/* Input Area */}
-      <div className="p-6 md:p-10 pt-2 bg-white">
+      <div className="p-3 md:p-6 md:p-10 pt-2 bg-white">
         <div className="relative group">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="What do you want to do?"
-            className="w-full bg-slate-50 border-2 border-slate-200 focus:border-black rounded-3xl pl-6 pr-14 py-4 min-h-[60px] max-h-[120px] resize-none outline-none text-slate-900 font-medium placeholder-slate-400 transition-colors shadow-sm focus:shadow-md"
+            className="w-full bg-slate-50 border-2 border-slate-200 focus:border-black rounded-2xl md:rounded-3xl pl-4 md:pl-6 pr-12 md:pr-14 py-3 md:py-4 min-h-[50px] md:min-h-[60px] max-h-[80px] md:max-h-[120px] resize-none outline-none text-sm md:text-base text-slate-900 font-medium placeholder-slate-400 transition-colors shadow-sm focus:shadow-md"
             rows={1}
           />
-          <div className="absolute right-3 bottom-3 flex items-center gap-2">
+          <div className="absolute right-2 md:right-3 bottom-2 md:bottom-3 flex items-center gap-2">
             <button 
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
               className="p-2 bg-black text-white rounded-full hover:bg-emerald-500 disabled:opacity-50 disabled:hover:bg-black transition-colors"
             >
-              <Send size={18} />
+              <Send size={16} className="md:hidden" />
+              <Send size={18} className="hidden md:block" />
             </button>
           </div>
         </div>
-        <div className="mt-4 flex items-center justify-between text-xs text-slate-400 font-bold uppercase tracking-wider px-2">
+        <div className="mt-2 md:mt-4 flex items-center justify-between text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-wider px-2 hidden md:flex">
           <div className="flex items-center gap-1">
              <MapPin size={12} />
              <span>Lisbon, Portugal</span>

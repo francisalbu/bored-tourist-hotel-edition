@@ -20,39 +20,42 @@ export default function App() {
   }, [selectedCategory, experiences]);
 
   return (
-    <div className="h-screen w-full bg-white text-slate-900 font-sans selection:bg-emerald-200 selection:text-emerald-900 flex flex-col md:flex-row overflow-hidden">
+    <div className="h-screen w-full bg-slate-50 text-slate-900 font-sans selection:bg-emerald-200 selection:text-emerald-900 flex flex-col md:flex-row overflow-hidden">
       
-      {/* LEFT PANEL: Chat / Concierge */}
-      <div className="w-full md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200 z-10 shadow-xl md:shadow-none">
+      {/* DESKTOP: LEFT PANEL - Chat / Concierge */}
+      <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200 z-10 shadow-xl">
         <ChatSection />
       </div>
 
-      {/* RIGHT PANEL: Video Feed */}
-      <div className="flex-1 h-full bg-slate-50 overflow-y-auto relative flex flex-col">
+      {/* MOBILE & DESKTOP: Video Feed */}
+      <div className="flex-1 h-full bg-slate-50 overflow-y-auto relative flex flex-col pb-32 md:pb-0">
         
-        {/* Header Overlay (Mobile Menu + Desktop Actions) */}
-        <div className="sticky top-0 z-30 bg-slate-50/95 backdrop-blur-md px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-           <div className="flex flex-col">
-              <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Discover</span>
-              <div className="flex items-center gap-1 cursor-pointer hover:opacity-70 transition-opacity">
-                <span className="font-black text-lg tracking-tight">Lisbon & Surroundings</span>
-                <Globe size={14} className="text-emerald-600" />
+        {/* Header */}
+        <div className="sticky top-0 z-30 bg-slate-50/95 backdrop-blur-md px-4 md:px-6 py-3 md:py-4 border-b border-slate-200">
+           <div className="flex items-center justify-between">
+              <div className="flex flex-col">
+                <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-400">Discover</span>
+                <div className="flex items-center gap-1">
+                  <span className="font-black text-base md:text-lg tracking-tight">Lisbon & Surroundings</span>
+                  <Globe size={12} className="text-emerald-600 md:hidden" />
+                  <Globe size={14} className="text-emerald-600 hidden md:block" />
+                </div>
               </div>
-           </div>
 
-           <div className="flex items-center gap-4">
-              <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-black transition-colors">
-                 <User size={14} />
-                 <span>My Account</span>
-              </button>
-              <button className="sm:hidden p-2 text-slate-900">
-                <Menu size={24} />
-              </button>
+              <div className="flex items-center gap-2 md:gap-4">
+                <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-black transition-colors">
+                   <User size={14} />
+                   <span>My Account</span>
+                </button>
+                <button className="md:hidden p-2 text-slate-900">
+                  <Menu size={20} />
+                </button>
+              </div>
            </div>
         </div>
 
         {/* Filters Sticky Bar */}
-        <div className="sticky top-[73px] z-20 bg-slate-50/95 backdrop-blur-md pb-4 pt-2 px-6 border-b border-slate-100/50">
+        <div className="sticky top-[57px] md:top-[73px] z-20 bg-slate-50/95 backdrop-blur-md pb-3 md:pb-4 pt-2 px-4 md:px-6 border-b border-slate-100/50">
            <CategoryFilter 
                 categories={categories}
                 selectedCategory={selectedCategory}
@@ -108,14 +111,21 @@ export default function App() {
                  </div>
                )}
 
-               {/* Simple Footer for Right Panel */}
-               <div className="mt-20 pt-10 border-t border-slate-200 text-center">
+               {/* Footer - Hidden on mobile */}
+               <div className="mt-20 pt-10 border-t border-slate-200 text-center hidden md:block">
                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">© 2024 Bored Tourist Hotel Edition</p>
                </div>
              </>
            )}
         </div>
 
+      </div>
+
+      {/* MOBILE ONLY: Fixed Chat at Bottom */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t-2 border-slate-200 shadow-2xl">
+        <div className="max-h-[30vh]">
+          <ChatSection />
+        </div>
       </div>
 
       {/* Detail Modal */}
