@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ExperienceDisplay } from '../types';
 import { X, Heart, MapPin, Clock, Star, ShieldCheck, Zap, Users, Info } from 'lucide-react';
+import { BookingFlow } from './BookingFlow';
 
 interface DetailModalProps {
   experience: ExperienceDisplay;
@@ -9,6 +10,7 @@ interface DetailModalProps {
 
 export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [showBookingFlow, setShowBookingFlow] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -44,6 +46,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
               controls
               loop
               playsInline
+              muted
               poster={experience.imageUrl}
             />
           ) : (
@@ -223,7 +226,10 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
                   <span className="text-sm text-slate-400 font-normal ml-1">/ person</span>
                 </p>
               </div>
-              <button className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-sm uppercase tracking-wider rounded-full transition-all hover:scale-105 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black">
+              <button 
+                onClick={() => setShowBookingFlow(true)}
+                className="px-8 py-4 bg-emerald-500 hover:bg-emerald-600 text-white font-black text-sm uppercase tracking-wider rounded-full transition-all hover:scale-105 hover:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black"
+              >
                 Book Now
               </button>
             </div>
@@ -231,6 +237,14 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
 
         </div>
       </div>
+
+      {/* Booking Flow Modal */}
+      {showBookingFlow && (
+        <BookingFlow 
+          experience={experience} 
+          onClose={() => setShowBookingFlow(false)} 
+        />
+      )}
     </div>
   );
 };

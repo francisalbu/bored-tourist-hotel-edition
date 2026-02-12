@@ -3,6 +3,10 @@ import { Send, Bot, User, MapPin } from 'lucide-react';
 import OpenAI from 'openai';
 import { supabase } from '../lib/supabase';
 import { ExperienceDisplay } from '../types';
+import { useUserMemories } from '../hooks/useUserMemories';
+import { DetailModal } from './DetailModal';
+import FreeSpotModal from './FreeSpotModal';
+import { getCachedPlaceDetails, getPhotoUrl, searchPlaceByName } from '../lib/googlePlaces';
 
 interface Message {
   id: string;
@@ -20,6 +24,10 @@ interface FreeSpot {
   rating: number;
   category: string;
   location: string;
+  placeId?: string; // Google Place ID for real data
+  gps?: string;
+  distance?: string;
+  duration?: string;
 }
 
 const FREE_SPOTS: FreeSpot[] = [
@@ -30,7 +38,8 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800",
     rating: 4.4,
     category: "Food & Dining",
-    location: "Cais do Sodré (Lisboa Centro - 10min from hotel)"
+    location: "Cais do Sodré (Lisboa Centro - 10min from hotel)",
+    placeId: "ChIJLxl_1w9KzJIRi8WHLX2DQg8"
   },
   {
     id: 2,
@@ -39,7 +48,8 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800",
     rating: 4.1,
     category: "Attraction",
-    location: "Various stops (Lisboa Centro)"
+    location: "Various stops (Lisboa Centro)",
+    placeId: "ChIJX7rCWORKzJIRfLQs2iVwSIo"
   },
   {
     id: 3,
@@ -48,7 +58,8 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1585208798174-6cedd86e019a?w=800",
     rating: 4.5,
     category: "Attraction",
-    location: "Alfama (Lisboa Centro - 15min from hotel)"
+    location: "Alfama (Lisboa Centro - 15min from hotel)",
+    placeId: "ChIJA24kWBBKzJIR5qW0VwBBQIo"
   },
   {
     id: 4,
@@ -57,7 +68,8 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800",
     rating: 4.6,
     category: "Food & Dining",
-    location: "Belém (25min from hotel)"
+    location: "Belém (25min from hotel)",
+    placeId: "ChIJYxJIQOKWJA0RI0N3WFBVGwQ"
   },
   {
     id: 5,
@@ -66,7 +78,8 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
     rating: 4.6,
     category: "Attraction",
-    location: "Parque das Nações (30min from hotel)"
+    location: "Parque das Nações (30min from hotel)",
+    placeId: "ChIJjQVvW0U5GQ0RYzb0EUTi2CY"
   },
   {
     id: 6,
@@ -75,7 +88,8 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?w=800",
     rating: 4.7,
     category: "Viewpoint",
-    location: "Graça (Lisboa Centro - 15min from hotel)"
+    location: "Graça (Lisboa Centro - 15min from hotel)",
+    placeId: "ChIJxzt_6hBKzJIRZphtxBFXrB8"
   },
   {
     id: 7,
@@ -84,7 +98,8 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1513342961520-28b8a0d64604?w=800",
     rating: 4.5,
     category: "Attraction",
-    location: "Alcântara (20min from hotel, near Belém)"
+    location: "Alcântara (20min from hotel, near Belém)",
+    placeId: "ChIJFQxZcYKWJA0RgDAvsBusKgQ"
   },
   {
     id: 8,
@@ -93,24 +108,145 @@ const FREE_SPOTS: FreeSpot[] = [
     imageUrl: "https://images.unsplash.com/photo-1599056095104-4fd9536b7bbf?w=800",
     rating: 4.8,
     category: "Neighborhood",
-    location: "Alfama (Lisboa Centro - 15min from hotel)"
+    location: "Alfama (Lisboa Centro - 15min from hotel)",
+    placeId: "ChIJzyhWTQ9KzJIRLPHg-bTTHI8"
+  },
+  {
+    id: 9,
+    title: "PR3 STB – Portinho da Arrábida Trail",
+    description: "Official marked trail starting at Creiro Archaeological Station parking (38.4826° N, 8.9894° W). Route: Creiro → Oceanographic Museum → Lapa de Santa Margarida (cave chapel) → Alpertuche beach access. Distance: 1.3km linear. Elevation gain: 45m. Duration: 30-45min. Difficulty: Easy (suitable for all ages). Surface: dirt path + stone steps. Best for: romantic seaside walk with historical points. Parking: Free at Creiro. Season: Year-round, avoid midday summer heat.",
+    imageUrl: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=800",
+    rating: 4.8,
+    category: "Hiking",
+    location: "Arrábida Natural Park (90min from hotel)",
+    gps: "38.4826° N, 8.9894° W",
+    distance: "1.3km linear",
+    duration: "30-45min"
+  },
+  {
+    id: 10,
+    title: "PR1 STB – Encostas de São Filipe Trail",
+    description: "Circular trail from Albarquel Urban Park (38.5245° N, 8.8912° W) climbing to 16th-century São Filipe Fort. Distance: 3.9km loop. Elevation gain: 120m. Duration: 1.5-2h. Difficulty: Moderate (some steep sections). Surface: paved initially, then dirt trail with rocks. Highlights: Panoramic 360° views of Setúbal bay, Tróia peninsula, and Serra da Arrábida. Best time: Sunset (golden hour). Parking: Albarquel park. Bring: Water, sun protection.",
+    imageUrl: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800",
+    rating: 4.7,
+    category: "Hiking",
+    location: "Setúbal (80min from hotel)",
+    gps: "38.5245° N, 8.8912° W",
+    distance: "3.9km loop",
+    duration: "1.5-2h"
+  },
+  {
+    id: 11,
+    title: "Risco Trail – Serra da Arrábida",
+    description: "Easy coastal trail between Mil Regos camping (38.4891° N, 8.9723° W) and Eco Parque do Outão. Distance: 2.1km linear (4.2km return). Elevation: +76m / -45m. Duration: 30min one-way, 1h return. Difficulty: Easy. Terrain: well-maintained dirt path through Mediterranean scrubland. Flora: wild rosemary, cistus, pine trees. Perfect for: peaceful nature walks, picnics at viewpoints, photography. Dog-friendly! Parking: Both campsites. Best: Spring (wildflowers) or autumn (cooler temps).",
+    imageUrl: "https://images.unsplash.com/photo-1445308394109-4ec2920981b1?w=800",
+    rating: 4.8,
+    category: "Hiking",
+    location: "Arrábida Natural Park (90min from hotel)",
+    gps: "38.4891° N, 8.9723° W",
+    distance: "2.1km linear (4.2km return)",
+    duration: "30min one-way, 1h return"
+  },
+  {
+    id: 12,
+    title: "Portinho da Arrábida Beach",
+    description: "Pristine beach at 38.4814° N, 8.9877° W. Water: Crystal-clear turquoise (avg 18-22°C summer). Sand: White/golden fine sand. Cliffs: Dramatic limestone formations providing natural shelter. Activities: Swimming, snorkeling (bring gear - rocky areas teem with fish), SUP, kayaking. Facilities: Beach bar (seasonal), parking (€), showers, lifeguard (summer). Best combined with PR3 trail. Arrive early (fills up by 11am summer). Sunset swims = magical. Protected area - no fishing.",
+    imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800",
+    rating: 4.7,
+    category: "Beach",
+    location: "Arrábida (90min from hotel)",
+    placeId: "ChIJy7gU5GVYNA0RQPw-XSQX5ag",
+    gps: "38.4814° N, 8.9877° W"
+  },
+  {
+    id: 13,
+    title: "Monsanto Forest Park Trails",
+    description: "Lisbon's green lung at 38.7289° N, 9.1867° W. Multiple marked trails: Yellow Route (2.5km, easy, 45min), Blue Route (5km, moderate, 1.5h), Red Route (8km, challenging, 2.5h). Elevation: 50-226m above sea level. Terrain: forest paths, some rocky sections. Highlights: Panoramic viewpoints (Montes Claros, Bela Vista), picnic areas, ancient trees. Activities: Hiking, trail running, mountain biking, birdwatching. Facilities: Multiple entrances, free parking, water fountains. Best: Early morning (cooler + bird activity) or sunset. Sunrise from Montes Claros viewpoint = stunning over city.",
+    imageUrl: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800",
+    rating: 4.6,
+    category: "Nature",
+    location: "Monsanto (20min from hotel)",
+    placeId: "ChIJE0B7hiAzGQ0RQGWqX6LrAAQ",
+    gps: "38.7289° N, 9.1867° W",
+    distance: "2.5-8km",
+    duration: "45min-2.5h"
+  },
+  {
+    id: 14,
+    title: "Gulbenkian Garden",
+    description: "Peaceful 7.5-hectare landscaped garden at 38.7373° N, 9.1538° W (adjacent to Gulbenkian Museum). Features: Artificial lake with ducks & turtles, contemporary sculpture garden (Rodin, Henry Moore), walking paths through diverse flora zones, amphitheater. FREE garden entry (museum €10 separate). Open: 10:00-19:30 (summer), 10:00-17:30 (winter). Perfect for: Romantic afternoon stroll, reading by lake, photography, post-museum relaxation. Quiet zones for couples. Small café inside. 15min walk from São Sebastião metro.",
+    imageUrl: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
+    rating: 4.7,
+    category: "Garden",
+    location: "São Sebastião (10min from hotel)"
   }
 ];
 
 interface ChatSectionProps {
   onExperienceClick?: (experience: ExperienceDisplay) => void;
+  userId?: string; // User identifier for memories
 }
 
-export const ChatSection: React.FC<ChatSectionProps> = ({ onExperienceClick }) => {
+export const ChatSection: React.FC<ChatSectionProps> = ({ 
+  onExperienceClick,
+  userId = 'guest-session' // Default session ID
+}) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [experiences, setExperiences] = useState<any[]>([]);
+  const [selectedFreeSpot, setSelectedFreeSpot] = useState<FreeSpot | null>(null);
+  const [enrichedSpots, setEnrichedSpots] = useState<Map<number, FreeSpot>>(new Map());
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  
+  // Memory hook
+  const { memory, updateMemory } = useUserMemories(userId);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  // Enrich free spots with Google Places data
+  useEffect(() => {
+    async function enrichSpotsWithGoogleData() {
+      for (const spot of FREE_SPOTS) {
+        if (!enrichedSpots.has(spot.id)) {
+          let placeDetails = null;
+          
+          // If placeId exists, use it directly
+          if (spot.placeId) {
+            placeDetails = await getCachedPlaceDetails(spot.placeId);
+          } 
+          // Otherwise, search by name automatically
+          else if (!spot.gps) { // Only search if it's not a hiking trail (trails don't have Google Places)
+            placeDetails = await searchPlaceByName(spot.title, 'Lisbon, Portugal');
+          }
+          
+          if (placeDetails) {
+            const enrichedSpot: FreeSpot = {
+              ...spot,
+              title: placeDetails.name || spot.title,
+              rating: placeDetails.rating || spot.rating,
+              location: placeDetails.formatted_address || spot.location,
+              imageUrl: placeDetails.photos && placeDetails.photos[0] 
+                ? getPhotoUrl(placeDetails.photos[0].photo_reference, 800)
+                : spot.imageUrl,
+              gps: spot.gps || `${placeDetails.geometry.location.lat}° N, ${Math.abs(placeDetails.geometry.location.lng)}° ${placeDetails.geometry.location.lng < 0 ? 'W' : 'E'}`
+            };
+            setEnrichedSpots(prev => new Map(prev).set(spot.id, enrichedSpot));
+          } else {
+            // Keep original data if no Google Place found
+            setEnrichedSpots(prev => new Map(prev).set(spot.id, spot));
+          }
+        }
+      }
+    }
+    enrichSpotsWithGoogleData();
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -150,6 +286,93 @@ export const ChatSection: React.FC<ChatSectionProps> = ({ onExperienceClick }) =
     fetchExperiences();
   }, []);
 
+  // Function to extract memories from conversation
+  const extractAndSaveMemories = async (conversationHistory: Message[], openai: OpenAI) => {
+    try {
+      const conversationText = conversationHistory
+        .map(m => `${m.role}: ${m.text}`)
+        .join('\n');
+
+      const memoryExtractionPrompt = `Analyze this conversation and extract meaningful insights about the guest. Write memories as natural, conversational observations - not dry facts.
+
+CONVERSATION:
+${conversationText}
+
+GOOD MEMORIES (conversational, contextual):
+✅ "Loves discovering hidden cocktail bars off the beaten path"
+✅ "Traveling with girlfriend - seeking romantic experiences for special occasions"
+✅ "Prefers intimate venues over crowded tourist spots"
+✅ "Mentioned wanting to try local Portuguese wines"
+
+BAD MEMORIES (too factual, data-like):
+❌ "Name: John"
+❌ "In a relationship"
+❌ "Interested in: bars, wine"
+
+Extract and respond ONLY with JSON:
+{
+  "name": "Guest name or null",
+  "relationshipStatus": "Natural description of who they're with (e.g., 'Traveling with girlfriend', 'Family of 4 with young kids')",
+  "interests": ["specific interest 1", "specific interest 2", "interest 3"],
+  "summary": "2-3 sentences describing the person's travel style, what they're seeking, and their vibe",
+  "newMemories": [
+    "Conversational observation about preference or context",
+    "Natural sentence about what they mentioned wanting",
+    "Contextual note about their travel style or interests"
+  ]
+}
+
+Keep it human, conversational, and insightful - not a database dump.`;
+
+      const response = await openai.chat.completions.create({
+        model: 'gpt-4-turbo-preview',
+        messages: [
+          { role: 'system', content: 'You are an expert concierge who remembers meaningful details about guests. Write observations as natural, conversational memories - like notes a thoughtful host would make. Always respond with valid JSON only.' },
+          { role: 'user', content: memoryExtractionPrompt }
+        ],
+        temperature: 0.7,
+        max_tokens: 600
+      });
+
+      const extractedData = response.choices[0]?.message?.content;
+      if (!extractedData) return;
+
+      // Parse JSON response
+      const parsed = JSON.parse(extractedData);
+      
+      // Merge with existing memories
+      const existingMemories = memory?.memories || [];
+      const allMemories = [...existingMemories];
+      
+      // Add new memories if they don't already exist
+      if (parsed.newMemories && Array.isArray(parsed.newMemories)) {
+        parsed.newMemories.forEach((newMem: string) => {
+          if (!allMemories.some(m => m.toLowerCase().includes(newMem.toLowerCase()))) {
+            allMemories.push(newMem);
+          }
+        });
+      }
+
+      // Merge interests
+      const existingInterests = memory?.interests || [];
+      const allInterests = [...new Set([...existingInterests, ...(parsed.interests || [])])];
+
+      // Update memory
+      await updateMemory({
+        name: parsed.name || memory?.name,
+        relationshipStatus: parsed.relationshipStatus || memory?.relationshipStatus,
+        interests: allInterests,
+        summary: parsed.summary || memory?.summary,
+        memories: allMemories,
+        conversationCount: (memory?.conversationCount || 0) + 1
+      });
+
+      console.log('✅ Memories updated:', parsed);
+    } catch (error) {
+      console.error('Error extracting memories:', error);
+    }
+  };
+
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
@@ -174,7 +397,7 @@ export const ChatSection: React.FC<ChatSectionProps> = ({ onExperienceClick }) =
       ).join('\n');
       
       const freeSpotsContext = FREE_SPOTS.map(spot =>
-        `[F${spot.id}] ${spot.title} (${spot.category}) - FREE, ${spot.location}. ${spot.description}`
+        `[F${spot.id}] **${spot.title}** (${spot.category}) - FREE, ${spot.location}. ${spot.description}`
       ).join('\n');
 
       // Group experiences by geographic zones for better recommendations
@@ -211,37 +434,72 @@ ${arrabida.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.lo
 FREE SPOTS:
 ${freeSpotsContext}`;
 
-      const systemPrompt = `You're a local Lisbon concierge at Vila Galé Opera hotel. Keep responses ULTRA SHORT - max 2 sentences.
+      const systemPrompt = `You're a passionate concierge at Vila Galé Opera hotel. Your PRIMARY GOAL: sell our premium experiences while providing exceptional service.
 
 HOTEL LOCATION: Tv. do Conde da Ponte, 1300-141 Lisboa (near Campo Pequeno)
 
 ${zoneContext}
 
-CRITICAL RULES FOR RECOMMENDATIONS:
-1. NEVER mix far zones in same day - respect travel time
-2. Group by proximity: Lisboa Centro + Belém OK, but NEVER Arrábida + Graça
-3. If morning in Sintra, suggest another Sintra activity - don't send them back to Lisboa Centro
-4. Consider guest's time: far zones (Sintra/Arrábida) need 4+ hours total with travel
-5. First message: Ask ONE question about their vibe
-6. Max 1-2 sentences always
-7. Only recommend after knowing: who's traveling + interests + style + timeframe
-8. When recommending PAID: end with EXPERIENCE_IDS: [id1, id2]
-9. When recommending FREE: end with FREE_SPOT_IDS: [F1, F2, F3]
-10. Can mix both: EXPERIENCE_IDS: [123] FREE_SPOT_IDS: [F1, F5]
+🎯 MANDATORY CONVERSATION FLOW:
 
-SMART GROUPING EXAMPLES:
-✅ GOOD: Alfama walk (F8) + Fado show (Lisboa Centro) + Miradouro da Graça (F6)
-✅ GOOD: Morning in Sintra (45min away) + afternoon Sintra activity
-✅ GOOD: Belém pastéis (F4) + Monument tour (Belém) + LX Factory (F7) nearby
-❌ BAD: Paragliding Arrábida (90min) + Miradouro Graça (Lisboa) - TOO FAR APART
-❌ BAD: Sintra morning + Setúbal afternoon - guest would spend 3h just traveling
+STEP 1 - DISCOVERY (First 1-2 messages):
+Ask questions to understand what they want:
+- "What brings you to Lisbon - adventure, culture, food, or relaxation?"
+- "Who are you traveling with?"
+- "What type of experiences excite you most?"
 
-Example responses:
-"What kind of vibe are you after - adventure, culture, food?"
-"Nice! Are you traveling solo or with others?"
-"Perfect! Here's what I'd do: FREE_SPOT_IDS: [F2, F6] EXPERIENCE_IDS: [123]"
+NEVER recommend anything until you know their interests!
 
-Keep it SHORT. Let the cards do the talking.`;
+STEP 2 - SELL OUR EXPERIENCES (Always try this first!):
+Once you know what they want, recommend OUR PAID EXPERIENCES that match perfectly.
+Example:
+"Perfect! For [their interest], we have some incredible experiences:
+
+EXPERIENCE_IDS: [5, 12, 23]
+
+These are our TOP picks for what you're looking for. Want to know more about any of these?"
+
+ALWAYS include EXPERIENCE_IDS when recommending paid experiences.
+The cards will show automatically with photo, description, and price.
+
+STEP 3 - FREE ALTERNATIVES (Only if they ask or paid doesn't match):
+If guest says "too expensive", "prefer free", or paid experiences don't match their vibe:
+"I totally understand! Here are some amazing FREE alternatives:
+
+1️⃣ **[Free Spot Name]** (distance, duration, difficulty)
+→ Highlight 1
+→ Highlight 2
+→ Highlight 3
+
+FREE_SPOT_IDS: [F9, F11, F13]"
+
+🚨 CRITICAL RULES:
+1. NEVER recommend experiences in first message - ask questions first
+2. ALWAYS try to sell paid experiences before mentioning free options
+3. When recommending paid: Use EXPERIENCE_IDS: [id1, id2, id3]
+4. When recommending free: Use detailed format with 1️⃣ 2️⃣ 3️⃣ and FREE_SPOT_IDS: [F1, F2]
+5. Can mix both: "Our premium option: EXPERIENCE_IDS: [5] Or free alternative: FREE_SPOT_IDS: [F9]"
+6. Keep responses conversational and enthusiastic
+7. ALWAYS end with a question to continue dialogue
+
+💰 SALES MINDSET:
+- Be a SELLER first, helper second
+- Our experiences are amazing - sell them with confidence!
+- Free options are backup plan, not first choice
+- Create FOMO: "This is our most popular experience!"
+- Build value: Explain why it's worth the price
+
+Example perfect conversation:
+User: "I want to do something fun"
+You: "Awesome! What kind of fun - adventure outdoors, cultural experiences, or food & drink?"
+
+User: "adventure outdoors"  
+You: "Perfect! We have incredible outdoor adventures. Check these out: EXPERIENCE_IDS: [15, 23, 8] Which one catches your eye?"
+
+User: "too expensive"
+You: "No worries! Here are epic FREE alternatives: 1️⃣ **Monsanto Trails**... FREE_SPOT_IDS: [F13]"
+
+Be the BEST salesperson they've ever met!`;
 
       const response = await openai.chat.completions.create({
         model: 'gpt-4-turbo-preview',
@@ -284,6 +542,21 @@ Keep it SHORT. Let the cards do the talking.`;
         experienceIds: experienceIds.length > 0 ? experienceIds : undefined,
         freeSpotIds: freeSpotIds.length > 0 ? freeSpotIds : undefined
       }]);
+      
+      // Extract memories after every 2-3 conversations
+      const newConversationCount = (memory?.conversationCount || 0) + 1;
+      if (newConversationCount % 2 === 0) {
+        await extractAndSaveMemories([...messages, userMessage, { 
+          id: (Date.now() + 1).toString(), 
+          role: 'assistant', 
+          text: cleanText 
+        }], openai);
+      } else {
+        // Just update conversation count
+        await updateMemory({ 
+          conversationCount: newConversationCount 
+        });
+      }
       
     } catch (error) {
       console.error("Chat error:", error);
@@ -367,50 +640,131 @@ Keep it SHORT. Let the cards do the talking.`;
                   )}
                 </div>
                 <div className="flex-1 max-w-[85%]">
-                  <div className={`rounded-2xl p-4 text-sm font-medium leading-relaxed ${
+                  <div className={`rounded-2xl p-4 text-sm leading-relaxed ${
                     msg.role === 'user' 
-                      ? 'bg-slate-100 text-slate-900 rounded-tr-none' 
-                      : 'bg-white border-2 border-slate-100 text-slate-600 rounded-tl-none shadow-sm'
+                      ? 'bg-slate-100 text-slate-900 rounded-tr-none font-medium' 
+                      : 'bg-white border-2 border-slate-100 text-slate-700 rounded-tl-none shadow-sm'
                   }`}>
-                    {msg.text}
+                    {msg.role === 'assistant' ? (
+                      <div className="space-y-3">
+                        {msg.text.split('\n\n').map((paragraph, idx) => {
+                          // Check if it's a numbered list item with emoji
+                          if (paragraph.match(/^\d+️⃣/)) {
+                            const lines = paragraph.split('\n');
+                            const titleLine = lines[0];
+                            
+                            // Extract emoji, title and metadata
+                            const match = titleLine.match(/^(\d+️⃣)\s*\*\*([^*]+)\*\*(.*)$/);
+                            if (match) {
+                              const [, emoji, title, metadata] = match;
+                              
+                              // Try to find matching FREE_SPOT to get image - more flexible matching
+                              let freeSpot = FREE_SPOTS.find(spot => {
+                                const spotWords = spot.title.toLowerCase().split(' ');
+                                const titleLower = title.toLowerCase();
+                                // Check if title contains key words from spot name
+                                return spotWords.some(word => word.length > 3 && titleLower.includes(word)) ||
+                                       titleLower.includes(spot.title.toLowerCase().substring(0, 10));
+                              });
+                              
+                              // If we have freeSpotIds in this message, try to match by position
+                              if (!freeSpot && msg.freeSpotIds && msg.freeSpotIds.length > 0) {
+                                // Match by index in the list (1️⃣ = first free spot, etc)
+                                const emojiNumber = parseInt(emoji.charAt(0));
+                                if (emojiNumber && msg.freeSpotIds[emojiNumber - 1]) {
+                                  freeSpot = FREE_SPOTS.find(spot => spot.id === msg.freeSpotIds[emojiNumber - 1]);
+                                }
+                              }
+                              
+                              return (
+                                <div key={idx} className="bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl overflow-hidden border-2 border-slate-200 hover:border-emerald-300 transition-colors">
+                                  {freeSpot?.imageUrl && (
+                                    <div className="h-32 w-full overflow-hidden bg-slate-200">
+                                      <img 
+                                        src={freeSpot.imageUrl} 
+                                        alt={title}
+                                        className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                                      />
+                                    </div>
+                                  )}
+                                  <div className="p-4">
+                                    <div className="flex items-start gap-2 mb-2">
+                                      <span className="text-2xl leading-none">{emoji}</span>
+                                      <div className="flex-1">
+                                        <div className="font-bold text-slate-900 text-base leading-tight">{title}</div>
+                                        <div className="text-xs text-slate-500 mt-0.5">{metadata.trim()}</div>
+                                      </div>
+                                    </div>
+                                    <div className="space-y-1 ml-8">
+                                      {lines.slice(1).map((line, i) => {
+                                        if (line.trim().startsWith('→')) {
+                                          return (
+                                            <div key={i} className="flex items-start gap-2 text-xs text-slate-600">
+                                              <span className="text-emerald-500 font-bold mt-0.5">→</span>
+                                              <span className="flex-1">{line.replace('→', '').trim()}</span>
+                                            </div>
+                                          );
+                                        }
+                                        return null;
+                                      })}
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            }
+                          }
+                          
+                          // Regular paragraph - parse bold text
+                          return (
+                            <p key={idx} className="text-slate-700 leading-relaxed">
+                              {paragraph.split(/(\*\*[^*]+\*\*)/).map((part, i) => {
+                                if (part.startsWith('**') && part.endsWith('**')) {
+                                  return <strong key={i} className="font-bold text-slate-900">{part.slice(2, -2)}</strong>;
+                                }
+                                return <span key={i}>{part}</span>;
+                              })}
+                            </p>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      msg.text
+                    )}
                   </div>
                   
                   {msg.experienceIds && msg.experienceIds.length > 0 && (
-                    <div className="mt-3 space-y-2">
+                    <div className="mt-3 space-y-3">
                       {msg.experienceIds.map(expId => {
                         const exp = experiences.find(e => e.id === expId);
                         if (!exp) return null;
+                        
+                        const imageUrl = exp.imageUrl || exp.thumbnail || (exp.images && exp.images[0]);
+                        
                         return (
                           <div 
                             key={expId} 
                             onClick={() => onExperienceClick?.(exp)}
-                            className="bg-white border-2 border-emerald-100 rounded-xl overflow-hidden hover:border-emerald-300 transition-all shadow-sm hover:shadow-md group cursor-pointer"
+                            className="bg-white border-2 border-emerald-200 rounded-xl overflow-hidden hover:border-emerald-400 hover:shadow-lg transition-all group cursor-pointer"
                           >
-                            <div className="flex gap-3 p-3">
-                              <div className="w-20 h-20 bg-slate-100 rounded-lg shrink-0 overflow-hidden">
-                                {exp.thumbnail && (
-                                  <img src={exp.thumbnail} alt={exp.title} className="w-full h-full object-cover" />
-                                )}
+                            {/* Thumbnail */}
+                            {imageUrl && (
+                              <div className="h-40 w-full overflow-hidden bg-slate-200">
+                                <img 
+                                  src={imageUrl} 
+                                  alt={exp.title} 
+                                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                />
                               </div>
-                              <div className="flex-1 min-w-0">
-                                <h4 className="font-bold text-sm text-slate-900 mb-1 line-clamp-1 group-hover:text-emerald-600 transition-colors">
-                                  {exp.title}
-                                </h4>
-                                <p className="text-xs text-slate-500 mb-2 line-clamp-2">
-                                  {exp.short_description}
-                                </p>
-                                <div className="flex items-center gap-3 text-xs">
-                                  <span className="font-bold text-emerald-600">€{exp.price}</span>
-                                  <span className="text-slate-400">•</span>
-                                  <span className="text-slate-500">{exp.duration}</span>
-                                  {exp.rating && (
-                                    <>
-                                      <span className="text-slate-400">•</span>
-                                      <span className="text-slate-500">⭐ {exp.rating}</span>
-                                    </>
-                                  )}
-                                </div>
-                              </div>
+                            )}
+                            
+                            {/* Content */}
+                            <div className="p-4">
+                              <h4 className="font-bold text-base text-slate-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                                {exp.title}
+                              </h4>
+                              <p className="text-sm text-slate-600 line-clamp-2">
+                                {exp.shortDescription || exp.description}
+                              </p>
                             </div>
                           </div>
                         );
@@ -421,11 +775,14 @@ Keep it SHORT. Let the cards do the talking.`;
                   {msg.freeSpotIds && msg.freeSpotIds.length > 0 && (
                     <div className="mt-3 space-y-2">
                       {msg.freeSpotIds.map(spotId => {
-                        const spot = FREE_SPOTS.find(s => s.id === spotId);
-                        if (!spot) return null;
+                        const baseSpot = FREE_SPOTS.find(s => s.id === spotId);
+                        if (!baseSpot) return null;
+                        // Use enriched data if available, otherwise use base data
+                        const spot = enrichedSpots.get(spotId) || baseSpot;
                         return (
                           <div 
                             key={`free-${spotId}`}
+                            onClick={() => setSelectedFreeSpot(spot)}
                             className="bg-white border-2 border-blue-100 rounded-xl overflow-hidden hover:border-blue-300 transition-all shadow-sm hover:shadow-md group cursor-pointer"
                           >
                             <div className="flex gap-3 p-3">
@@ -507,6 +864,14 @@ Keep it SHORT. Let the cards do the talking.`;
           <span>Powered by GPT-4</span>
         </div>
       </div>
+
+      {/* Free Spot Modal */}
+      {selectedFreeSpot && (
+        <FreeSpotModal 
+          spot={selectedFreeSpot} 
+          onClose={() => setSelectedFreeSpot(null)} 
+        />
+      )}
     </div>
   );
 };

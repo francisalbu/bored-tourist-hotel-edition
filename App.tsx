@@ -3,16 +3,28 @@ import { CategoryFilter } from './components/CategoryFilter';
 import { VideoCard } from './components/VideoCard';
 import { DetailModal } from './components/DetailModal';
 import { ChatSection } from './components/ChatSection';
+import { MemoriesPanel } from './components/MemoriesPanel';
 import { ExperienceDisplay } from './types';
-import { Menu, Globe, User, Loader2 } from 'lucide-react';
+import { Menu, Globe, User, Loader2, Brain } from 'lucide-react';
 import { useExperiences, useCategories } from './hooks/useExperiences';
+import { useUserMemories } from './hooks/useUserMemories';
 
 export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedExperience, setSelectedExperience] = useState<ExperienceDisplay | null>(null);
+  const [showMemories, setShowMemories] = useState(false);
   
   const { experiences, loading, error } = useExperiences();
   const categories = useCategories();
+  
+  // User memories - using a default guest session ID
+  const userId = 'guest-session-' + (localStorage.getItem('guestSessionId') || (() => {
+    const id = Math.random().toString(36).substring(7);
+    localStorage.setItem('guestSessionId', id);
+    return id;
+  })());
+  
+  const { memory, loading: memoryLoading, downloadMemories } = useUserMemories(userId);
 
   const filteredExperiences = useMemo(() => {
     if (selectedCategory === 'all') return experiences;
@@ -24,8 +36,23 @@ export default function App() {
       
       {/* DESKTOP: LEFT PANEL - Chat / Concierge */}
       <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200 z-10 shadow-xl">
-        <ChatSection onExperienceClick={setSelectedExperience} />
+        <ChatSection onExperienceClick={setSelectedExperience} userId={userId} />
       </div>
+      
+      {/* DESKTOP: RIGHT PANEL - Memories (Toggle) */}
+      {showMemories && (
+        <div className="hidden md:flex md:w-[35%] lg:w-[30%] h-full border-l border-slate-700 z-10 shadow-xl">
+          <MemoriesPanel 
+            memory={memory}
+            loading={memoryLoading}
+            onDownload={downloadMemories}
+            onAddMemory={() => {
+              // Could open a modal to manually add memories
+              alert('Coming soon: Add custom memories');
+            }}
+          />
+        </div>
+      )}
 
       {/* MOBILE & DESKTOP: Video Feed */}
       <div className="flex-1 h-full bg-slate-50 overflow-y-auto relative flex flex-col pb-32 md:pb-0">
@@ -43,6 +70,20 @@ export default function App() {
               </div>
 
               <div className="flex items-center gap-2 md:gap-4">
+                <button 
+                  onClick={() => setShowMemories(!showMemories)}
+                  className="hidden md:flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-pink-500 transition-colors"
+                >
+                   <Brain size={14} className={showMemories ? 'text-pink-500' : ''} />
+                   <span className={showMemories ? 'text-pink-500' : ''}>
+                     {showMemories ? 'Hide Memories' : 'My Memories'}
+                   </span>
+                   {memory && memory.memories.length > 0 && (
+                     <span className="bg-pink-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+                       {memory.memories.length}
+                     </span>
+                   )}
+                </button>
                 <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-black transition-colors">
                    <User size={14} />
                    <span>My Account</span>
@@ -124,7 +165,7 @@ export default function App() {
       {/* MOBILE ONLY: Fixed Chat at Bottom */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t-2 border-slate-200 shadow-2xl">
         <div className="max-h-[30vh]">
-          <ChatSection />
+          <ChatSection userId={userId} />
         </div>
       </div>
 

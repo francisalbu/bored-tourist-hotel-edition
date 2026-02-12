@@ -33,6 +33,32 @@ export interface Experience {
   city?: string;
 }
 
+// User Memory types
+export interface UserMemory {
+  id: string;
+  user_id: string;
+  name?: string;
+  relationship_status?: string;
+  interests?: string[];
+  summary?: string;
+  memories: string[];
+  conversation_count: number;
+  last_interaction?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface UserMemoryDisplay {
+  id: string;
+  name?: string;
+  relationshipStatus?: string;
+  interests?: string[];
+  summary?: string;
+  memories: string[];
+  conversationCount: number;
+  lastInteraction?: string;
+}
+
 // For frontend display (mapped from DB)
 export interface ExperienceDisplay {
   id: string;
