@@ -605,7 +605,7 @@ Be the BEST salesperson they've ever met!`;
           </button>
           <div className="flex items-center gap-3">
             <img 
-              src="https://storage.googleapis.com/bored_tourist_media/images/WhatsApp%20Image%202026-02-11%20at%2000.12.20.jpeg" 
+              src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg" 
               alt="Vila Gale Opera"
               className="w-10 h-10 rounded-full object-cover border-2 border-emerald-100"
             />
