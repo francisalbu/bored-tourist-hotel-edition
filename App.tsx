@@ -179,9 +179,13 @@ export default function App() {
       {!mobileFullScreenChat && (
         <button
           onClick={() => setMobileFullScreenChat(true)}
-          className="md:hidden fixed bottom-6 right-6 z-40 w-16 h-16 bg-black text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-slate-800 transition-colors"
+          className="md:hidden fixed bottom-6 right-6 z-40 w-16 h-16 bg-white border-2 border-emerald-200 rounded-full shadow-2xl flex items-center justify-center hover:border-emerald-400 transition-all overflow-hidden"
         >
-          <Bot size={28} />
+          <img 
+            src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg"
+            alt="Vila Gale Concierge"
+            className="w-full h-full object-cover"
+          />
         </button>
       )}
 
