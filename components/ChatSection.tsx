@@ -185,11 +185,15 @@ const FREE_SPOTS: FreeSpot[] = [
 interface ChatSectionProps {
   onExperienceClick?: (experience: ExperienceDisplay) => void;
   userId?: string; // User identifier for memories
+  isMobileFullScreen?: boolean; // Mobile full-screen mode
+  onCloseMobileChat?: () => void; // Close mobile chat
 }
 
 export const ChatSection: React.FC<ChatSectionProps> = ({ 
   onExperienceClick,
-  userId = 'guest-session' // Default session ID
+  userId = 'guest-session', // Default session ID
+  isMobileFullScreen = false,
+  onCloseMobileChat
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -584,18 +588,49 @@ Be the BEST salesperson they've ever met!`;
 
   return (
     <div className="flex flex-col h-full bg-white relative">
-      <div className="p-3 md:p-6 md:pb-0 pb-0 border-b md:border-0 border-slate-100">
-        <div className="flex items-center gap-3 mb-2 md:mb-8">
-           <img 
-             src="https://storage.googleapis.com/bored_tourist_media/images/WhatsApp%20Image%202026-02-11%20at%2000.12.20.jpeg" 
+      {/* Mobile Full Screen Header with Back Button */}
+      {isMobileFullScreen && (
+        <div className="sticky top-0 z-10 bg-white border-b border-slate-200 px-4 py-3 flex items-center gap-3">
+          <button
+            onClick={onCloseMobileChat}
+            className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <div className="flex items-center gap-3">
+            <img 
+              src="https://storage.googleapis.com/bored_tourist_media/images/WhatsApp%20Image%202026-02-11%20at%2000.12.20.jpeg" 
+              alt="Vila Gale Opera"
+              className="w-10 h-10 rounded-full object-cover border-2 border-emerald-100"
+            />
+            <div>
+              <div className="text-sm font-bold text-slate-900">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Vila Gale Opera</span>
+              </div>
+              <div className="text-xs text-slate-500">AI Concierge</div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Regular Header (Desktop or Mobile Bottom) */}
+      {!isMobileFullScreen && (
+        <div className="p-3 md:p-6 md:pb-0 pb-0 border-b md:border-0 border-slate-100">
+          <div className="flex items-center gap-3 mb-2 md:mb-8">
+             <img 
+               src="https://storage.googleapis.com/bored_tourist_media/images/WhatsApp%20Image%202026-02-11%20at%2000.12.20.jpeg" 
              alt="Vila Gale Opera"
              onClick={handleReset}
              className="h-8 md:h-10 w-auto object-contain cursor-pointer hover:opacity-80 transition-opacity"
            />
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="flex-1 overflow-y-auto px-3 md:px-6 md:px-10 py-2 md:py-4 no-scrollbar hidden md:block">
+      {/* Messages Area - Show on mobile full screen or desktop */}
+      <div className={`flex-1 overflow-y-auto px-3 md:px-6 md:px-10 py-2 md:py-4 no-scrollbar ${isMobileFullScreen ? 'block' : 'hidden md:block'}`}>
         {messages.length === 0 ? (
           <div className="h-full flex flex-col justify-center items-center text-center space-y-6">
             <div className="w-32 h-32 rounded-2xl flex items-center justify-center mb-4 overflow-hidden bg-slate-100 shadow-lg">

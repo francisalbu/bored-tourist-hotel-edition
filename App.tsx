@@ -5,7 +5,7 @@ import { DetailModal } from './components/DetailModal';
 import { ChatSection } from './components/ChatSection';
 import { MemoriesPanel } from './components/MemoriesPanel';
 import { ExperienceDisplay } from './types';
-import { Menu, Globe, User, Loader2, Brain } from 'lucide-react';
+import { Menu, Globe, User, Loader2, Brain, Bot } from 'lucide-react';
 import { useExperiences, useCategories } from './hooks/useExperiences';
 import { useUserMemories } from './hooks/useUserMemories';
 
@@ -13,6 +13,7 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedExperience, setSelectedExperience] = useState<ExperienceDisplay | null>(null);
   const [showMemories, setShowMemories] = useState(false);
+  const [mobileFullScreenChat, setMobileFullScreenChat] = useState(false);
   
   const { experiences, loading, error } = useExperiences();
   const categories = useCategories();
@@ -162,12 +163,27 @@ export default function App() {
 
       </div>
 
-      {/* MOBILE ONLY: Fixed Chat at Bottom */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t-2 border-slate-200 shadow-2xl">
-        <div className="max-h-[30vh]">
-          <ChatSection userId={userId} />
+      {/* MOBILE ONLY: Full Screen Chat */}
+      {mobileFullScreenChat && (
+        <div className="md:hidden fixed inset-0 z-50 bg-white">
+          <ChatSection 
+            userId={userId} 
+            onExperienceClick={setSelectedExperience}
+            isMobileFullScreen={true}
+            onCloseMobileChat={() => setMobileFullScreenChat(false)}
+          />
         </div>
-      </div>
+      )}
+
+      {/* MOBILE ONLY: Chat Button */}
+      {!mobileFullScreenChat && (
+        <button
+          onClick={() => setMobileFullScreenChat(true)}
+          className="md:hidden fixed bottom-6 right-6 z-40 w-16 h-16 bg-black text-white rounded-full shadow-2xl flex items-center justify-center hover:bg-slate-800 transition-colors"
+        >
+          <Bot size={28} />
+        </button>
+      )}
 
       {/* Detail Modal */}
       {selectedExperience && (
