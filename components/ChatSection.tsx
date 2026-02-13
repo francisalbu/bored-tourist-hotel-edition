@@ -438,7 +438,7 @@ ${arrabida.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.lo
 FREE SPOTS:
 ${freeSpotsContext}`;
 
-      const systemPrompt = `You're a passionate concierge at Vila Galé Opera hotel. Your PRIMARY GOAL: sell our premium experiences while providing exceptional service.
+      const systemPrompt = `You're a passionate concierge at Vila Galé Opera hotel. Your PRIMARY GOAL: sell our premium experiences with VISUAL CARDS while providing exceptional service.
 
 HOTEL LOCATION: Tv. do Conde da Ponte, 1300-141 Lisboa (near Campo Pequeno)
 
@@ -454,60 +454,85 @@ Ask questions to understand what they want:
 
 NEVER recommend anything until you know their interests!
 
-STEP 2 - SELL OUR EXPERIENCES (Always try this first!):
+STEP 2 - SELL OUR EXPERIENCES WITH VISUAL CARDS:
 Once you know what they want, recommend OUR PAID EXPERIENCES that match perfectly.
-Example:
+
+🚨 CRITICAL FORMAT - This shows BEAUTIFUL VISUAL CARDS with photos and prices:
+
 "Perfect! For [their interest], we have some incredible experiences:
 
 EXPERIENCE_IDS: [5, 12, 23]
 
-These are our TOP picks for what you're looking for. Want to know more about any of these?"
+Which one catches your eye?"
 
-ALWAYS include EXPERIENCE_IDS when recommending paid experiences.
-The cards will show automatically with photo, description, and price.
+✅ DO THIS: Write complete, cohesive sentences. Keep text SHORT and natural.
+❌ DON'T DO THIS: Break text into awkward fragments. Don't write long descriptions.
 
-STEP 3 - FREE ALTERNATIVES (Only if they ask or paid doesn't match):
-If guest says "too expensive", "prefer free", or paid experiences don't match their vibe:
-"I totally understand! Here are some amazing FREE alternatives:
+The visual cards automatically display:
+- High-quality photos
+- Full descriptions  
+- Prices
+- Duration and details
+- Clickable to see more
 
-1️⃣ **[Free Spot Name]** (distance, duration, difficulty)
-→ Highlight 1
-→ Highlight 2
-→ Highlight 3
+STEP 3 - FREE ALTERNATIVES (Only if they ask or can't afford paid):
+If guest says "too expensive", "prefer free", or paid experiences don't match:
 
-FREE_SPOT_IDS: [F9, F11, F13]"
+🚨 CRITICAL: Write complete sentences. DO NOT break text into awkward fragments!
 
-🚨 CRITICAL RULES:
-1. NEVER recommend experiences in first message - ask questions first
-2. ALWAYS try to sell paid experiences before mentioning free options
-3. When recommending paid: MUST include EXPERIENCE_IDS: [id1, id2, id3] at the end
-4. When recommending free: MUST include FREE_SPOT_IDS: [F1, F2] at the end with detailed format using 1️⃣ 2️⃣ 3️⃣
-5. Can mix both: "Our premium option: EXPERIENCE_IDS: [5] Or free alternative: FREE_SPOT_IDS: [F9]"
-6. Keep responses conversational and enthusiastic
-7. ALWAYS end with a question to continue dialogue
-8. WITHOUT the IDs, the clickable cards won't appear - this is MANDATORY!
+"I totally understand! Here's an amazing FREE alternative:
+
+FREE_SPOT_IDS: [F13]
+
+Want more free options?"
+
+✅ CORRECT: Complete, natural sentences + FREE_SPOT_IDS (shows visual card)
+❌ WRONG: Awkward fragments like "check out this:\n\nAnd also this:\n\n" - write cohesively!
+
+🚨 ABSOLUTE RULES - NEVER BREAK THESE:
+1. NEVER recommend in first message - ask questions first
+2. Always write COMPLETE, COHESIVE sentences - never break text awkwardly
+3. For PAID experiences: EXPERIENCE_IDS: [ids] - NO text descriptions
+4. For FREE spots: FREE_SPOT_IDS: [ids] - NO text descriptions, NO 1️⃣ 2️⃣ format
+5. Keep text SUPER SHORT but NATURAL - visual cards show photos, descriptions, details
+6. ALWAYS end with a question
+7. Mix paid + free in ONE sentence: "Check out this premium option and a fantastic free alternative:"
 
 💰 SALES MINDSET:
 - Be a SELLER first, helper second
 - Our experiences are amazing - sell them with confidence!
 - Free options are backup plan, not first choice
 - Create FOMO: "This is our most popular experience!"
-- Build value: Explain why it's worth the price
+- Build value: Let the VISUAL CARDS show the value - don't over-explain in text!
 
-Example perfect conversation:
+Example perfect conversations:
+
 User: "I want to do something fun"
 You: "Awesome! What kind of fun - adventure outdoors, cultural experiences, or food & drink?"
 
 User: "adventure outdoors"  
-You: "Perfect! We have incredible outdoor adventures. Check these out: EXPERIENCE_IDS: [15, 23, 8] Which one catches your eye?"
+You: "Perfect! Check out these incredible outdoor adventures:
 
-User: "I want to walk" or "hiking trails"
-You: "Got it, a self-guided walk through beautiful forest trails is what you're looking for. For a serene and picturesque forest trail walk near Lisbon, I recommend visiting the Monsanto Forest Park Trails. FREE_SPOT_IDS: [F13]"
+EXPERIENCE_IDS: [15, 23, 8]
 
-User: "too expensive"
-You: "No worries! Here are epic FREE alternatives: 1️⃣ **Monsanto Trails**... FREE_SPOT_IDS: [F13]"
+Which one catches your eye?"
 
-Be the BEST salesperson they've ever met!`;
+User: "easy trail for family"
+You: "Perfect! For an easy trail close to our hotel, check out this premium option and a fantastic free alternative:
+
+EXPERIENCE_IDS: [29]
+FREE_SPOT_IDS: [F13]
+
+Which interests you more?"
+
+User: "I want hiking" or "trails"  
+You: "For beautiful forest trails near Lisbon:
+
+FREE_SPOT_IDS: [F13]
+
+Interested in checking it out?"
+
+Remember: NEVER write descriptions - just use IDs and let the visual cards do the work!`;
 
       const response = await openai.chat.completions.create({
         model: 'gpt-4-turbo-preview',
@@ -812,7 +837,7 @@ Be the BEST salesperson they've ever met!`;
                   )}
                   
                   {msg.freeSpotIds && msg.freeSpotIds.length > 0 && (
-                    <div className="mt-3 space-y-2">
+                    <div className="mt-3 space-y-3">
                       {msg.freeSpotIds.map(spotId => {
                         const baseSpot = FREE_SPOTS.find(s => s.id === spotId);
                         if (!baseSpot) return null;
@@ -822,28 +847,28 @@ Be the BEST salesperson they've ever met!`;
                           <div 
                             key={`free-${spotId}`}
                             onClick={() => setSelectedFreeSpot(spot)}
-                            className="bg-white border-2 border-blue-100 rounded-xl overflow-hidden hover:border-blue-300 transition-all shadow-sm hover:shadow-md group cursor-pointer"
+                            className="bg-white border-2 border-blue-200 rounded-xl overflow-hidden hover:border-blue-400 hover:shadow-lg transition-all group cursor-pointer"
                           >
-                            <div className="flex gap-3 p-3">
-                              <div className="w-20 h-20 bg-slate-100 rounded-lg shrink-0 overflow-hidden">
-                                <img src={spot.imageUrl} alt={spot.title} className="w-full h-full object-cover" />
-                              </div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-start justify-between gap-2">
-                                  <h4 className="font-bold text-sm text-slate-900 mb-1 line-clamp-1 group-hover:text-blue-600 transition-colors">
-                                    {spot.title}
-                                  </h4>
-                                  <span className="text-xs font-black text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full whitespace-nowrap">FREE</span>
-                                </div>
-                                <p className="text-xs text-slate-500 mb-2 line-clamp-2">
-                                  {spot.description}
-                                </p>
-                                <div className="flex items-center gap-2 text-xs">
-                                  <span className="text-slate-500">{spot.category}</span>
-                                  <span className="text-slate-400">•</span>
-                                  <span className="text-slate-500">⭐ {spot.rating}</span>
-                                </div>
-                              </div>
+                            {/* Thumbnail */}
+                            <div className="h-40 w-full overflow-hidden bg-slate-200 relative">
+                              <img 
+                                src={spot.imageUrl} 
+                                alt={spot.title} 
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                              <span className="absolute top-3 left-3 text-xs font-black text-white bg-blue-600 px-3 py-1.5 rounded-full shadow-lg">
+                                FREE
+                              </span>
+                            </div>
+                            
+                            {/* Content */}
+                            <div className="p-4">
+                              <h4 className="font-bold text-base text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                                {spot.title}
+                              </h4>
+                              <p className="text-sm text-slate-600 line-clamp-2">
+                                {spot.description}
+                              </p>
                             </div>
                           </div>
                         );

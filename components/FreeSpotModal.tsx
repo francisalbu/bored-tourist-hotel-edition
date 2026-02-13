@@ -33,10 +33,13 @@ export default function FreeSpotModal({ spot, onClose }: FreeSpotModalProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div className="fixed inset-0 z-[200] flex items-end md:items-center justify-center md:p-4 bg-black/60 backdrop-blur-sm" onClick={onClose}>
+      <div 
+        className="bg-white rounded-t-3xl md:rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Header Image */}
-        <div className="relative h-64 overflow-hidden">
+        <div className="relative h-48 md:h-64 overflow-hidden rounded-t-3xl md:rounded-t-2xl">
           <img 
             src={spot.imageUrl} 
             alt={spot.title}
@@ -44,7 +47,7 @@ export default function FreeSpotModal({ spot, onClose }: FreeSpotModalProps) {
           />
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all"
+            className="absolute top-4 right-4 bg-white/90 hover:bg-white p-2 rounded-full shadow-lg transition-all z-10"
           >
             <X className="h-5 w-5 text-slate-700" />
           </button>
@@ -56,10 +59,10 @@ export default function FreeSpotModal({ spot, onClose }: FreeSpotModalProps) {
         </div>
 
         {/* Content */}
-        <div className="p-6">
+        <div className="p-4 md:p-6 pb-8">
           {/* Title & Rating */}
           <div className="mb-4">
-            <h2 className="text-2xl font-bold text-slate-900 mb-2">{spot.title}</h2>
+            <h2 className="text-xl md:text-2xl font-bold text-slate-900 mb-2">{spot.title}</h2>
             <div className="flex items-center gap-3 text-sm">
               <span className="bg-slate-100 px-3 py-1 rounded-full text-slate-700 font-medium">
                 {spot.category}
@@ -70,7 +73,7 @@ export default function FreeSpotModal({ spot, onClose }: FreeSpotModalProps) {
 
           {/* Description */}
           <div className="mb-6">
-            <p className="text-slate-600 leading-relaxed">{spot.description}</p>
+            <p className="text-sm md:text-base text-slate-600 leading-relaxed">{spot.description}</p>
           </div>
 
           {/* Trail Info */}
@@ -115,7 +118,7 @@ export default function FreeSpotModal({ spot, onClose }: FreeSpotModalProps) {
           )}
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
+          <div className="flex flex-col md:flex-row gap-3">
             <button
               onClick={handleOpenInMaps}
               className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-xl transition-colors flex items-center justify-center gap-2"
