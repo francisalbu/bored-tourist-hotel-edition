@@ -4,8 +4,9 @@ import { VideoCard } from './components/VideoCard';
 import { DetailModal } from './components/DetailModal';
 import { ChatSection } from './components/ChatSection';
 import { MemoriesPanel } from './components/MemoriesPanel';
+import { HotelPicks } from './components/HotelPicks';
 import { ExperienceDisplay } from './types';
-import { Menu, Globe, User, Loader2, Brain, Bot } from 'lucide-react';
+import { Menu, Globe, User, Loader2, Brain, Bot, Sparkles } from 'lucide-react';
 import { useExperiences, useCategories } from './hooks/useExperiences';
 import { useUserMemories } from './hooks/useUserMemories';
 
@@ -13,6 +14,7 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedExperience, setSelectedExperience] = useState<ExperienceDisplay | null>(null);
   const [showMemories, setShowMemories] = useState(false);
+  const [showHotelPicks, setShowHotelPicks] = useState(false);
   const [mobileFullScreenChat, setMobileFullScreenChat] = useState(false);
   
   const { experiences, loading, error } = useExperiences();
@@ -72,18 +74,13 @@ export default function App() {
 
               <div className="flex items-center gap-2 md:gap-4">
                 <button 
-                  onClick={() => setShowMemories(!showMemories)}
-                  className="hidden md:flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-pink-500 transition-colors"
+                  onClick={() => setShowHotelPicks(!showHotelPicks)}
+                  className="hidden md:flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-emerald-500 transition-colors"
                 >
-                   <Brain size={14} className={showMemories ? 'text-pink-500' : ''} />
-                   <span className={showMemories ? 'text-pink-500' : ''}>
-                     {showMemories ? 'Hide Memories' : 'My Memories'}
+                   <Sparkles size={14} className={showHotelPicks ? 'text-emerald-500' : ''} />
+                   <span className={showHotelPicks ? 'text-emerald-500' : ''}>
+                     {showHotelPicks ? 'Hide Picks' : 'Hotel Picks'}
                    </span>
-                   {memory && memory.memories.length > 0 && (
-                     <span className="bg-pink-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
-                       {memory.memories.length}
-                     </span>
-                   )}
                 </button>
                 <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-black transition-colors">
                    <User size={14} />
@@ -107,24 +104,29 @@ export default function App() {
 
         {/* Content Grid */}
         <div className="flex-1 p-6 pb-24">
-           {/* Loading State */}
-           {loading && (
-             <div className="flex items-center justify-center py-20">
-               <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
-               <span className="ml-3 text-slate-600 font-bold">Loading experiences...</span>
-             </div>
-           )}
+           {/* Hotel Picks View */}
+           {showHotelPicks ? (
+             <HotelPicks onExperienceClick={setSelectedExperience} />
+           ) : (
+             <>
+               {/* Loading State */}
+               {loading && (
+                 <div className="flex items-center justify-center py-20">
+                   <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
+                   <span className="ml-3 text-slate-600 font-bold">Loading experiences...</span>
+                 </div>
+               )}
 
-           {/* Error State */}
-           {error && (
-             <div className="py-20 text-center border-2 border-dashed border-red-200 rounded-3xl bg-red-50">
-               <p className="text-red-600 font-bold">Error: {error}</p>
-               <button onClick={() => window.location.reload()} className="mt-2 text-red-600 font-black text-sm uppercase">Retry</button>
-             </div>
-           )}
+               {/* Error State */}
+               {error && (
+                 <div className="py-20 text-center border-2 border-dashed border-red-200 rounded-3xl bg-red-50">
+                   <p className="text-red-600 font-bold">Error: {error}</p>
+                   <button onClick={() => window.location.reload()} className="mt-2 text-red-600 font-black text-sm uppercase">Retry</button>
+                 </div>
+               )}
 
-           {/* Content */}
-           {!loading && !error && (
+               {/* Content */}
+               {!loading && !error && (
              <>
                {/* Section Title */}
                <div className="flex items-center gap-3 mb-6">
@@ -154,6 +156,8 @@ export default function App() {
                )}
 
                {/* Footer - Hidden on mobile */}
+           </>
+           )}
                <div className="mt-20 pt-10 border-t border-slate-200 text-center hidden md:block">
                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">© 2024 Bored Tourist Hotel Edition</p>
                </div>

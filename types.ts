@@ -48,6 +48,18 @@ export interface UserMemory {
   updated_at: string;
 }
 
+// Event Card Display type
+export interface EventDisplay {
+  id: string;
+  name: string;
+  date: string;
+  venue: string;
+  category: string;
+  imageUrl: string;
+  link: string;
+  description?: string;
+}
+
 export interface UserMemoryDisplay {
   id: string;
   name?: string;

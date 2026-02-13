@@ -2,11 +2,32 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, MapPin } from 'lucide-react';
 import OpenAI from 'openai';
 import { supabase } from '../lib/supabase';
-import { ExperienceDisplay } from '../types';
+import { ExperienceDisplay, EventDisplay } from '../types';
 import { useUserMemories } from '../hooks/useUserMemories';
 import { DetailModal } from './DetailModal';
 import FreeSpotModal from './FreeSpotModal';
+import { EventCard } from './EventCard';
 import { getCachedPlaceDetails, getPhotoUrl, searchPlaceByName } from '../lib/googlePlaces';
+
+interface WeatherData {
+  temperature: number;
+  condition: string;
+  description: string;
+  humidity: number;
+  windSpeed: number;
+  precipitation: number; // mm of rain
+}
+
+interface EventData {
+  id: string;
+  name: string;
+  date: string;
+  venue: string;
+  category: string;
+  imageUrl: string;
+  link: string;
+  description?: string;
+}
 
 interface Message {
   id: string;
@@ -14,6 +35,7 @@ interface Message {
   text: string;
   experienceIds?: number[];
   freeSpotIds?: number[];
+  eventIds?: string[];
 }
 
 interface FreeSpot {
@@ -201,6 +223,8 @@ export const ChatSection: React.FC<ChatSectionProps> = ({
   const [experiences, setExperiences] = useState<any[]>([]);
   const [selectedFreeSpot, setSelectedFreeSpot] = useState<FreeSpot | null>(null);
   const [enrichedSpots, setEnrichedSpots] = useState<Map<number, FreeSpot>>(new Map());
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+  const [todayEvents, setTodayEvents] = useState<EventData[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
   // Memory hook
@@ -213,6 +237,222 @@ export const ChatSection: React.FC<ChatSectionProps> = ({
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  // Fetch weather data for Lisbon
+  useEffect(() => {
+    async function fetchWeather() {
+      try {
+        // Using Open-Meteo API (100% free, no API key needed!)
+        // Lisbon coordinates: 38.7223° N, 9.1393° W
+        const response = await fetch(
+          'https://api.open-meteo.com/v1/forecast?latitude=38.7223&longitude=-9.1393&current=temperature_2m,precipitation,weathercode,windspeed_10m&timezone=Europe/Lisbon'
+        );
+        
+        if (response.ok) {
+          const data = await response.json();
+          const current = data.current;
+          
+          // Map WMO weather codes to conditions
+          const getCondition = (code: number) => {
+            if (code === 0) return { main: 'Clear', description: 'clear sky' };
+            if (code <= 3) return { main: 'Clouds', description: 'partly cloudy' };
+            if (code <= 49) return { main: 'Fog', description: 'foggy' };
+            if (code <= 69) return { main: 'Rain', description: 'rainy' };
+            if (code <= 79) return { main: 'Snow', description: 'snowy' };
+            if (code <= 99) return { main: 'Thunderstorm', description: 'thunderstorm' };
+            return { main: 'Clear', description: 'clear' };
+          };
+          
+          const condition = getCondition(current.weathercode);
+          
+          setWeatherData({
+            temperature: Math.round(current.temperature_2m),
+            condition: condition.main,
+            description: condition.description,
+            humidity: 65, // Open-Meteo free tier doesn't include humidity in basic plan
+            windSpeed: current.windspeed_10m,
+            precipitation: current.precipitation
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching weather:', error);
+        // Set default sunny weather for Lisbon
+        setWeatherData({
+          temperature: 18,
+          condition: 'Clear',
+          description: 'sunny',
+          humidity: 65,
+          windSpeed: 3.5,
+          precipitation: 0
+        });
+      }
+    }
+
+    fetchWeather();
+    // Refresh weather every 30 minutes
+    const interval = setInterval(fetchWeather, 30 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Fetch events data from Agenda LX and Gulbenkian
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        // Fetch from both sources in parallel
+        const [agendaLXResponse, gulbenkianResponse] = await Promise.all([
+          fetch('https://www.agendalx.pt/wp-json/agendalx/v1/events', {
+            headers: { 'User-Agent': 'BoredTourist/1.0' },
+          }),
+          fetch('https://gulbenkian.pt/wp-json/wp/v2/events?per_page=50', {
+            headers: { 'User-Agent': 'BoredTourist/1.0' },
+          })
+        ]);
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const allEvents: EventData[] = [];
+        
+        // Process Agenda LX events
+        if (agendaLXResponse.ok) {
+          const agendaData = await agendaLXResponse.json();
+          const agendaEvents = agendaData
+            .filter((event: any) => {
+              if (!event.StartDate) return false;
+              const eventDate = new Date(event.StartDate);
+              const diffDays = Math.floor((eventDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+              return diffDays >= 0 && diffDays <= 30; // Extended to 30 days
+            })
+            .slice(0, 10)
+            .map((event: any, index: number) => {
+              const venueName = event.venue 
+                ? Object.values(event.venue)[0] as { name: string }
+                : null;
+              
+              const categoryName = event.categories_name_list
+                ? Object.values(event.categories_name_list)[0] as { name: string }
+                : null;
+
+              return {
+                id: `agenda-${event.id || index}`,
+                name: event.title?.rendered || 'Event',
+                date: event.string_dates || event.StartDate,
+                venue: venueName?.name || 'Lisboa',
+                category: categoryName?.name || 'cultura',
+                imageUrl: event.featured_media_large || 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=800',
+                link: event.link || '#',
+                description: event.subtitle || '',
+              };
+            });
+          allEvents.push(...agendaEvents);
+        }
+
+        // Process Gulbenkian events
+        if (gulbenkianResponse.ok) {
+          const gulbenkianData = await gulbenkianResponse.json();
+          
+          // Get featured media URLs for images
+          const eventsWithImages = await Promise.all(
+            gulbenkianData.map(async (event: any) => {
+              let imageUrl = 'https://images.unsplash.com/photo-1580974928064-f0aeef70895a?w=800';
+              
+              // Try to fetch featured media
+              if (event.featured_media && event.featured_media !== 0) {
+                try {
+                  const mediaResponse = await fetch(
+                    `https://gulbenkian.pt/wp-json/wp/v2/media/${event.featured_media}`,
+                    { headers: { 'User-Agent': 'BoredTourist/1.0' } }
+                  );
+                  if (mediaResponse.ok) {
+                    const mediaData = await mediaResponse.json();
+                    imageUrl = mediaData.source_url || imageUrl;
+                  }
+                } catch (err) {
+                  console.log('Failed to fetch Gulbenkian media:', err);
+                }
+              }
+              
+              return { ...event, imageUrl };
+            })
+          );
+          
+          // Process each event and check ALL sessions, not just the first one
+          const expandedEvents: any[] = [];
+          eventsWithImages.forEach((event: any) => {
+            if (!event.acf?.sessions || event.acf.sessions.length === 0) return;
+            
+            // Check each session of this event
+            event.acf.sessions.forEach((session: any) => {
+              if (!session.start_date) return;
+              const sessionDate = new Date(session.start_date);
+              const diffDays = Math.floor((sessionDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+              
+              // Include if session is within next 30 days
+              if (diffDays >= 0 && diffDays <= 30) {
+                expandedEvents.push({
+                  ...event,
+                  selectedSession: session,
+                  sessionDate: sessionDate
+                });
+              }
+            });
+          });
+          
+          // Sort by date (closest first) and take top 10
+          const gulbenkianEvents = expandedEvents
+            .sort((a, b) => a.sessionDate.getTime() - b.sessionDate.getTime())
+            .slice(0, 10)
+            .map((event: any, index: number) => {
+              const sessionDate = event.sessionDate;
+              const formattedDate = sessionDate.toLocaleDateString('pt-PT', {
+                day: 'numeric',
+                month: 'long',
+                hour: '2-digit',
+                minute: '2-digit'
+              });
+
+              // Get category name
+              let category = 'Cultura';
+              if (event['fcg-agenda_template']?.includes(31607)) category = 'Música';
+              else if (event['fcg-agenda_template']?.includes(9466)) category = 'Exposição';
+              else if (event['fcg-agenda_template']?.includes(9468)) category = 'Conferência';
+              else if (event['fcg-agenda_template']?.includes(31507)) category = 'Atividade';
+
+              return {
+                id: `gulbenkian-${event.id}-${event.selectedSession.uuid || index}`,
+                name: event.title?.rendered || 'Event',
+                date: formattedDate,
+                venue: 'Fundação Gulbenkian',
+                category: category,
+                imageUrl: event.imageUrl,
+                link: event.link || '#',
+                description: event.acf?.lead || event.acf?.subtitle || '',
+              };
+            });
+          allEvents.push(...gulbenkianEvents);
+        }
+        
+        // Sort by date and limit to 20 total events
+        setTodayEvents(allEvents.slice(0, 20));
+        
+      } catch (error) {
+        console.error('Error fetching events:', error);
+        // Fallback to mock events if API fails
+        setTodayEvents([
+          {
+            name: "Fado Night at Alfama",
+            date: new Date().toLocaleDateString('pt-PT'),
+            venue: "Casa de Linhares",
+            category: "Music"
+          }
+        ]);
+      }
+    }
+
+    fetchEvents();
+    // Refresh events every 6 hours
+    const interval = setInterval(fetchEvents, 6 * 60 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Enrich free spots with Google Places data
   useEffect(() => {
@@ -404,6 +644,50 @@ Keep it human, conversational, and insightful - not a database dump.`;
         `[F${spot.id}] **${spot.title}** (${spot.category}) - FREE, ${spot.location}. ${spot.description}`
       ).join('\n');
 
+      // Current context for dynamic recommendations
+      const now = new Date();
+      const timeOfDay = now.getHours();
+      const dayOfWeek = now.toLocaleDateString('pt-PT', { weekday: 'long' });
+      const currentTime = now.toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+      
+      const weatherContext = weatherData 
+        ? `Weather: ${weatherData.temperature}°C, ${weatherData.description} (${weatherData.condition})${weatherData.precipitation > 0 ? ` - ${weatherData.precipitation}mm rain` : ' - No rain'}`
+        : 'Weather: Pleasant sunny day';
+      
+      const eventsContext = todayEvents.length > 0
+        ? `Upcoming Events in Lisbon (next 7 days):\n${todayEvents.map(e => `- ${e.name} on ${e.date} at ${e.venue}`).join('\n')}`
+        : 'No major events scheduled this week';
+      
+      const timeContext = timeOfDay < 12 
+        ? '🌅 Morning - Great time for breakfast spots, early tours, and outdoor activities'
+        : timeOfDay < 17 
+        ? '☀️ Afternoon - Perfect for sightseeing, museums, and lunch experiences'
+        : timeOfDay < 21
+        ? '🌇 Evening - Ideal for sunset views, dinner experiences, and nightlife prep'
+        : '🌙 Night - Time for bars, restaurants, and evening entertainment';
+
+      const contextualInfo = `
+═══════════════════════════════════════
+📍 CURRENT CONTEXT (Use this to personalize recommendations!)
+═══════════════════════════════════════
+⏰ Time: ${currentTime} (${dayOfWeek})
+${timeContext}
+
+🌤️ ${weatherContext}
+${weatherData?.condition === 'Rain' || (weatherData?.precipitation && weatherData.precipitation > 0) ? '☔ RAINY/WET → Suggest indoor activities (museums, food halls, wine tasting)!' : ''}
+${weatherData?.condition === 'Clear' && weatherData?.temperature > 25 ? '🌡️ HOT DAY → Suggest water activities, beaches, or shaded gardens!' : ''}
+${weatherData?.precipitation && weatherData.precipitation > 2 ? '⚠️ HEAVY RAIN → Only recommend fully indoor experiences!' : ''}
+
+🎭 ${eventsContext}
+
+💡 ADJUST YOUR RECOMMENDATIONS:
+- Bad weather? → Push indoor experiences and cozy restaurants
+- Morning? → Breakfast spots, early tours, hiking
+- Afternoon? → Museums, tours, lunch spots
+- Evening? → Sunset viewpoints, dinner, pre-nightlife
+- Events nearby? → Suggest dinner/drinks near event venues
+`;
+
       // Group experiences by geographic zones for better recommendations
       const lisboaCentro = experiences.filter(e => 
         e.location.includes('Alfama') || e.location.includes('Baixa') || 
@@ -441,6 +725,8 @@ ${freeSpotsContext}`;
       const systemPrompt = `You're a passionate concierge at Vila Galé Opera hotel. Your PRIMARY GOAL: sell our premium experiences with VISUAL CARDS while providing exceptional service.
 
 HOTEL LOCATION: Tv. do Conde da Ponte, 1300-141 Lisboa (near Campo Pequeno)
+
+${contextualInfo}
 
 ${zoneContext}
 
@@ -489,19 +775,43 @@ Want more free options?"
 ✅ CORRECT: Complete, natural sentences + FREE_SPOT_IDS (shows visual card)
 ❌ WRONG: Awkward fragments like "check out this:\n\nAnd also this:\n\n" - write cohesively!
 
+STEP 4 - CULTURAL EVENTS (ALWAYS show when asked about events):
+When guest asks about:
+- "what events" / "events today" / "events happening"
+- "concerts" / "shows" / "exhibitions"  
+- "what's happening" / "things to do today"
+- "cultural activities"
+
+IMMEDIATELY show EVENT_IDS:
+
+"Here are some amazing cultural events happening in Lisboa:
+
+EVENT_IDS: [agenda-197328, gulbenkian-323728]
+
+Which one sounds interesting?"
+
+✅ DO THIS: Natural sentence + EVENT_IDS (shows beautiful visual cards with photos, dates, venues)
+❌ DON'T: Say you can't access real-time data - YOU HAVE THE DATA! Just show EVENT_IDS!
+❌ DON'T: Suggest external websites - USE THE EVENT_IDS BELOW!
+
 🚨 ABSOLUTE RULES - NEVER BREAK THESE:
-1. NEVER recommend in first message - ask questions first
+1. NEVER recommend in first message - ask questions first (UNLESS they ask about events - then show events!)
 2. Always write COMPLETE, COHESIVE sentences - never break text awkwardly
 3. For PAID experiences: EXPERIENCE_IDS: [ids] - NO text descriptions
 4. For FREE spots: FREE_SPOT_IDS: [ids] - NO text descriptions, NO 1️⃣ 2️⃣ format
-5. Keep text SUPER SHORT but NATURAL - visual cards show photos, descriptions, details
-6. ALWAYS end with a question
-7. Mix paid + free in ONE sentence: "Check out this premium option and a fantastic free alternative:"
+5. For CULTURAL EVENTS: EVENT_IDS: [ids] - NO text descriptions
+6. Keep text SUPER SHORT but NATURAL - visual cards show photos, descriptions, details
+7. ALWAYS end with a question
+8. When asked about events, ALWAYS use EVENT_IDS - never say you can't access data!
+
+AVAILABLE CULTURAL EVENTS (${todayEvents.length} events - use these IDs):
+${todayEvents.length > 0 ? todayEvents.map(e => `[${e.id}] ${e.name} - ${e.date} at ${e.venue} (${e.category})`).join('\n') : 'No events currently loaded'}
 
 💰 SALES MINDSET:
 - Be a SELLER first, helper second
 - Our experiences are amazing - sell them with confidence!
 - Free options are backup plan, not first choice
+- Events are great for cultural context and evening plans
 - Create FOMO: "This is our most popular experience!"
 - Build value: Let the VISUAL CARDS show the value - don't over-explain in text!
 
@@ -562,10 +872,17 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
           }).filter(id => id !== null) as number[]
         : [];
       
-      // Clean text removing both ID markers
+      // Extract event IDs  
+      const eventIdsMatch = aiText.match(/EVENT_IDS:\s*\[([a-zA-Z0-9\-,\s]+)\]/);
+      const eventIds = eventIdsMatch
+        ? eventIdsMatch[1].split(',').map(id => id.trim()).filter(id => id.length > 0)
+        : [];
+      
+      // Clean text removing all ID markers
       const cleanText = aiText
         .replace(/EXPERIENCE_IDS:\s*\[[^\]]+\]/g, '')
         .replace(/FREE_SPOT_IDS:\s*\[[^\]]+\]/g, '')
+        .replace(/EVENT_IDS:\s*\[[^\]]+\]/g, '')
         .trim();
 
       setMessages(prev => [...prev, { 
@@ -573,7 +890,8 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
         role: 'assistant', 
         text: cleanText,
         experienceIds: experienceIds.length > 0 ? experienceIds : undefined,
-        freeSpotIds: freeSpotIds.length > 0 ? freeSpotIds : undefined
+        freeSpotIds: freeSpotIds.length > 0 ? freeSpotIds : undefined,
+        eventIds: eventIds.length > 0 ? eventIds : undefined
       }]);
       
       // Extract memories after every 2-3 conversations
@@ -872,6 +1190,17 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
                             </div>
                           </div>
                         );
+                      })}
+                    </div>
+                  )}
+                  
+                  {msg.eventIds && msg.eventIds.length > 0 && (
+                    <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {msg.eventIds.map(eventId => {
+                        const event = todayEvents.find(e => e.id === eventId);
+                        if (!event) return null;
+                        
+                        return <EventCard key={eventId} event={event} />;
                       })}
                     </div>
                   )}
