@@ -107,7 +107,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick }) => 
 
               <button 
                 onClick={handleBookClick}
-                className="bg-emerald-400 hover:bg-emerald-300 text-black font-black uppercase tracking-widest text-xs px-5 py-3 rounded-lg transition-all shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none hover:-translate-y-0.5"
+                className="relative bg-white/10 hover:bg-white/20 backdrop-blur-md text-white font-semibold uppercase tracking-widest text-[11px] px-5 py-2.5 rounded-full border border-white/30 hover:border-white/60 transition-all duration-200 shadow-lg hover:shadow-white/10 hover:-translate-y-0.5 active:translate-y-0"
               >
                 Book
               </button>

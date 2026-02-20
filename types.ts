@@ -83,6 +83,7 @@ export interface ExperienceDisplay {
   rating: number;
   location: string;
   imageUrl: string;
+  images?: string[];
   videoUrl?: string;
   duration: string;
   reviews: number;
@@ -92,6 +93,10 @@ export interface ExperienceDisplay {
   maxGroupSize?: number;
   cancellationPolicy?: string;
   importantInfo?: string;
+  languages?: string[];
+  valueToBring?: string[];
+  latitude?: number;
+  longitude?: number;
 }
 
 export interface Category {

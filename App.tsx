@@ -5,12 +5,18 @@ import { DetailModal } from './components/DetailModal';
 import { ChatSection } from './components/ChatSection';
 import { MemoriesPanel } from './components/MemoriesPanel';
 import { HotelPicks } from './components/HotelPicks';
+import { PreArrivalCreator } from './components/PreArrivalCreator';
 import { ExperienceDisplay } from './types';
-import { Menu, Globe, User, Loader2, Brain, Bot, Sparkles } from 'lucide-react';
+import { Menu, User, Loader2, Sparkles } from 'lucide-react';
 import { useExperiences, useCategories } from './hooks/useExperiences';
 import { useUserMemories } from './hooks/useUserMemories';
+import { HotelProvider, useHotel } from './contexts/HotelContext';
 
-export default function App() {
+type AppView = 'discover' | 'pre-arrival';
+
+function AppContent() {
+  const hotel = useHotel();
+  const [currentView, setCurrentView] = useState<AppView>('discover');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [selectedExperience, setSelectedExperience] = useState<ExperienceDisplay | null>(null);
   const [showMemories, setShowMemories] = useState(false);
@@ -34,11 +40,26 @@ export default function App() {
     return experiences.filter(exp => exp.category === selectedCategory);
   }, [selectedCategory, experiences]);
 
+  // Render Pre-Arrival Creator view
+  if (currentView === 'pre-arrival') {
+    return (
+      <div className="h-screen w-full flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--hotel-bg)' }}>
+        <PreArrivalCreator
+          onBack={() => setCurrentView('discover')}
+          onExperienceClick={(exp) => {
+            setCurrentView('discover');
+            setTimeout(() => setSelectedExperience(exp), 50);
+          }}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="h-screen w-full bg-slate-50 text-slate-900 font-sans selection:bg-emerald-200 selection:text-emerald-900 flex flex-col md:flex-row overflow-hidden">
       
       {/* DESKTOP: LEFT PANEL - Chat / Concierge */}
-      <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200 z-10 shadow-xl">
+      <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200/40 z-10">
         <ChatSection onExperienceClick={setSelectedExperience} userId={userId} />
       </div>
       
@@ -58,43 +79,47 @@ export default function App() {
       )}
 
       {/* MOBILE & DESKTOP: Video Feed */}
-      <div className="flex-1 h-full bg-slate-50 overflow-y-auto relative flex flex-col pb-32 md:pb-0">
+      <div className="flex-1 h-full bg-[#FAFAF8] overflow-y-auto relative flex flex-col pb-32 md:pb-0">
         
         {/* Header */}
-        <div className="sticky top-0 z-30 bg-slate-50/95 backdrop-blur-md px-4 md:px-6 py-3 md:py-4 border-b border-slate-200">
+        <div className="sticky top-0 z-30 bg-[#FAFAF8]/95 backdrop-blur-md px-6 md:px-12 py-6 md:py-8 border-b border-slate-200/40">
            <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-400">Discover</span>
-                <div className="flex items-center gap-1">
-                  <span className="font-black text-base md:text-lg tracking-tight">Lisbon & Surroundings</span>
-                  <Globe size={12} className="text-emerald-600 md:hidden" />
-                  <Globe size={14} className="text-emerald-600 hidden md:block" />
+                <span className="text-[10px] uppercase tracking-[0.4em] text-slate-400 mb-2 font-medium">{hotel.tagline}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-2xl md:text-3xl text-slate-900 font-light tracking-tight">{hotel.location}</span>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 md:gap-4">
                 <button 
-                  onClick={() => setShowHotelPicks(!showHotelPicks)}
-                  className="hidden md:flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-emerald-500 transition-colors"
+                  onClick={() => setCurrentView('pre-arrival')}
+                  className="hidden md:flex items-center gap-2 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide hover:bg-slate-50 border border-slate-200/60 bg-white text-slate-600"
                 >
-                   <Sparkles size={14} className={showHotelPicks ? 'text-emerald-500' : ''} />
-                   <span className={showHotelPicks ? 'text-emerald-500' : ''}>
+                  <span>Pre-Arrival</span>
+                </button>
+                <button 
+                  onClick={() => setShowHotelPicks(!showHotelPicks)}
+                  className="hidden md:flex items-center gap-2 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide hover:bg-slate-50 border border-slate-200/60 bg-white"
+                >
+                   <Sparkles size={15} strokeWidth={1.5} className={showHotelPicks ? 'text-slate-900' : 'text-slate-400'} />
+                   <span className={showHotelPicks ? 'text-slate-900' : 'text-slate-600'}>
                      {showHotelPicks ? 'Hide Picks' : 'Hotel Picks'}
                    </span>
                 </button>
-                <button className="hidden sm:flex items-center gap-2 px-4 py-2 bg-white border-2 border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider hover:border-black transition-colors">
-                   <User size={14} />
+                <button className="hidden sm:flex items-center gap-2 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide hover:bg-slate-50 border border-slate-200/60 bg-white text-slate-600">
+                   <User size={15} strokeWidth={1.5} />
                    <span>My Account</span>
                 </button>
                 <button className="md:hidden p-2 text-slate-900">
-                  <Menu size={20} />
+                  <Menu size={20} strokeWidth={1.5} />
                 </button>
               </div>
            </div>
         </div>
 
         {/* Filters Sticky Bar */}
-        <div className="sticky top-[57px] md:top-[73px] z-20 bg-slate-50/95 backdrop-blur-md pb-3 md:pb-4 pt-2 px-4 md:px-6 border-b border-slate-100/50">
+        <div className="sticky top-[88px] md:top-[108px] z-20 bg-[#FAFAF8]/95 backdrop-blur-md pb-6 md:pb-8 pt-4 px-6 md:px-12">
            <CategoryFilter 
                 categories={categories}
                 selectedCategory={selectedCategory}
@@ -103,7 +128,7 @@ export default function App() {
         </div>
 
         {/* Content Grid */}
-        <div className="flex-1 p-6 pb-24">
+        <div className="flex-1 px-6 md:px-12 pb-24">
            {/* Hotel Picks View */}
            {showHotelPicks ? (
              <HotelPicks onExperienceClick={setSelectedExperience} />
@@ -111,17 +136,17 @@ export default function App() {
              <>
                {/* Loading State */}
                {loading && (
-                 <div className="flex items-center justify-center py-20">
-                   <Loader2 className="w-8 h-8 animate-spin text-emerald-600" />
-                   <span className="ml-3 text-slate-600 font-bold">Loading experiences...</span>
+                 <div className="flex items-center justify-center py-32">
+                   <Loader2 className="w-7 h-7 animate-spin text-slate-400" strokeWidth={1.5} />
+                   <span className="ml-4 text-slate-500 font-light text-sm tracking-wide">Loading experiences...</span>
                  </div>
                )}
 
                {/* Error State */}
                {error && (
-                 <div className="py-20 text-center border-2 border-dashed border-red-200 rounded-3xl bg-red-50">
-                   <p className="text-red-600 font-bold">Error: {error}</p>
-                   <button onClick={() => window.location.reload()} className="mt-2 text-red-600 font-black text-sm uppercase">Retry</button>
+                 <div className="py-32 text-center border border-slate-200/60 rounded-2xl bg-white">
+                   <p className="text-slate-600 font-light">Error: {error}</p>
+                   <button onClick={() => window.location.reload()} className="mt-4 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide bg-slate-900 text-white shadow-sm">Retry</button>
                  </div>
                )}
 
@@ -129,16 +154,16 @@ export default function App() {
                {!loading && !error && (
              <>
                {/* Section Title */}
-               <div className="flex items-center gap-3 mb-6">
-                  <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter">
-                    {selectedCategory === 'all' ? "Today's Inspo" : categories.find(c => c.id === selectedCategory)?.label}
+               <div className="flex items-center gap-4 mb-10">
+                  <h2 className="text-3xl md:text-4xl text-slate-900 font-light tracking-tight">
+                    {selectedCategory === 'all' ? "Today's Inspiration" : categories.find(c => c.id === selectedCategory)?.label}
                   </h2>
-                  <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-wider rounded-full">
-                     {filteredExperiences.length} Results
+                  <span className="px-3 py-1 bg-slate-100 text-slate-600 text-[11px] font-medium tracking-wide rounded-full">
+                     {filteredExperiences.length}
                   </span>
                </div>
 
-               <div className="grid grid-cols-1 min-[450px]:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+               <div className="grid grid-cols-1 min-[450px]:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
                   {filteredExperiences.map((experience) => (
                     <VideoCard 
                       key={experience.id} 
@@ -149,17 +174,17 @@ export default function App() {
                </div>
                
                {filteredExperiences.length === 0 && (
-                 <div className="py-20 text-center border-2 border-dashed border-slate-200 rounded-3xl">
-                    <p className="text-slate-400 font-bold">No experiences found in this category.</p>
-                    <button onClick={() => setSelectedCategory('all')} className="mt-2 text-emerald-600 font-black text-sm uppercase">Clear Filters</button>
+                 <div className="py-32 text-center border border-slate-200/60 rounded-2xl bg-white">
+                    <p className="text-slate-500 font-light">No experiences found in this category.</p>
+                    <button onClick={() => setSelectedCategory('all')} className="mt-4 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide bg-slate-900 text-white shadow-sm">Clear Filters</button>
                  </div>
                )}
 
                {/* Footer - Hidden on mobile */}
            </>
            )}
-               <div className="mt-20 pt-10 border-t border-slate-200 text-center hidden md:block">
-                  <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">© 2024 Bored Tourist Hotel Edition</p>
+               <div className="mt-32 pt-12 border-t border-slate-200/40 text-center hidden md:block">
+                  <p className="text-slate-400 text-[10px] font-light uppercase tracking-[0.3em]">© 2024 Bored Tourist Hotel Edition</p>
                </div>
              </>
            )}
@@ -183,11 +208,11 @@ export default function App() {
       {!mobileFullScreenChat && (
         <button
           onClick={() => setMobileFullScreenChat(true)}
-          className="md:hidden fixed bottom-6 right-6 z-40 w-16 h-16 bg-white border-2 border-emerald-200 rounded-full shadow-2xl flex items-center justify-center hover:border-emerald-400 transition-all overflow-hidden"
+          className="md:hidden fixed bottom-6 right-6 z-40 w-16 h-16 bg-white border border-slate-200/60 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all overflow-hidden"
         >
           <img 
-            src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg"
-            alt="Vila Gale Concierge"
+            src={hotel.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg'}
+            alt={`${hotel.name} Concierge`}
             className="w-full h-full object-cover"
           />
         </button>
@@ -201,5 +226,13 @@ export default function App() {
         />
       )}
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <HotelProvider>
+      <AppContent />
+    </HotelProvider>
   );
 }

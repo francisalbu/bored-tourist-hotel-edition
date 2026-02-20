@@ -1,3 +1,4 @@
+import { useHotel } from '../contexts/HotelContext';
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, MapPin } from 'lucide-react';
 import OpenAI from 'openai';
@@ -226,6 +227,7 @@ export const ChatSection: React.FC<ChatSectionProps> = ({
   const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
   const [todayEvents, setTodayEvents] = useState<EventData[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const hotel = useHotel();
   
   // Memory hook
   const { memory, updateMemory } = useUserMemories(userId);
@@ -934,13 +936,13 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
   };
 
   return (
-    <div className="flex flex-col h-full bg-white relative">
+    <div className="flex flex-col h-full bg-[#FAFAF8] relative">
       {/* Mobile Full Screen Header with Back Button */}
       {isMobileFullScreen && (
-        <div className="sticky top-0 z-10 bg-white border-b border-slate-200 px-4 py-3 flex items-center gap-3">
+        <div className="sticky top-0 z-10 bg-[#FAFAF8]/95 backdrop-blur-md border-b border-slate-200/40 px-6 py-4 flex items-center gap-3">
           <button
             onClick={onCloseMobileChat}
-            className="p-2 hover:bg-slate-100 rounded-full transition-colors"
+            className="p-2 hover:bg-white/60 rounded-full transition-colors"
           >
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
@@ -950,13 +952,13 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
             <img 
               src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg" 
               alt="Vila Gale Opera"
-              className="w-10 h-10 rounded-full object-cover border-2 border-emerald-100"
+              className="w-10 h-10 rounded-full object-cover border border-slate-200/60"
             />
             <div>
-              <div className="text-sm font-bold text-slate-900">
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Vila Gale Opera</span>
+              <div className="text-sm font-medium text-slate-900">
+                Vila Gale Opera
               </div>
-              <div className="text-xs text-slate-500">AI Concierge</div>
+              <div className="text-[11px] text-slate-500 font-light tracking-wide">AI Concierge</div>
             </div>
           </div>
         </div>
@@ -964,7 +966,7 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
 
       {/* Regular Header (Desktop or Mobile Bottom) */}
       {!isMobileFullScreen && (
-        <div className="p-3 md:p-6 md:pb-0 pb-0 border-b md:border-0 border-slate-100">
+        <div className="p-3 md:p-6 md:pb-0 pb-0 border-b md:border-0 border-slate-200/30">
           <div className="flex items-center gap-3 mb-2 md:mb-8">
              <img 
                src="https://storage.googleapis.com/bored_tourist_media/images/WhatsApp%20Image%202026-02-11%20at%2000.12.20.jpeg" 
@@ -980,37 +982,37 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
       <div className={`flex-1 overflow-y-auto px-3 md:px-6 md:px-10 py-2 md:py-4 no-scrollbar ${isMobileFullScreen ? 'block' : 'hidden md:block'}`}>
         {messages.length === 0 ? (
           <div className="h-full flex flex-col justify-center items-center text-center space-y-6">
-            <div className="w-32 h-32 rounded-2xl flex items-center justify-center mb-4 overflow-hidden bg-slate-100 shadow-lg">
+            <div className="w-32 h-32 rounded-2xl flex items-center justify-center mb-4 overflow-hidden bg-white border border-slate-200/60 shadow-sm">
               <img 
                 src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg" 
                 alt="Vila Gale Opera"
                 className="w-full h-full object-cover"
               />
             </div>
-            <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight uppercase leading-tight">
-              Welcome to <br/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-teal-500">Vila Gale Opera</span>
+            <h1 className="text-3xl md:text-4xl text-slate-900 font-light tracking-tight leading-tight">
+              {hotel.welcomeTitle || 'Welcome to'} <br/>
+              <span className="font-serif italic">{hotel.welcomeSubtitle || hotel.name}</span>
             </h1>
-            <p className="text-slate-500 font-medium max-w-md text-lg">
-              I'm your digital concierge. Ask me anything about the city, or let me find your next adventure.
+            <p className="text-slate-600 font-light max-w-md text-base leading-relaxed">
+              {hotel.welcomeDescription || "I'm your digital concierge. Ask me anything about the city, or let me find your next adventure."}
             </p>
             <div className="flex flex-wrap justify-center gap-2 mt-4 w-full px-4">
-              <button onClick={() => setInput("What do you recommend for a 2 day stay?")} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors mb-2">
-                🗓️ 2 Day Itinerary
-              </button>
-              <button onClick={() => setInput("What can I do as a family of 4?")} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors mb-2">
-                👨‍👩‍👧‍👦 Family Activities
-              </button>
-              <button onClick={() => setInput("We want to do dive, where can we go?")} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 border border-slate-200 rounded-full text-xs font-bold uppercase tracking-wider text-slate-600 transition-colors mb-2">
-                🤿 Diving Spots
-              </button>
+              {(hotel.quickSuggestions || [
+                { emoji: '🗓️', label: '2 Day Itinerary', prompt: 'What do you recommend for a 2 day stay?' },
+                { emoji: '👨‍👩‍��‍👦', label: 'Family Activities', prompt: 'What can I do as a family of 4?' },
+                { emoji: '🤿', label: 'Diving Spots', prompt: 'We want to do dive, where can we go?' },
+              ]).map((sug, i) => (
+                <button key={i} onClick={() => setInput(sug.prompt)} className="px-6 py-2.5 bg-white hover:bg-slate-50 border border-slate-200/60 rounded-full text-[13px] font-medium tracking-wide text-slate-600 transition-colors mb-2">
+                  {sug.emoji} {sug.label}
+                </button>
+              ))}
             </div>
           </div>
         ) : (
           <div className="space-y-6">
             {messages.map((msg) => (
               <div key={msg.id} className={`flex gap-4 ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden ${msg.role === 'user' ? 'bg-black text-white' : 'bg-white border-2 border-emerald-100'}`}>
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 overflow-hidden ${msg.role === 'user' ? 'bg-slate-900 text-white' : 'bg-white border border-slate-200/60'}`}>
                   {msg.role === 'user' ? (
                     <User size={16} />
                   ) : (
@@ -1024,8 +1026,8 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
                 <div className="flex-1 max-w-[85%]">
                   <div className={`rounded-2xl p-4 text-sm leading-relaxed ${
                     msg.role === 'user' 
-                      ? 'bg-slate-100 text-slate-900 rounded-tr-none font-medium' 
-                      : 'bg-white border-2 border-slate-100 text-slate-700 rounded-tl-none shadow-sm'
+                      ? 'bg-white text-slate-900 rounded-tr-none font-light border border-slate-200/60' 
+                      : 'bg-white border border-slate-200/60 text-slate-700 rounded-tl-none shadow-sm font-light'
                   }`}>
                     {msg.role === 'assistant' ? (
                       <div className="space-y-3">
@@ -1059,9 +1061,9 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
                               }
                               
                               return (
-                                <div key={idx} className="bg-gradient-to-br from-slate-50 to-slate-100/50 rounded-xl overflow-hidden border-2 border-slate-200 hover:border-emerald-300 transition-colors">
+                                <div key={idx} className="bg-white rounded-xl overflow-hidden border border-slate-200/60 hover:border-slate-300 transition-colors shadow-sm">
                                   {freeSpot?.imageUrl && (
-                                    <div className="h-32 w-full overflow-hidden bg-slate-200">
+                                    <div className="h-32 w-full overflow-hidden bg-slate-100">
                                       <img 
                                         src={freeSpot.imageUrl} 
                                         alt={title}
@@ -1073,16 +1075,16 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
                                     <div className="flex items-start gap-2 mb-2">
                                       <span className="text-2xl leading-none">{emoji}</span>
                                       <div className="flex-1">
-                                        <div className="font-bold text-slate-900 text-base leading-tight">{title}</div>
-                                        <div className="text-xs text-slate-500 mt-0.5">{metadata.trim()}</div>
+                                        <div className="font-medium text-slate-900 text-base leading-tight">{title}</div>
+                                        <div className="text-xs text-slate-500 mt-0.5 font-light">{metadata.trim()}</div>
                                       </div>
                                     </div>
                                     <div className="space-y-1 ml-8">
                                       {lines.slice(1).map((line, i) => {
                                         if (line.trim().startsWith('→')) {
                                           return (
-                                            <div key={i} className="flex items-start gap-2 text-xs text-slate-600">
-                                              <span className="text-emerald-500 font-bold mt-0.5">→</span>
+                                            <div key={i} className="flex items-start gap-2 text-xs text-slate-600 font-light">
+                                              <span className="text-slate-400 font-normal mt-0.5">→</span>
                                               <span className="flex-1">{line.replace('→', '').trim()}</span>
                                             </div>
                                           );
@@ -1209,17 +1211,17 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
             ))}
             {isLoading && (
                <div className="flex gap-4">
-                  <div className="w-8 h-8 rounded-full bg-white border-2 border-emerald-100 flex items-center justify-center shrink-0 overflow-hidden">
+                  <div className="w-8 h-8 rounded-full bg-white border border-slate-200/60 flex items-center justify-center shrink-0 overflow-hidden">
                     <img 
                       src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg" 
                       alt="Vila Gale"
                       className="w-full h-full object-cover"
                     />
                   </div>
-                  <div className="bg-white border-2 border-slate-100 rounded-2xl rounded-tl-none p-4 shadow-sm flex items-center gap-2">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce" />
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce [animation-delay:0.1s]" />
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-bounce [animation-delay:0.2s]" />
+                  <div className="bg-white border border-slate-200/60 rounded-2xl rounded-tl-none p-4 shadow-sm flex items-center gap-2">
+                    <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" />
+                    <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:0.1s]" />
+                    <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce [animation-delay:0.2s]" />
                   </div>
                </div>
             )}
@@ -1228,28 +1230,28 @@ Remember: NEVER write descriptions - just use IDs and let the visual cards do th
         )}
       </div>
 
-      <div className="p-3 md:p-6 md:p-10 pt-2 bg-white">
+      <div className="p-3 md:p-6 md:p-10 pt-2 bg-[#FAFAF8] border-t border-slate-200/40">
         <div className="relative group">
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="What do you want to do?"
-            className="w-full bg-slate-50 border-2 border-slate-200 focus:border-black rounded-2xl md:rounded-3xl pl-4 md:pl-6 pr-12 md:pr-14 py-3 md:py-4 min-h-[50px] md:min-h-[60px] max-h-[80px] md:max-h-[120px] resize-none outline-none text-sm md:text-base text-slate-900 font-medium placeholder-slate-400 transition-colors shadow-sm focus:shadow-md"
+            className="w-full bg-white border border-slate-200/60 focus:border-slate-400 rounded-2xl md:rounded-3xl pl-4 md:pl-6 pr-12 md:pr-14 py-3 md:py-4 min-h-[50px] md:min-h-[60px] max-h-[80px] md:max-h-[120px] resize-none outline-none text-sm md:text-base text-slate-900 font-light placeholder-slate-400 transition-colors shadow-sm focus:shadow-md"
             rows={1}
           />
           <div className="absolute right-2 md:right-3 bottom-2 md:bottom-3 flex items-center gap-2">
             <button 
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
-              className="p-2 bg-black text-white rounded-full hover:bg-emerald-500 disabled:opacity-50 disabled:hover:bg-black transition-colors"
+              className="p-2 bg-slate-900 text-white rounded-full hover:bg-slate-700 disabled:opacity-50 disabled:hover:bg-slate-900 transition-colors"
             >
               <Send size={16} className="md:hidden" />
               <Send size={18} className="hidden md:block" />
             </button>
           </div>
         </div>
-        <div className="mt-2 md:mt-4 flex items-center justify-between text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-wider px-2 hidden md:flex">
+        <div className="mt-2 md:mt-4 flex items-center justify-between text-[10px] md:text-xs text-slate-400 font-light tracking-wide px-2 hidden md:flex">
           <div className="flex items-center gap-1">
              <MapPin size={12} />
              <span>Lisbon, Portugal</span>

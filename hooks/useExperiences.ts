@@ -18,6 +18,7 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
     rating: exp.rating,
     location: exp.location,
     imageUrl: imageUrl,
+    images: exp.images && exp.images.length > 0 ? exp.images : undefined,
     videoUrl: exp.video_url,
     duration: exp.duration,
     reviews: 0, // You might want to fetch this from reviews table
@@ -27,6 +28,10 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
     maxGroupSize: exp.max_group_size,
     cancellationPolicy: exp.cancellation_policy,
     importantInfo: exp.important_info,
+    languages: exp.languages,
+    valueToBring: exp.value_to_bring,
+    latitude: exp.latitude,
+    longitude: exp.longitude,
   };
 }
 
@@ -43,7 +48,7 @@ export function useExperiences() {
           .from('experiences')
           .select('*')
           .eq('is_active', true)
-          .order('created_at', { ascending: false });
+          .order('display_order', { ascending: true, nullsFirst: false });
 
         if (error) throw error;
 
