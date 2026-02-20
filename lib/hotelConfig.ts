@@ -51,6 +51,19 @@ export interface SiteFeatures {
   enableInstantBooking: boolean;
 }
 
+// AI Bot configuration (managed from Dashboard)
+export interface BotConfig {
+  botName: string;
+  personality: 'premium' | 'casual' | 'friendly' | 'professional' | 'adventurous';
+  language: 'auto' | 'pt' | 'en' | 'es' | 'fr' | 'de' | 'it';
+  toneDescription: string;
+  customInstructions: string;
+  restrictions: string[];
+  knowledgeEntries: { id: string; title: string; type: string; content: string }[];
+  salesAggressiveness: 'soft' | 'balanced' | 'aggressive';
+  maxResponseLength: 'short' | 'medium' | 'long';
+}
+
 export interface HotelConfig {
   id: string;
   name: string;
@@ -74,6 +87,7 @@ export interface HotelConfig {
   welcomeSubtitle?: string;
   welcomeDescription?: string;
   quickSuggestions?: { emoji: string; label: string; prompt: string }[];
+  botConfig?: BotConfig;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -280,6 +294,7 @@ export async function fetchHotelConfigFromDB(hotelId?: string): Promise<HotelCon
       welcomeSubtitle: data.welcome_subtitle || undefined,
       welcomeDescription: data.welcome_description || undefined,
       quickSuggestions: data.quick_suggestions || undefined,
+      botConfig: data.bot_config || undefined,
     };
   } catch (err) {
     console.warn('[hotelConfig] Unexpected error fetching from Supabase:', err);

@@ -56,7 +56,7 @@ function AppContent() {
   }
 
   return (
-    <div className="h-screen w-full bg-slate-50 text-slate-900 font-sans selection:bg-emerald-200 selection:text-emerald-900 flex flex-col md:flex-row overflow-hidden">
+    <div className="h-screen w-full text-slate-900 font-sans selection:bg-emerald-200 selection:text-emerald-900 flex flex-col md:flex-row overflow-hidden" style={{ backgroundColor: 'var(--hotel-bg, #FAFAF8)' }}>
       
       {/* DESKTOP: LEFT PANEL - Chat / Concierge */}
       <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200/40 z-10">
@@ -79,10 +79,10 @@ function AppContent() {
       )}
 
       {/* MOBILE & DESKTOP: Video Feed */}
-      <div className="flex-1 h-full bg-[#FAFAF8] overflow-y-auto relative flex flex-col pb-32 md:pb-0">
+      <div className="flex-1 h-full overflow-y-auto relative flex flex-col pb-32 md:pb-0" style={{ backgroundColor: 'var(--hotel-bg, #FAFAF8)' }}>
         
         {/* Header */}
-        <div className="sticky top-0 z-30 bg-[#FAFAF8]/95 backdrop-blur-md px-6 md:px-12 py-6 md:py-8 border-b border-slate-200/40">
+        <div className="sticky top-0 z-30 backdrop-blur-md px-6 md:px-12 py-6 md:py-8 border-b border-slate-200/40" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
            <div className="flex items-center justify-between">
               <div className="flex flex-col">
                 <span className="text-[10px] uppercase tracking-[0.4em] text-slate-400 mb-2 font-medium">{hotel.tagline}</span>
@@ -119,7 +119,7 @@ function AppContent() {
         </div>
 
         {/* Filters Sticky Bar */}
-        <div className="sticky top-[88px] md:top-[108px] z-20 bg-[#FAFAF8]/95 backdrop-blur-md pb-6 md:pb-8 pt-4 px-6 md:px-12">
+        <div className="sticky top-[88px] md:top-[108px] z-20 backdrop-blur-md pb-6 md:pb-8 pt-4 px-6 md:px-12" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
            <CategoryFilter 
                 categories={categories}
                 selectedCategory={selectedCategory}
