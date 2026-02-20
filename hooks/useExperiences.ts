@@ -25,6 +25,7 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
     address: exp.address,
     highlights: exp.highlights,
     included: exp.included,
+    whatsIncluded: exp.whats_included,
     maxGroupSize: exp.max_group_size,
     cancellationPolicy: exp.cancellation_policy,
     importantInfo: exp.important_info,

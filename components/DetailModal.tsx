@@ -260,6 +260,71 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
                 )}
               </div>
 
+              {/* ─ What's included ─ */}
+              <div className="py-8 border-b border-gray-200">
+                <h2 className="text-xl font-semibold text-gray-900 mb-5">What's included</h2>
+                {experience.whatsIncluded && experience.whatsIncluded.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {experience.whatsIncluded.map((item, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check size={12} strokeWidth={2.5} className="text-green-600" />
+                        </div>
+                        <span className="text-[15px] text-gray-700 leading-snug">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {['Professional local guide', 'Small group experience', 'All tastings & samples', 'Hotel pickup coordination'].map((item, i) => (
+                      <div key={i} className="flex items-start gap-3">
+                        <div className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <Check size={12} strokeWidth={2.5} className="text-green-600" />
+                        </div>
+                        <span className="text-[15px] text-gray-700 leading-snug">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* ─ What to bring ─ */}
+              <div className="py-8 border-b border-gray-200">
+                <h2 className="text-xl font-semibold text-gray-900 mb-5">What to bring</h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {(experience.valueToBring && experience.valueToBring.length > 0
+                    ? experience.valueToBring
+                    : ['Comfortable walking shoes', 'Weather-appropriate clothing', 'Camera or smartphone', 'Water bottle']
+                  ).map((item, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <div className="w-5 h-5 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Info size={12} strokeWidth={2} className="text-blue-500" />
+                      </div>
+                      <span className="text-[15px] text-gray-700 leading-snug">{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* ─ Languages ─ */}
+              <div className="py-8 border-b border-gray-200">
+                <h2 className="text-xl font-semibold text-gray-900 mb-5">Languages</h2>
+                <div className="flex flex-wrap gap-2">
+                  {(experience.languages && experience.languages.length > 0
+                    ? experience.languages
+                    : ['English']
+                  ).map((lang, i) => (
+                    <div key={i} className="flex items-center gap-2 px-4 py-2.5 bg-gray-50 rounded-xl border border-gray-100">
+                      <Globe size={15} strokeWidth={1.5} className="text-gray-500" />
+                      <span className="text-sm font-medium text-gray-700">{lang}</span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-[13px] text-gray-500 mt-3">
+                  This experience is offered in the languages listed above. The guide speaks the primary language and may accommodate other languages on request.
+                </p>
+              </div>
+
               {/* ─ Rating & Reviews ─ */}
               {experience.rating > 0 && (
                 <div className="py-8 border-b border-gray-200">

@@ -21,6 +21,7 @@ export interface Experience {
   provider_logo?: string;
   highlights?: string[];
   included?: boolean;
+  whats_included?: string[];
   value_to_bring?: string[];
   languages?: string[];
   cancellation_policy?: string;
@@ -90,6 +91,7 @@ export interface ExperienceDisplay {
   address?: string;
   highlights?: string[];
   included?: boolean;
+  whatsIncluded?: string[];
   maxGroupSize?: number;
   cancellationPolicy?: string;
   importantInfo?: string;
