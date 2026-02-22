@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hotel Solar do Chiado — Lisboa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --gold: #b8860b;
+      --dark: #1b1b1b;
+      --cream: #faf8f4;
+      --sand: #f2efe9;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--cream);
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* ─── Top Bar ─── */
+    .top-bar {
+      background: var(--dark);
+      color: #ccc;
+      font-size: 12px;
+      padding: 8px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .top-bar a { color: var(--gold); text-decoration: none; }
+
+    /* ─── Navigation ─── */
+    .navbar {
+      background: #fff;
+      border-bottom: 1px solid #e8e5de;
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+      position: sticky;
+      top: 0;
+      z-index: 999;
+    }
+    .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--dark);
+      letter-spacing: 1px;
+    }
+    .logo span { color: var(--gold); }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #666;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color .2s;
+      position: relative;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--dark); }
+    .nav-links a.active::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--gold);
+    }
+    .book-btn {
+      background: var(--gold);
+      color: #fff;
+      border: none;
+      padding: 10px 24px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background .2s;
+    }
+    .book-btn:hover { background: #9a7209; }
+
+    /* ─── Hero ─── */
+    .hero {
+      position: relative;
+      height: 520px;
+      background: url('https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1600&auto=format&q=80') center/cover no-repeat;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(27,27,27,.65) 0%, rgba(27,27,27,.25) 100%);
+    }
+    .hero-content {
+      position: relative;
+      text-align: center;
+      color: #fff;
+      max-width: 700px;
+      padding: 0 24px;
+    }
+    .hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 52px;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .hero-content p {
+      font-size: 17px;
+      font-weight: 300;
+      opacity: .85;
+      max-width: 520px;
+      margin: 0 auto 28px;
+    }
+    .hero-cta {
+      display: inline-block;
+      padding: 14px 36px;
+      border: 1.5px solid #fff;
+      color: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all .3s;
+    }
+    .hero-cta:hover {
+      background: #fff;
+      color: var(--dark);
+    }
+
+    /* ─── Info Strip ─── */
+    .info-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 1000px;
+      margin: -40px auto 0;
+      position: relative;
+      z-index: 10;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.08);
+    }
+    .info-item {
+      text-align: center;
+      padding: 28px 20px;
+      border-right: 1px solid #f0ede7;
+    }
+    .info-item:last-child { border-right: none; }
+    .info-item .icon { font-size: 28px; margin-bottom: 8px; }
+    .info-item h4 {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 4px;
+    }
+    .info-item p { font-size: 13px; color: #999; }
+
+    /* ─── Sections ─── */
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 72px 24px;
+    }
+    .section-title {
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    .section-title span {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .section-title h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--dark);
+      margin-top: 8px;
+    }
+    .section-subtitle {
+      text-align: center;
+      font-size: 15px;
+      color: #888;
+      max-width: 560px;
+      margin: 0 auto 48px;
+    }
+
+    /* ─── Rooms preview ─── */
+    .rooms-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    .room-card {
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,.06);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .room-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,.1);
+    }
+    .room-card img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+    }
+    .room-info {
+      padding: 20px;
+    }
+    .room-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 6px;
+    }
+    .room-info p {
+      font-size: 13px;
+      color: #888;
+      margin-bottom: 12px;
+    }
+    .room-price {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--gold);
+    }
+    .room-price small {
+      font-weight: 400;
+      color: #aaa;
+      font-size: 12px;
+    }
+
+    /* ─── Experiences (widget container) ─── */
+    .experiences-area {
+      background: var(--sand);
+      padding: 72px 0;
+    }
+    .experiences-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ─── Testimonials ─── */
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .testimonial {
+      background: #fff;
+      border-radius: 8px;
+      padding: 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    }
+    .testimonial .stars { color: var(--gold); font-size: 14px; margin-bottom: 12px; }
+    .testimonial blockquote {
+      font-size: 14px;
+      color: #555;
+      font-style: italic;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+    .testimonial .author {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark);
+    }
+    .testimonial .source {
+      font-size: 12px;
+      color: #aaa;
+    }
+
+    /* ─── Newsletter ─── */
+    .newsletter {
+      background: var(--dark);
+      text-align: center;
+      padding: 64px 24px;
+      color: #fff;
+    }
+    .newsletter h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 400;
+      margin-bottom: 8px;
+    }
+    .newsletter p {
+      font-size: 14px;
+      color: #999;
+      margin-bottom: 24px;
+    }
+    .newsletter-form {
+      display: flex;
+      max-width: 440px;
+      margin: 0 auto;
+      gap: 8px;
+    }
+    .newsletter-form input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid #444;
+      background: transparent;
+      color: #fff;
+      font-size: 14px;
+      border-radius: 4px;
+      outline: none;
+    }
+    .newsletter-form input::placeholder { color: #666; }
+    .newsletter-form button {
+      padding: 12px 28px;
+      background: var(--gold);
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    /* ─── Footer ─── */
+    .footer {
+      background: #141414;
+      padding: 48px 40px 24px;
+      color: #777;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      max-width: 1200px;
+      margin: 0 auto 40px;
+    }
+    .footer h4 {
+      font-family: 'Playfair Display', serif;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 400;
+      margin-bottom: 16px;
+    }
+    .footer p, .footer li {
+      font-size: 13px;
+      line-height: 2;
+    }
+    .footer ul { list-style: none; }
+    .footer a { color: #777; text-decoration: none; transition: color .2s; }
+    .footer a:hover { color: var(--gold); }
+    .footer-bottom {
+      text-align: center;
+      padding-top: 24px;
+      border-top: 1px solid #2a2a2a;
+      font-size: 12px;
+      color: #555;
+    }
+
+    /* ─── Responsive ─── */
+    @media (max-width: 768px) {
+      .info-strip { grid-template-columns: repeat(2, 1fr); }
+      .rooms-grid, .testimonials { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .hero-content h1 { font-size: 36px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Top Bar ─── -->
+  <div class="top-bar">
+    <span>📍 Rua do Chiado 24, Lisboa · <a href="tel:+351211234567">+351 21 123 4567</a></span>
+    <span>🌐 PT | EN | FR</span>
+  </div>
+
+  <!-- ─── Navbar ─── -->
+  <nav class="navbar">
+    <div class="logo">Solar <span>do Chiado</span></div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Quartos</a></li>
+      <li><a href="#">Restaurante</a></li>
+      <li><a href="#experiencias" class="active">Experiências</a></li>
+      <li><a href="#">Spa & Wellness</a></li>
+      <li><a href="#">Galeria</a></li>
+      <li><a href="#">Contacto</a></li>
+    </ul>
+    <button class="book-btn">Reservar Agora</button>
+  </nav>
+
+  <!-- ─── Hero ─── -->
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Um refúgio no coração de Lisboa</h1>
+      <p>Descubra o charme de um palácio do séc. XVIII convertido num hotel boutique de luxo, no coração do Chiado.</p>
+      <a href="#" class="hero-cta">Descobrir Mais</a>
+    </div>
+  </div>
+
+  <!-- ─── Info Strip ─── -->
+  <div class="info-strip">
+    <div class="info-item">
+      <div class="icon">🏛️</div>
+      <h4>Palácio Histórico</h4>
+      <p>Séc. XVIII restaurado</p>
+    </div>
+    <div class="info-item">
+      <div class="icon">🌇</div>
+      <h4>Vista Rio Tejo</h4>
+      <p>Terraço panorâmico</p>
+    </div>
+    <div class="info-item">
+      <div class="icon">🍷</div>
+      <h4>Wine Bar</h4>
+      <p>Vinhos portugueses</p>
+    </div>
+    <div class="info-item">
+      <div class="icon">⭐</div>
+      <h4>9.4 / 10</h4>
+      <p>Booking.com</p>
+    </div>
+  </div>
+
+  <!-- ─── Rooms Section ─── -->
+  <section class="section">
+    <div class="section-title">
+      <span>Alojamento</span>
+      <h2>Os Nossos Quartos</h2>
+    </div>
+    <p class="section-subtitle">Cada quarto é único — decorado com arte portuguesa contemporânea e mobiliário de época restaurado.</p>
+    <div class="rooms-grid">
+      <div class="room-card">
+        <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=600&auto=format&q=80" alt="Classic Room" />
+        <div class="room-info">
+          <h3>Quarto Clássico</h3>
+          <p>24m² · Vista cidade · Cama King</p>
+          <div class="room-price">€189 <small>/ noite</small></div>
+        </div>
+      </div>
+      <div class="room-card">
+        <img src="https://images.unsplash.com/photo-1590490360182-c33d55351c28?w=600&auto=format&q=80" alt="Superior Room" />
+        <div class="room-info">
+          <h3>Suite Superior</h3>
+          <p>38m² · Varanda privada · Banheira</p>
+          <div class="room-price">€289 <small>/ noite</small></div>
+        </div>
+      </div>
+      <div class="room-card">
+        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=600&auto=format&q=80" alt="Royal Suite" />
+        <div class="room-info">
+          <h3>Suite Real</h3>
+          <p>62m² · Vista Tejo · Sala de estar</p>
+          <div class="room-price">€459 <small>/ noite</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Experiences Section (WIDGET GOES HERE) ─── -->
+  <section id="experiencias" class="experiences-area">
+    <div class="experiences-inner">
+      <div class="section-title">
+        <span>Curadoria Local</span>
+        <h2>Experiências em Lisboa</h2>
+      </div>
+      <p class="section-subtitle">Experiências selecionadas pela nossa equipa de concierge para tornar a sua estadia inesquecível.</p>
+
+      <!--
+        ╔══════════════════════════════════════════════════════╗
+        ║   🎯  BORED TOURIST WIDGET — embedded from         ║ 
+        ║        the hotel's partner dashboard                ║
+        ╚══════════════════════════════════════════════════════╝
+      -->
+      <div
+        data-bt-widget
+        data-hotel-id="vila-gale"
+        data-limit="6"
+        data-columns="3"
+        data-lang="pt"
+      ></div>
+    </div>
+  </section>
+
+  <!-- ─── Testimonials ─── -->
+  <section class="section">
+    <div class="section-title">
+      <span>Testemunhos</span>
+      <h2>O Que Dizem os Nossos Hóspedes</h2>
+    </div>
+    <p class="section-subtitle">Milhares de hóspedes de todo o mundo já viveram a experiência Solar do Chiado.</p>
+    <div class="testimonials">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"A localização é perfeita. As experiências sugeridas pelo hotel tornaram a nossa estadia mágica — especialmente o tour de vinhos!"</blockquote>
+        <div class="author">Maria & João</div>
+        <div class="source">TripAdvisor · Fevereiro 2026</div>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Beautiful boutique hotel with an incredible terrace. The concierge booked amazing food tours for us. Will definitely return!"</blockquote>
+        <div class="author">Sarah T.</div>
+        <div class="source">Google Reviews · Janeiro 2026</div>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Un hôtel magnifique au cœur de Lisbonne. L'équipe est aux petits soins et les expériences proposées sont exceptionnelles."</blockquote>
+        <div class="author">Pierre & Claire</div>
+        <div class="source">Booking.com · Dezembro 2025</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Newsletter ─── -->
+  <div class="newsletter">
+    <h3>Subscreva a Nossa Newsletter</h3>
+    <p>Receba ofertas exclusivas e novidades do Solar do Chiado.</p>
+    <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Obrigado!');">
+      <input type="email" placeholder="O seu email..." />
+      <button type="submit">Subscrever</button>
+    </form>
+  </div>
+
+  <!-- ─── Footer ─── -->
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <h4>Solar do Chiado</h4>
+        <p>Um palácio do séc. XVIII transformado num hotel boutique de luxo no coração de Lisboa. Tradição, conforto e experiências autênticas.</p>
+      </div>
+      <div>
+        <h4>Explorar</h4>
+        <ul>
+          <li><a href="#">Quartos & Suites</a></li>
+          <li><a href="#">Restaurante</a></li>
+          <li><a href="#">Spa & Wellness</a></li>
+          <li><a href="#">Experiências</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Informações</h4>
+        <ul>
+          <li><a href="#">Como Chegar</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Política de Privacidade</a></li>
+          <li><a href="#">Termos & Condições</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contacto</h4>
+        <ul>
+          <li>📍 Rua do Chiado 24</li>
+          <li>📞 +351 21 123 4567</li>
+          <li>✉️ info@solardochiado.pt</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Hotel Solar do Chiado — Todos os direitos reservados
+    </div>
+  </footer>
+
+  <!-- 
+    ══════════════════════════════════════════════
+    The ONLY thing the hotel needs to add:
+    this script tag pointing to our widget JS
+    ══════════════════════════════════════════════
+  -->
+  <script src="/widget/bt-widget.js" async></script>
+
+</body>
+</html>

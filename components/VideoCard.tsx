@@ -69,10 +69,12 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick }) => 
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent opacity-90" />
         
-        {/* Play Icon (Center) */}
+        {/* Play Icon (Center) - only when video exists */}
+          {experience.videoUrl && (
         <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white transition-all duration-300 ${isPlaying ? 'scale-150 opacity-0' : 'scale-100 opacity-100'}`}>
           <Play size={20} fill="currentColor" className="ml-1" />
         </div>
+          )}
         
         {/* Category Tag (Top Left) */}
         <div className="absolute top-3 left-3">

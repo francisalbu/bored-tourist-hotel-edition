@@ -15,6 +15,13 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   return (
     <div className="flex overflow-x-auto no-scrollbar gap-2 items-center">
       {categories.map((cat) => {
+        // Render a subtle divider between marketplace & hotel categories
+        if (cat.id === '_divider') {
+          return (
+            <div key="_divider" className="w-px h-7 bg-slate-200/80 mx-1 flex-shrink-0" />
+          );
+        }
+
         const isSelected = selectedCategory === cat.id;
         return (
           <button

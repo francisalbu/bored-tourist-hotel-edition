@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Lumiares — Experiences</title>
+  <style>
+    /* ── Simulated hotel website styles ── */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      background: #FAF9F6;
+      color: #2c2c2c;
+    }
+
+    /* Navbar */
+    .hotel-nav {
+      background: #fff;
+      border-bottom: 1px solid #e8e5df;
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .hotel-logo {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #1a1a1a;
+    }
+    .hotel-nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+    .hotel-nav-links a {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      text-decoration: none;
+      color: #555;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .hotel-nav-links a:hover, .hotel-nav-links a.active {
+      color: #1a1a1a;
+    }
+
+    /* Hero */
+    .hotel-hero {
+      position: relative;
+      height: 400px;
+      background: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1400&auto=format') center/cover no-repeat;
+    }
+    .hotel-hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.45));
+    }
+    .hotel-hero-content {
+      position: relative;
+      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: #fff;
+    }
+    .hotel-hero h1 {
+      font-size: 42px;
+      font-weight: 400;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .hotel-hero p {
+      font-family: -apple-system, sans-serif;
+      font-size: 16px;
+      opacity: 0.85;
+      max-width: 480px;
+    }
+
+    /* Experiences section */
+    .experiences-section {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .section-header h2 {
+      font-size: 30px;
+      font-weight: 400;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+    .section-header p {
+      font-family: -apple-system, sans-serif;
+      font-size: 15px;
+      color: #888;
+    }
+
+    /* Footer */
+    .hotel-footer {
+      background: #1a1a1a;
+      color: #aaa;
+      text-align: center;
+      padding: 32px;
+      font-family: -apple-system, sans-serif;
+      font-size: 13px;
+    }
+
+    /* ── Embed code sample ── */
+    .embed-guide {
+      max-width: 800px;
+      margin: 0 auto 60px;
+      padding: 0 24px;
+    }
+    .embed-guide h3 {
+      font-family: -apple-system, sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 12px;
+    }
+    .embed-guide p {
+      font-family: -apple-system, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+    .code-block {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      border-radius: 12px;
+      padding: 20px 24px;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .code-block .tag { color: #89b4fa; }
+    .code-block .attr { color: #f9e2af; }
+    .code-block .str { color: #a6e3a1; }
+    .code-block .comment { color: #6c7086; font-style: italic; }
+  </style>
+</head>
+<body>
+
+  <!-- ─── Simulated Hotel Navbar ─── -->
+  <nav class="hotel-nav">
+    <div class="hotel-logo">The Lumiares</div>
+    <ul class="hotel-nav-links">
+      <li><a href="#">Rooms</a></li>
+      <li><a href="#">Restaurant</a></li>
+      <li><a href="#" class="active">Experiences</a></li>
+      <li><a href="#">Spa</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ─── Hero ─── -->
+  <div class="hotel-hero">
+    <div class="hotel-hero-content">
+      <h1>Experiences</h1>
+      <p>Discover curated experiences handpicked by our concierge team for an unforgettable stay.</p>
+    </div>
+  </div>
+
+  <!-- ─── Experiences Widget Section ─── -->
+  <section class="experiences-section">
+    <div class="section-header">
+      <h2>Our Curated Experiences</h2>
+      <p>Each experience is hand-selected to complement your stay at The Lumiares</p>
+    </div>
+
+    <!-- 
+      ┌─────────────────────────────────────────────────┐
+      │  THIS IS THE BORED TOURIST WIDGET               │
+      │  Just add this div + script to any hotel site    │
+      └─────────────────────────────────────────────────┘
+    -->
+    <div
+      data-bt-widget
+      data-hotel-id="vila-gale"
+      data-limit="6"
+      data-columns="3"
+      data-lang="en"
+    ></div>
+
+  </section>
+
+  <!-- ─── Embed Guide ─── -->
+  <section class="embed-guide">
+    <h3>🛠️ How to embed this widget</h3>
+    <p>
+      Add the following two lines to your hotel website's HTML. 
+      Replace <code>your-hotel-id</code> with the hotel ID provided by Bored Tourist.
+      You can customise the number of cards, columns, language, and category filter.
+    </p>
+    <div class="code-block"><span class="comment">&lt;!-- 1. Add the container where you want experiences to appear --&gt;</span>
+<span class="tag">&lt;div</span>
+  <span class="attr">data-bt-widget</span>
+  <span class="attr">data-hotel-id=</span><span class="str">"your-hotel-id"</span>
+  <span class="attr">data-limit=</span><span class="str">"6"</span>          <span class="comment">&lt;!-- number of cards --&gt;</span>
+  <span class="attr">data-columns=</span><span class="str">"3"</span>        <span class="comment">&lt;!-- grid columns (desktop) --&gt;</span>
+  <span class="attr">data-category=</span><span class="str">""</span>        <span class="comment">&lt;!-- filter: "food", "adventure", etc. or empty for all --&gt;</span>
+  <span class="attr">data-lang=</span><span class="str">"en"</span>          <span class="comment">&lt;!-- en | pt | es | fr --&gt;</span>
+<span class="tag">&gt;&lt;/div&gt;</span>
+
+<span class="comment">&lt;!-- 2. Load the widget script (async, non-blocking) --&gt;</span>
+<span class="tag">&lt;script</span> <span class="attr">src=</span><span class="str">"https://YOUR_DOMAIN/widget/bt-widget.js"</span> <span class="attr">async</span><span class="tag">&gt;&lt;/script&gt;</span></div>
+  </section>
+
+  <!-- ─── Hotel Footer ─── -->
+  <footer class="hotel-footer">
+    <p>© 2026 The Lumiares Hotel & Spa — Lisbon, Portugal</p>
+  </footer>
+
+  <!-- ─── Load the Bored Tourist widget ─── -->
+  <script src="/widget/bt-widget.js" async></script>
+
+</body>
+</html>

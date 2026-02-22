@@ -70,7 +70,7 @@ export function useExperiences() {
 }
 
 export function useCategories() {
-  // Official Bored Tourist categories
+  // Bored. marketplace + hotel service categories
   const categories = [
     { id: 'all', label: 'All', icon: '🔥' },
     { id: 'Outdoors', label: 'Outdoors', icon: '🏞️' },
@@ -79,6 +79,12 @@ export function useCategories() {
     { id: 'Local Cooking', label: 'Local Cooking', icon: '🍳' },
     { id: 'Time Stories', label: 'Time Stories', icon: '⏳' },
     { id: 'Micro Adventures', label: 'Micro Adventures', icon: '🎒' },
+    { id: '_divider', label: '', icon: '' },
+    { id: 'Spa & Wellness', label: 'Spa', icon: '🧖' },
+    { id: 'Rentals', label: 'Rentals', icon: '🚲' },
+    { id: 'Transfers', label: 'Transfers', icon: '🚗' },
+    { id: 'Tables', label: 'Tables', icon: '🍽️' },
+    { id: 'Packages', label: 'Packages', icon: '🎁' },
   ];
 
   return categories;
