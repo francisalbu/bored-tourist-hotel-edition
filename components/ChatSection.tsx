@@ -524,7 +524,8 @@ export const ChatSection: React.FC<ChatSectionProps> = ({
         videoUrl: exp.video_url,
         imageUrl: exp.images && exp.images.length > 0 ? exp.images[0] : null,
         thumbnail: exp.images && exp.images.length > 0 ? exp.images[0] : null,
-        images: exp.images || []
+        images: exp.images || [],
+        tags: exp.tags || []
       }));
       
       setExperiences(mappedData);
@@ -638,9 +639,11 @@ Keep it human, conversational, and insightful - not a database dump.`;
         dangerouslyAllowBrowser: true
       });
       
-      const experiencesContext = experiences.map((exp, idx) => 
-        `[${exp.id}] ${exp.title} (${exp.category}) - €${exp.price}, ${exp.duration}, ${exp.location}. ${exp.short_description || ''}`
-      ).join('\n');
+      const experiencesContext = experiences.map((exp) => {
+        const tags = Array.isArray(exp.tags) ? exp.tags.join(', ') : '';
+        const desc = exp.description || exp.shortDescription || '';
+        return `[${exp.id}] ${exp.title} (${exp.category}) - €${exp.price}, ${exp.duration}, ${exp.location}. Tags: [${tags}]. ${desc}`;
+      }).join('\n');
       
       const freeSpotsContext = FREE_SPOTS.map(spot =>
         `[F${spot.id}] **${spot.title}** (${spot.category}) - FREE, ${spot.location}. ${spot.description}`
@@ -690,38 +693,15 @@ ${weatherData?.precipitation && weatherData.precipitation > 2 ? '⚠️ HEAVY RA
 - Events nearby? → Suggest dinner/drinks near event venues
 `;
 
-      // Group experiences by geographic zones for better recommendations
-      const lisboaCentro = experiences.filter(e => 
-        e.location.includes('Alfama') || e.location.includes('Baixa') || 
-        e.location.includes('Bairro Alto') || e.location.includes('Mouraria') ||
-        e.location.includes('Principe Real') || e.location.includes('Chiado') ||
-        e.location.includes('Lisbon') && !e.location.includes('Setúbal') && !e.location.includes('Sintra')
-      );
-      
-      const belem = experiences.filter(e => e.location.includes('Belém'));
-      const sintra = experiences.filter(e => e.location.includes('Sintra'));
-      const arrabida = experiences.filter(e => e.location.includes('Setúbal') || e.location.includes('Arrábida'));
-      const parqueDasNacoes = experiences.filter(e => e.location.includes('Parque das Nações'));
-      
       const zoneContext = `
-GEOGRAPHIC ZONES (for proximity-based recommendations):
+═══════════════════════════════════════
+📋 COMPLETE EXPERIENCE CATALOG (search by tags & description to match guest requests)
+═══════════════════════════════════════
+${experiencesContext}
 
-LISBOA CENTRO (5-15 min from hotel):
-${lisboaCentro.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.location}`).join('\n')}
-
-BELÉM (20-30 min from hotel):
-${belem.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.location}`).join('\n')}
-
-PARQUE DAS NAÇÕES (25-35 min from hotel):
-${parqueDasNacoes.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.location}`).join('\n')}
-
-SINTRA (45-60 min from hotel):
-${sintra.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.location}`).join('\n')}
-
-ARRÁBIDA/SETÚBAL (60-90 min from hotel):
-${arrabida.map(e => `[${e.id}] ${e.title} - €${e.price}, ${e.duration}, ${e.location}`).join('\n')}
-
-FREE SPOTS:
+═══════════════════════════════════════
+🆓 FREE SPOTS & LOCAL TIPS
+═══════════════════════════════════════
 ${freeSpotsContext}`;
 
       // ── Build dynamic system prompt from hotel bot config ──
@@ -834,13 +814,24 @@ EVENT_IDS: [agenda-197328]
 
 Which sounds interesting?"
 
-🚨 RULES:
-1. NEVER recommend in the first message — ask questions first (unless they ask about events)
-2. Write COMPLETE, COHESIVE sentences — never break text awkwardly
-3. Use EXPERIENCE_IDS for paid, FREE_SPOT_IDS for free, EVENT_IDS for events
-4. Let visual cards show photos/details — keep your text SHORT
-5. ALWAYS end with a question
-6. When asked about events, use EVENT_IDS — never say you can't access data
+🚨 CRITICAL MATCHING RULES:
+1. When a guest asks for a specific activity (e.g. "diving", "surf", "cooking"), you MUST search the catalog by TAGS and DESCRIPTION to find experiences that EXACTLY match.
+   - "diving" / "scuba" → look for tags containing "Scuba", "Diving", "Underwater", "Ocean"
+   - "surf" → look for tags containing "Surf", "Surfing", "Wave"
+   - "cooking" / "food" → look for tags containing "Cooking", "Food", "Culinary", "Tasting"
+   - "spa" / "massage" → look for tags containing "Massage", "Spa", "Wellness", "Facial"
+   - "adventure" → look for tags containing "Adventure", "Adrenaline", "Off-Road"
+   - "romantic" / "couples" → look for tags containing "Romantic", "Couples"
+   - "dinner" / "restaurant" → look for category "Tables" or tags with "Dinner", "Restaurant"
+2. NEVER recommend an experience that doesn't match the guest's request. A "Cave Tour" is NOT diving. A "Hiking" trail is NOT surfing.
+3. If NO experience in the catalog matches what the guest asks for, say honestly: "We don't currently have that exact experience available, but here are some similar options..." or suggest the closest match while being transparent.
+4. NEVER recommend in the first message — ask questions first (unless they ask about events or a specific activity)
+5. Write COMPLETE, COHESIVE sentences — never break text awkwardly
+6. Use EXPERIENCE_IDS for paid, FREE_SPOT_IDS for free, EVENT_IDS for events
+7. Let visual cards show photos/details — keep your text SHORT
+8. ALWAYS end with a question
+9. When asked about events, use EVENT_IDS — never say you can't access data
+10. For dinner/restaurant requests: recommend from "Tables" category experiences AND suggest FREE_SPOTS that are restaurants
 
 AVAILABLE EVENTS (${todayEvents.length}):
 ${todayEvents.length > 0 ? todayEvents.map((e: any) => '[' + e.id + '] ' + e.name + ' - ' + e.date + ' at ' + e.venue).join('\n') : 'No events currently loaded'}
@@ -854,8 +845,8 @@ Remember: Use IDs and let the visual cards do the work!`;
           ...messages.map(m => ({ role: m.role, content: m.text })),
           { role: 'user', content: userMessage.text }
         ],
-        temperature: 0.8,
-        max_tokens: 300
+        temperature: 0.4,
+        max_tokens: 500
       });
 
       const aiText = response.choices[0]?.message?.content || "I'm having a moment - mind trying that again?";
