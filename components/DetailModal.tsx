@@ -36,7 +36,6 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
   const [selectedGuests, setSelectedGuests] = useState(1);
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [addTransport, setAddTransport] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   // Distance from hotel to this activity
@@ -417,32 +416,6 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
                   </div>
                 )}
 
-                <button
-                  onClick={() => setAddTransport(t => !t)}
-                  className={`w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all text-left ${
-                    addTransport ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                      addTransport ? 'bg-gray-900' : 'bg-gray-100'
-                    }`}>
-                      <Car size={18} strokeWidth={1.5} className={addTransport ? 'text-white' : 'text-gray-600'} />
-                    </div>
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">Add hotel transfer</p>
-                      <p className="text-xs text-gray-500">Private driver from {hotel.name} and back</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 ml-3 flex-shrink-0">
-                    <span className="text-sm font-semibold text-gray-700">+€{hotel.transportationPrice ?? 20}/person</span>
-                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${
-                      addTransport ? 'border-gray-900 bg-gray-900' : 'border-gray-300'
-                    }`}>
-                      {addTransport && <Check size={10} strokeWidth={3} className="text-white" />}
-                    </div>
-                  </div>
-                </button>
               </div>
 
               {/* ─ Important information ─ */}
@@ -525,13 +498,6 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
                   <p className="text-[13px] text-green-600 font-medium mt-1">Free cancellation</p>
                 </div>
 
-                {addTransport && (
-                  <div className="flex items-center gap-2 mb-3 text-sm bg-gray-50 rounded-xl px-3 py-2.5">
-                    <Car size={14} strokeWidth={1.5} className="text-gray-500 flex-shrink-0" />
-                    <span className="text-[13px] text-gray-600">Hotel transfer</span>
-                    <span className="ml-auto text-[13px] font-semibold text-gray-900">+€{hotel.transportationPrice ?? 20}/person</span>
-                  </div>
-                )}
 
                 {/* Guest counter */}
                 <div className="border border-gray-200 rounded-2xl px-5 py-4 mb-3 flex items-center justify-between">
@@ -609,7 +575,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
       </div>
 
       {/* ─── Mobile Sticky Bottom Bar ─── */}
-      <div className="lg:hidden flex-shrink-0 bg-white border-t border-gray-200 px-5 py-3.5">
+      <div className="lg:hidden flex-shrink-0 bg-white border-t border-gray-200 px-4 sm:px-5 py-3.5" style={{ paddingBottom: 'max(14px, env(safe-area-inset-bottom))' }}>
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-[11px] text-gray-500">From</p>

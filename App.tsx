@@ -82,19 +82,19 @@ function AppContent() {
       <div className="flex-1 h-full overflow-y-auto relative flex flex-col pb-32 md:pb-0" style={{ backgroundColor: 'var(--hotel-bg, #FAFAF8)' }}>
         
         {/* Header */}
-        <div className="sticky top-0 z-30 backdrop-blur-md px-6 md:px-12 py-6 md:py-8 border-b border-slate-200/40" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
+        <div className="sticky top-0 z-30 backdrop-blur-md px-4 md:px-12 py-4 md:py-8 border-b border-slate-200/40" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
            <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-[10px] uppercase tracking-[0.4em] text-slate-400 mb-2 font-medium">{hotel.tagline}</span>
+                <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-slate-400 mb-1 md:mb-2 font-medium">{hotel.tagline}</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-2xl md:text-3xl text-slate-900 font-light tracking-tight">{hotel.location}</span>
+                  <span className="text-xl md:text-3xl text-slate-900 font-light tracking-tight">{hotel.location}</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 md:gap-4">
+              <div className="flex items-center gap-1.5 md:gap-4">
                 <button 
                   onClick={() => setCurrentView('pre-arrival')}
-                  className="hidden md:flex items-center gap-2 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide hover:bg-slate-50 border border-slate-200/60 bg-white text-slate-600"
+                  className="flex items-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 text-[11px] md:text-[13px] font-medium rounded-full transition-all tracking-wide hover:bg-slate-50 border border-slate-200/60 bg-white text-slate-600"
                 >
                   <span>Pre-Arrival</span>
                 </button>
@@ -107,19 +107,16 @@ function AppContent() {
                      {showHotelPicks ? 'Hide Picks' : 'Hotel Picks'}
                    </span>
                 </button>
-                <button className="hidden sm:flex items-center gap-2 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide hover:bg-slate-50 border border-slate-200/60 bg-white text-slate-600">
+                <button className="hidden md:flex items-center gap-2 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide hover:bg-slate-50 border border-slate-200/60 bg-white text-slate-600">
                    <User size={15} strokeWidth={1.5} />
                    <span>My Account</span>
-                </button>
-                <button className="md:hidden p-2 text-slate-900">
-                  <Menu size={20} strokeWidth={1.5} />
                 </button>
               </div>
            </div>
         </div>
 
         {/* Filters Sticky Bar */}
-        <div className="sticky top-[88px] md:top-[108px] z-20 backdrop-blur-md pb-6 md:pb-8 pt-4 px-6 md:px-12" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
+        <div className="sticky top-[72px] md:top-[108px] z-20 backdrop-blur-md pb-3 md:pb-8 pt-3 md:pt-4 px-4 md:px-12" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
            <CategoryFilter 
                 categories={categories}
                 selectedCategory={selectedCategory}
@@ -128,7 +125,7 @@ function AppContent() {
         </div>
 
         {/* Content Grid */}
-        <div className="flex-1 px-6 md:px-12 pb-24">
+        <div className="flex-1 px-4 md:px-12 pb-24">
            {/* Hotel Picks View */}
            {showHotelPicks ? (
              <HotelPicks onExperienceClick={setSelectedExperience} />
@@ -154,16 +151,16 @@ function AppContent() {
                {!loading && !error && (
              <>
                {/* Section Title */}
-               <div className="flex items-center gap-4 mb-10">
-                  <h2 className="text-3xl md:text-4xl text-slate-900 font-light tracking-tight">
+               <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-10">
+                  <h2 className="text-2xl md:text-4xl text-slate-900 font-light tracking-tight">
                     {selectedCategory === 'all' ? "Today's Inspiration" : categories.find(c => c.id === selectedCategory)?.label}
                   </h2>
-                  <span className="px-3 py-1 bg-slate-100 text-slate-600 text-[11px] font-medium tracking-wide rounded-full">
+                  <span className="px-2.5 py-0.5 md:px-3 md:py-1 bg-slate-100 text-slate-600 text-[10px] md:text-[11px] font-medium tracking-wide rounded-full">
                      {filteredExperiences.length}
                   </span>
                </div>
 
-               <div className="grid grid-cols-1 min-[450px]:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-5">
+               <div className="grid grid-cols-1 min-[450px]:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 min-[450px]:gap-4 md:gap-5">
                   {filteredExperiences.map((experience) => (
                     <VideoCard 
                       key={experience.id} 
@@ -208,13 +205,17 @@ function AppContent() {
       {!mobileFullScreenChat && (
         <button
           onClick={() => setMobileFullScreenChat(true)}
-          className="md:hidden fixed bottom-6 right-6 z-40 w-16 h-16 bg-white border border-slate-200/60 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl transition-all overflow-hidden"
+          className="md:hidden fixed left-1/2 -translate-x-1/2 z-40 flex items-center gap-2.5 bg-white border border-slate-200/60 rounded-full shadow-lg px-4 py-2.5 hover:shadow-xl transition-all"
+          style={{ bottom: 'max(20px, calc(env(safe-area-inset-bottom) + 8px))' }}
         >
-          <img 
-            src={hotel.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg'}
-            alt={`${hotel.name} Concierge`}
-            className="w-full h-full object-cover"
-          />
+          <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
+            <img 
+              src={hotel.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg'}
+              alt={`${hotel.name} Concierge`}
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <span className="text-sm font-medium text-slate-700">Ask me anything</span>
         </button>
       )}
 

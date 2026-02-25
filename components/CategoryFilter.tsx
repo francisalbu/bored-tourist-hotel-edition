@@ -27,7 +27,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
           <button
             key={cat.id}
             onClick={() => onSelectCategory(cat.id)}
-            className={`flex items-center gap-2.5 px-6 py-2.5 rounded-full whitespace-nowrap text-[13px] font-medium tracking-wide transition-all duration-200 border ${
+            className={`flex items-center gap-1.5 md:gap-2.5 px-4 md:px-6 py-2 md:py-2.5 rounded-full whitespace-nowrap text-[12px] md:text-[13px] font-medium tracking-wide transition-all duration-200 border ${
               isSelected
                 ? 'shadow-sm border-transparent'
                 : 'bg-white text-slate-600 border-slate-200/60 hover:bg-slate-50'

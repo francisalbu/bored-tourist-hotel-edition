@@ -41,7 +41,6 @@ interface HotelBrand {
   logoUrl?: string;
   latitude?: number;
   longitude?: number;
-  transportationPrice?: number;
   theme: {
     primaryColor: string;
     primaryTextColor: string;
@@ -111,7 +110,6 @@ export function WidgetBookingApp() {
   const [guests, setGuests]         = useState(1);
   const [showAllPhotos, setShowAllPhotos] = useState(false);
   const [showVideoModal, setShowVideoModal] = useState(false);
-  const [addTransport, setAddTransport] = useState(false);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName]   = useState('');
   const [email, setEmail]         = useState('');
@@ -129,7 +127,6 @@ export function WidgetBookingApp() {
         if (h) setHotel({
           id: h.id, name: h.name, logoUrl: h.logo_url,
           latitude: h.latitude, longitude: h.longitude,
-          transportationPrice: h.transportation_price,
           theme: h.theme || { primaryColor:'#0f172a', primaryTextColor:'#fff', accentColor:'#10b981', backgroundColor:'#fafaf8', surfaceColor:'#fff', fontHeading:'Inter', fontBody:'Inter' },
         });
         const { data: e } = await supabase.from('experiences').select('*').eq('id', expId).single();
@@ -182,9 +179,8 @@ export function WidgetBookingApp() {
   }, [exp]);
 
   /* ── Derived ───────────────────────────────────────────────── */
-  const tPrice      = hotel?.transportationPrice ?? 20;
   const feeRate     = 0.12;
-  const basePP      = (exp?.price || 0) + (addTransport ? tPrice : 0);
+  const basePP      = (exp?.price || 0);
   const subtotal    = basePP * guests;
   const serviceFee  = Math.round(subtotal * feeRate * 100) / 100;
   const total       = subtotal + serviceFee;
@@ -255,12 +251,12 @@ export function WidgetBookingApp() {
             <section>
               <h2 className="text-xl font-semibold text-gray-900 mb-5">Guest details</h2>
               <div className="space-y-3">
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <FloatInput label="First name *" value={firstName} onChange={setFirstName} />
                   <FloatInput label="Last name *" value={lastName} onChange={setLastName} />
                 </div>
                 <FloatInput label="Email address *" value={email} onChange={setEmail} type="email" />
-                <div className="grid grid-cols-[140px_1fr] gap-3">
+                <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[140px_1fr] gap-3">
                   <div className="relative">
                     <label className="absolute top-2 left-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Country</label>
                     <select value={country.code} onChange={e => setCountry(COUNTRIES.find(c => c.code === e.target.value) || COUNTRIES[0])} className="w-full pt-6 pb-2 pl-3 pr-6 border border-gray-300 rounded-lg text-sm text-gray-900 bg-white focus:outline-none focus:border-gray-900 appearance-none">
@@ -277,7 +273,6 @@ export function WidgetBookingApp() {
                 <InfoRow label="Date" value={fmtDate(selectedSlot.date)} />
                 <InfoRow label="Time" value={`${fmtTime(selectedSlot.start_time)} – ${fmtTime(selectedSlot.end_time)}`} />
                 <InfoRow label="Guests" value={`${guests} adult${guests !== 1 ? 's' : ''}`} />
-                {addTransport && <InfoRow label="Hotel transfer" value={`+€${tPrice}/person`} />}
               </div>
             </section>
             <section className="border-t border-gray-100 pt-8">
@@ -304,7 +299,6 @@ export function WidgetBookingApp() {
               <div className="border border-gray-200 rounded-2xl p-5 space-y-3">
                 <h3 className="text-base font-semibold text-gray-900">Booking summary</h3>
                 <div className="flex justify-between text-sm"><span className="text-gray-600">{exp.currency}{exp.price} × {guests}</span><span className="text-gray-900 font-medium">{exp.currency}{(exp.price * guests).toFixed(2)}</span></div>
-                {addTransport && <div className="flex justify-between text-sm"><span className="text-gray-600">Hotel transfer × {guests}</span><span className="text-gray-900 font-medium">{exp.currency}{(tPrice * guests).toFixed(2)}</span></div>}
                 <div className="flex justify-between text-sm"><span className="text-gray-600">Service fee</span><span className="text-gray-900 font-medium">{exp.currency}{serviceFee.toFixed(2)}</span></div>
                 <div className="flex justify-between text-sm font-bold border-t border-gray-100 pt-3"><span>Total</span><span>{exp.currency}{total.toFixed(2)}</span></div>
               </div>
@@ -504,23 +498,6 @@ export function WidgetBookingApp() {
                       ))}
                     </div>
                   )}
-                  <button onClick={() => setAddTransport(t => !t)} className={`w-full flex items-center justify-between p-4 rounded-2xl border-2 transition-all text-left ${addTransport ? 'border-gray-900 bg-gray-50' : 'border-gray-200 hover:border-gray-300'}`}>
-                    <div className="flex items-center gap-3">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${addTransport ? 'bg-gray-900' : 'bg-gray-100'}`}>
-                        <span className={addTransport ? 'text-white' : 'text-gray-600'}>{I.car}</span>
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-gray-900">Add hotel transfer</p>
-                        <p className="text-xs text-gray-500">Private driver from {hotel.name} and back</p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 ml-3 flex-shrink-0">
-                      <span className="text-sm font-semibold text-gray-700">+€{tPrice}/person</span>
-                      <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center flex-shrink-0 ${addTransport ? 'border-gray-900 bg-gray-900' : 'border-gray-300'}`}>
-                        {addTransport && <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>}
-                      </div>
-                    </div>
-                  </button>
                 </div>
               )}
 
@@ -574,13 +551,6 @@ export function WidgetBookingApp() {
                   <p className="text-[13px] text-green-600 font-medium mt-1">Free cancellation</p>
                 </div>
 
-                {addTransport && (
-                  <div className="flex items-center gap-2 mb-3 text-sm bg-gray-50 rounded-xl px-3 py-2.5">
-                    <span className="text-gray-500 flex-shrink-0">{I.car}</span>
-                    <span className="text-[13px] text-gray-600">Hotel transfer</span>
-                    <span className="ml-auto text-[13px] font-semibold text-gray-900">+€{tPrice}/person</span>
-                  </div>
-                )}
 
                 <div className="border border-gray-200 rounded-2xl px-5 py-4 mb-3 flex items-center justify-between">
                   <div>
@@ -625,7 +595,7 @@ export function WidgetBookingApp() {
       </div>
 
       {/* ── Mobile Sticky Bottom Bar ─── */}
-      <div className="lg:hidden flex-shrink-0 bg-white border-t border-gray-200 px-5 py-3.5">
+      <div className="lg:hidden flex-shrink-0 bg-white border-t border-gray-200 px-4 sm:px-5 py-3.5" style={{ paddingBottom: 'max(14px, env(safe-area-inset-bottom))' }}>
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-[11px] text-gray-500">From</p>

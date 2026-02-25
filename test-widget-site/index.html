@@ -100,8 +100,22 @@
     @media (max-width: 768px) {
       .rooms-grid { grid-template-columns: 1fr; }
       .hero h1 { font-size: 36px; }
-      .nav-links { display: none; }
+      .nav-links { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.95); flex-direction: column; align-items: center; justify-content: center; gap: 28px; z-index: 9999; }
+      .nav-links.open { display: flex; }
+      .nav-links a { color: #fff; font-size: 18px; }
+      .nav-links a:hover, .nav-links a.active { color: var(--gold); }
+      .nav-close { position: absolute; top: 24px; right: 24px; background: none; border: none; color: #fff; font-size: 32px; cursor: pointer; }
+      .top-bar { padding: 8px 16px; font-size: 11px; }
+      .navbar { padding: 0 16px; }
+      .hero { height: 50vh; }
+      .section { padding: 40px 16px; }
+      .section-title { font-size: 28px; }
+      .amenities { gap: 24px; }
     }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+    .hamburger span { display: block; width: 22px; height: 2px; background: var(--dark); margin: 5px 0; transition: all .3s; border-radius: 2px; }
+    @media (max-width: 768px) { .hamburger { display: block; } .book-btn { padding: 8px 16px; font-size: 12px; } }
+    .nav-close { display: none; }
   </style>
 </head>
 
@@ -116,7 +130,11 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="logo">Solar do <span>Chiado</span></div>
-    <ul class="nav-links">
+    <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <button class="nav-close" id="navClose">&times;</button>
       <li><a href="#" class="active">Home</a></li>
       <li><a href="#">Quartos</a></li>
       <li><a href="#experiences">Experiências</a></li>
@@ -231,6 +249,18 @@
     <p>&copy; 2026 Hotel Solar do Chiado — <a href="#">Política de Privacidade</a> &nbsp;|&nbsp; <a href="#">Termos</a></p>
     <p style="margin-top:8px; font-size:11px; color:#555;">Experiências powered by <a href="#">Bored Tourist</a></p>
   </footer>
+
+  <!-- ══ Hamburger menu toggle ══ -->
+  <script>
+    (function(){
+      var btn = document.getElementById('hamburgerBtn');
+      var nav = document.getElementById('navLinks');
+      var cls = document.getElementById('navClose');
+      btn.addEventListener('click', function(){ nav.classList.add('open'); cls.style.display='block'; });
+      cls.addEventListener('click', function(){ nav.classList.remove('open'); cls.style.display='none'; });
+      nav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ nav.classList.remove('open'); cls.style.display='none'; }); });
+    })();
+  </script>
 
   <!-- ══ Load Widget Script from main Vite server ══ -->
   <script src="http://localhost:3000/widget/bt-widget.js" async></script>

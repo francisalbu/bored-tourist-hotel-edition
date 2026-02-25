@@ -28,15 +28,15 @@ export const HotelPicks: React.FC<HotelPicksProps> = ({ onExperienceClick }) => 
   const staff = STAFF_MEMBERS[selectedStaff];
 
   return (
-    <div className="bg-white px-6 py-10 md:px-10">
+    <div className="bg-white px-4 py-8 md:px-10 md:py-10">
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6 md:mb-8">
         <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-1">Staff Picks</p>
-        <h2 className="text-2xl font-semibold text-gray-900 tracking-tight">Hotel Picks</h2>
+        <h2 className="text-xl md:text-2xl font-semibold text-gray-900 tracking-tight">Hotel Picks</h2>
       </div>
 
       {/* Staff Selector */}
-      <div className="flex gap-4 mb-8 border-b border-gray-100 pb-8">
+      <div className="flex gap-3 md:gap-4 mb-6 md:mb-8 border-b border-gray-100 pb-6 md:pb-8 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
         {STAFF_MEMBERS.map((s, index) => (
           <button
             key={s.name}
@@ -48,13 +48,13 @@ export const HotelPicks: React.FC<HotelPicksProps> = ({ onExperienceClick }) => 
             <img
               src={s.avatar}
               alt={s.name}
-              className={`w-14 h-14 rounded-full object-cover transition-all duration-200 ${
+              className={`w-11 h-11 md:w-14 md:h-14 rounded-full object-cover transition-all duration-200 ${
                 selectedStaff === index ? 'ring-2 ring-offset-2 ring-gray-900' : ''
               }`}
             />
-            <div className="text-center">
-              <div className={`text-sm font-medium ${selectedStaff === index ? 'text-gray-900' : 'text-gray-500'}`}>{s.name}</div>
-              <div className="text-[11px] text-gray-400">{s.role}</div>
+            <div className="text-center whitespace-nowrap">
+              <div className={`text-xs md:text-sm font-medium ${selectedStaff === index ? 'text-gray-900' : 'text-gray-500'}`}>{s.name}</div>
+              <div className="text-[10px] md:text-[11px] text-gray-400">{s.role}</div>
             </div>
           </button>
         ))}

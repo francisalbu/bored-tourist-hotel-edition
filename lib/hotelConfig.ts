@@ -42,8 +42,6 @@ export interface ActivityPreferences {
 export interface SiteFeatures {
   showActivities: boolean;
   showSpa: boolean;
-  showDining: boolean;
-  showTransfers: boolean;
   showRentals: boolean;
   showReviews: boolean;
   showHotelPicks: boolean;
@@ -76,8 +74,6 @@ export interface HotelConfig {
   /** Hotel GPS coordinates — used to calculate distance to each activity */
   latitude?: number;
   longitude?: number;
-  /** Price in EUR for the hotel transfer add-on (default 20) */
-  transportationPrice?: number;
   theme: HotelTheme;
   staffMembers: StaffMember[];
   activityPreferences: ActivityPreferences;
@@ -97,8 +93,6 @@ export interface HotelConfig {
 const DEFAULT_FEATURES: SiteFeatures = {
   showActivities: true,
   showSpa: true,
-  showDining: true,
-  showTransfers: true,
   showRentals: true,
   showReviews: true,
   showHotelPicks: true,
@@ -113,7 +107,6 @@ const VILA_GALE: HotelConfig = {
   location: 'Lisbon & Surroundings',
   latitude: 38.7170,
   longitude: -9.1383,
-  transportationPrice: 20,
   conciergeAvatarUrl:
     'https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg',
   theme: {
@@ -161,7 +154,6 @@ const PESTANA: HotelConfig = {
   location: 'Lisboa',
   latitude: 38.7072,
   longitude: -9.1858,
-  transportationPrice: 25,
   theme: {
     primaryColor: '#1a1a2e',
     primaryTextColor: '#ffffff',
@@ -202,7 +194,6 @@ const BAIRRO_ALTO: HotelConfig = {
   location: 'Lisboa',
   latitude: 38.7112,
   longitude: -9.1440,
-  transportationPrice: 18,
   theme: {
     primaryColor: '#18181b',
     primaryTextColor: '#ffffff',
@@ -285,7 +276,6 @@ export async function fetchHotelConfigFromDB(hotelId?: string): Promise<HotelCon
       conciergeAvatarUrl: data.concierge_avatar_url || undefined,
       latitude: data.latitude ?? undefined,
       longitude: data.longitude ?? undefined,
-      transportationPrice: data.transportation_price ?? 20,
       theme: data.theme ?? getHotelConfig().theme,
       staffMembers: data.staff_members ?? [],
       activityPreferences: data.activity_preferences ?? { style: 'mixed' },

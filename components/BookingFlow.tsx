@@ -123,14 +123,14 @@ export const BookingFlow: React.FC<BookingFlowProps> = ({ experience, slot, gues
               <section>
                 <h2 className="text-xl font-semibold text-gray-900 mb-5">Guest details</h2>
                 <div className="space-y-3">
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div className="relative">
                       <label className="absolute top-2 left-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wide">First name *</label>
                       <input
                         type="text"
                         value={firstName}
                         onChange={e => setFirstName(e.target.value)}
-                        className="w-full pt-6 pb-2 px-3 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-gray-900 transition-colors"
+                        className="w-full pt-6 pb-2 px-3 border border-gray-300 rounded-lg text-[16px] sm:text-sm text-gray-900 focus:outline-none focus:border-gray-900 transition-colors"
                       />
                     </div>
                     <div className="relative">
@@ -139,7 +139,7 @@ export const BookingFlow: React.FC<BookingFlowProps> = ({ experience, slot, gues
                         type="text"
                         value={lastName}
                         onChange={e => setLastName(e.target.value)}
-                        className="w-full pt-6 pb-2 px-3 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-gray-900 transition-colors"
+                        className="w-full pt-6 pb-2 px-3 border border-gray-300 rounded-lg text-[16px] sm:text-sm text-gray-900 focus:outline-none focus:border-gray-900 transition-colors"
                       />
                     </div>
                   </div>
@@ -149,10 +149,10 @@ export const BookingFlow: React.FC<BookingFlowProps> = ({ experience, slot, gues
                       type="email"
                       value={email}
                       onChange={e => setEmail(e.target.value)}
-                      className="w-full pt-6 pb-2 px-3 border border-gray-300 rounded-lg text-sm text-gray-900 focus:outline-none focus:border-gray-900 transition-colors"
+                      className="w-full pt-6 pb-2 px-3 border border-gray-300 rounded-lg text-[16px] sm:text-sm text-gray-900 focus:outline-none focus:border-gray-900 transition-colors"
                     />
                   </div>
-                  <div className="grid grid-cols-[160px_1fr] gap-3">
+                  <div className="grid grid-cols-[120px_1fr] sm:grid-cols-[160px_1fr] gap-3">
                     <div className="relative">
                       <label className="absolute top-2 left-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wide">Country *</label>
                       <select

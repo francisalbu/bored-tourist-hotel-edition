@@ -82,8 +82,6 @@ export function useCategories() {
     { id: '_divider', label: '', icon: '' },
     { id: 'Spa & Wellness', label: 'Spa', icon: '🧖' },
     { id: 'Rentals', label: 'Rentals', icon: '🚲' },
-    { id: 'Transfers', label: 'Transfers', icon: '🚗' },
-    { id: 'Tables', label: 'Tables', icon: '🍽️' },
     { id: 'Packages', label: 'Packages', icon: '🎁' },
   ];
 

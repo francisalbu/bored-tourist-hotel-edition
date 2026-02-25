@@ -731,8 +731,14 @@ ${freeSpotsContext}`;
       const salesMode = bot.salesAggressiveness || 'balanced';
       const responseLen = bot.maxResponseLength || 'medium';
       const langInstr = !bot.language || bot.language === 'auto'
-        ? 'Respond in the same language the guest uses.'
-        : `Always respond in ${{pt:'Portuguese',en:'English',es:'Spanish',fr:'French',de:'German',it:'Italian'}[bot.language] || 'English'}.`;
+        ? `LANGUAGE RULES (CRITICAL):
+- Always detect and respond in the same language the guest uses.
+- If the guest writes in Portuguese, ALWAYS respond in European Portuguese (PT-PT), NEVER in Brazilian Portuguese (PT-BR).
+- Use Portuguese from Portugal vocabulary and expressions: "telemóvel" (not "celular"), "autocarro" (not "ônibus"), "pequeno-almoço" (not "café da manhã"), "fixe" (not "legal"), "giro" (not "bonito"), "ecrã" (not "tela").
+- Use "tu" form (informal) by default, not "você".
+- Spelling must follow PT-PT rules: "facto" (not "fato"), "contacto" (not "contato"), "ótimo" not "ótimo" with BR pronunciation hints.
+- If the guest writes in English, respond in English. If in Spanish, respond in Spanish. Etc.`
+        : `Always respond in ${{pt:'European Portuguese (PT-PT, never Brazilian Portuguese)',en:'English',es:'Spanish',fr:'French',de:'German',it:'Italian'}[bot.language] || 'English'}.`;
 
       const personalityTraits: Record<string, string> = {
         premium: 'sophisticated, elegant, and refined — like a luxury hotel concierge at a 5-star property',
@@ -934,24 +940,24 @@ Remember: Use IDs and let the visual cards do the work!`;
     <div className="flex flex-col h-full relative" style={{ backgroundColor: "var(--hotel-surface, #FAFAF8)" }}>
       {/* Mobile Full Screen Header with Back Button */}
       {isMobileFullScreen && (
-        <div className="sticky top-0 z-10 backdrop-blur-md border-b border-slate-200/40 px-6 py-4 flex items-center gap-3" style={{ backgroundColor: "color-mix(in srgb, var(--hotel-surface, #FAFAF8) 95%, transparent)" }}>
+        <div className="sticky top-0 z-10 backdrop-blur-md border-b border-slate-200/40 px-4 py-3 flex items-center gap-3" style={{ backgroundColor: "color-mix(in srgb, var(--hotel-surface, #FAFAF8) 95%, transparent)" }}>
           <button
             onClick={onCloseMobileChat}
-            className="p-2 hover:bg-white/60 rounded-full transition-colors"
+            className="p-2 -ml-1 hover:bg-white/60 rounded-full transition-colors"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
           </button>
           <div className="flex items-center gap-3">
             <img 
-              src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg" 
-              alt="Vila Gale Opera"
-              className="w-10 h-10 rounded-full object-cover border border-slate-200/60"
+              src={hotel?.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg'} 
+              alt={hotel?.name || 'Concierge'}
+              className="w-9 h-9 rounded-full object-cover border border-slate-200/60"
             />
             <div>
               <div className="text-sm font-medium text-slate-900">
-                Vila Gale Opera
+                {hotel?.name || 'Concierge'}
               </div>
               <div className="text-[11px] text-slate-500 font-light tracking-wide">AI Concierge</div>
             </div>
@@ -1225,7 +1231,7 @@ Remember: Use IDs and let the visual cards do the work!`;
         )}
       </div>
 
-      <div className="p-3 md:p-6 md:p-10 pt-2 border-t border-slate-200/40" style={{ backgroundColor: "var(--hotel-surface, #FAFAF8)" }}>
+      <div className="p-3 md:p-6 md:p-10 pt-2 border-t border-slate-200/40" style={{ backgroundColor: "var(--hotel-surface, #FAFAF8)", paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
         <div className="relative group">
           <textarea
             value={input}
