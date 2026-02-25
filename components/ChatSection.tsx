@@ -951,7 +951,7 @@ Remember: Use IDs and let the visual cards do the work!`;
           </button>
           <div className="flex items-center gap-3">
             <img 
-              src={hotel?.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg'} 
+              src={hotel?.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp'} 
               alt={hotel?.name || 'Concierge'}
               className="w-9 h-9 rounded-full object-cover border border-slate-200/60"
             />
@@ -985,8 +985,8 @@ Remember: Use IDs and let the visual cards do the work!`;
           <div className="h-full flex flex-col justify-center items-center text-center space-y-6">
             <div className="w-32 h-32 rounded-2xl flex items-center justify-center mb-4 overflow-hidden bg-white border border-slate-200/60 shadow-sm">
               <img 
-                src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg" 
-                alt="Vila Gale Opera"
+                src={hotel?.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp'} 
+                alt={hotel?.name || 'Concierge'}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -1018,8 +1018,8 @@ Remember: Use IDs and let the visual cards do the work!`;
                     <User size={16} />
                   ) : (
                     <img 
-                      src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg" 
-                      alt="Vila Gale"
+                      src={hotel?.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp'} 
+                      alt={hotel?.name || 'Concierge'}
                       className="w-full h-full object-cover"
                     />
                   )}
@@ -1214,8 +1214,8 @@ Remember: Use IDs and let the visual cards do the work!`;
                <div className="flex gap-4">
                   <div className="w-8 h-8 rounded-full bg-white border border-slate-200/60 flex items-center justify-center shrink-0 overflow-hidden">
                     <img 
-                      src="https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg" 
-                      alt="Vila Gale"
+                      src={hotel?.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp'} 
+                      alt={hotel?.name || 'Concierge'}
                       className="w-full h-full object-cover"
                     />
                   </div>

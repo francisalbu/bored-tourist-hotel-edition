@@ -196,7 +196,7 @@ function AppContent() {
         >
           <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
             <img 
-              src={hotel.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg'}
+              src={hotel.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp'}
               alt={`${hotel.name} Concierge`}
               className="w-full h-full object-cover"
             />

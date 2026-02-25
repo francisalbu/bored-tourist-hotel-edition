@@ -109,7 +109,7 @@ const VILA_GALE: HotelConfig = {
   latitude: 38.7170,
   longitude: -9.1383,
   conciergeAvatarUrl:
-    'https://storage.googleapis.com/bored_tourist_media/images/473801429_1013077440848496_8087265659102202312_n.jpg',
+    'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp',
   theme: {
     primaryColor: '#0f172a',
     primaryTextColor: '#ffffff',
