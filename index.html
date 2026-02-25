@@ -26,6 +26,13 @@
         from { transform: translateX(-100%); }
         to   { transform: translateX(0); }
       }
+      @keyframes slideInRight {
+        from { transform: translateX(100%); }
+        to   { transform: translateX(0); }
+      }
+      .animate-slide-in-right {
+        animation: slideInRight .25s cubic-bezier(.22,1,.36,1) forwards;
+      }
       
       body {
         background-color: #f8fafc; /* slate-50 */

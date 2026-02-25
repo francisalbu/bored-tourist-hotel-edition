@@ -7,7 +7,7 @@ import { MemoriesPanel } from './components/MemoriesPanel';
 import { HotelPicks } from './components/HotelPicks';
 import { PreArrivalCreator } from './components/PreArrivalCreator';
 import { ExperienceDisplay } from './types';
-import { Menu, User, Loader2, Sparkles } from 'lucide-react';
+import { Menu, X, Loader2, Sparkles, ChevronRight, Plane } from 'lucide-react';
 import { useExperiences, useCategories } from './hooks/useExperiences';
 import { useUserMemories } from './hooks/useUserMemories';
 import { HotelProvider, useHotel } from './contexts/HotelContext';
@@ -22,6 +22,7 @@ function AppContent() {
   const [showMemories, setShowMemories] = useState(false);
   const [showHotelPicks, setShowHotelPicks] = useState(false);
   const [mobileFullScreenChat, setMobileFullScreenChat] = useState(false);
+  const [showDrawer, setShowDrawer] = useState(false);
   
   const { experiences, loading, error } = useExperiences();
   const categories = useCategories();
@@ -91,27 +92,12 @@ function AppContent() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 md:gap-4">
-                <button 
-                  onClick={() => setCurrentView('pre-arrival')}
-                  className="flex items-center gap-1.5 md:gap-2 px-3 md:px-6 py-2 md:py-2.5 text-[11px] md:text-[13px] font-medium rounded-full transition-all tracking-wide hover:bg-slate-50 border border-slate-200/60 bg-white text-slate-600"
-                >
-                  <span>Pre-Arrival</span>
-                </button>
-                <button 
-                  onClick={() => setShowHotelPicks(!showHotelPicks)}
-                  className="hidden md:flex items-center gap-2 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide hover:bg-slate-50 border border-slate-200/60 bg-white"
-                >
-                   <Sparkles size={15} strokeWidth={1.5} className={showHotelPicks ? 'text-slate-900' : 'text-slate-400'} />
-                   <span className={showHotelPicks ? 'text-slate-900' : 'text-slate-600'}>
-                     {showHotelPicks ? 'Hide Picks' : 'Hotel Picks'}
-                   </span>
-                </button>
-                <button className="hidden md:flex items-center gap-2 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide hover:bg-slate-50 border border-slate-200/60 bg-white text-slate-600">
-                   <User size={15} strokeWidth={1.5} />
-                   <span>My Account</span>
-                </button>
-              </div>
+              <button 
+                onClick={() => setShowDrawer(true)}
+                className="flex items-center justify-center w-10 h-10 md:w-11 md:h-11 rounded-full hover:bg-slate-100 transition-colors border border-slate-200/60 bg-white"
+              >
+                <Menu size={18} strokeWidth={2} className="text-slate-700" />
+              </button>
            </div>
         </div>
 
@@ -217,6 +203,66 @@ function AppContent() {
           </div>
           <span className="text-sm font-medium text-slate-700">Ask me anything</span>
         </button>
+      )}
+
+      {/* ─── Side Drawer ─── */}
+      {showDrawer && (
+        <>
+          {/* Backdrop */}
+          <div 
+            className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm transition-opacity"
+            onClick={() => setShowDrawer(false)}
+          />
+          {/* Drawer panel */}
+          <div className="fixed top-0 right-0 bottom-0 z-[61] w-[280px] sm:w-[320px] bg-white shadow-2xl flex flex-col animate-slide-in-right">
+            {/* Drawer header */}
+            <div className="flex items-center justify-between px-5 py-5 border-b border-slate-100">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-semibold">{hotel.name}</span>
+              <button 
+                onClick={() => setShowDrawer(false)}
+                className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
+              >
+                <X size={18} strokeWidth={2} className="text-slate-500" />
+              </button>
+            </div>
+
+            {/* Drawer items */}
+            <div className="flex-1 overflow-y-auto py-4 px-3">
+              <button
+                onClick={() => { setShowHotelPicks(!showHotelPicks); setShowDrawer(false); }}
+                className="w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-left hover:bg-slate-50 transition-colors group"
+              >
+                <div className="w-9 h-9 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0">
+                  <Sparkles size={16} strokeWidth={1.5} className="text-amber-500" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[14px] font-semibold text-slate-900">Hotel Picks</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">Staff-curated experiences</p>
+                </div>
+                <ChevronRight size={16} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
+              </button>
+
+              <button
+                onClick={() => { setCurrentView('pre-arrival'); setShowDrawer(false); }}
+                className="w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-left hover:bg-slate-50 transition-colors group"
+              >
+                <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
+                  <Plane size={16} strokeWidth={1.5} className="text-blue-500" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[14px] font-semibold text-slate-900">Pre-Arrival</p>
+                  <p className="text-[11px] text-slate-400 mt-0.5">Plan before you arrive</p>
+                </div>
+                <ChevronRight size={16} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
+              </button>
+            </div>
+
+            {/* Drawer footer */}
+            <div className="px-5 py-5 border-t border-slate-100">
+              <p className="text-[10px] text-slate-300 uppercase tracking-[0.2em] text-center">Powered by Bored Tourist</p>
+            </div>
+          </div>
+        </>
       )}
 
       {/* Detail Modal */}
