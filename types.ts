@@ -20,9 +20,8 @@ export interface Experience {
   max_group_size?: number;
   provider_logo?: string;
   highlights?: string[];
-  included?: boolean;
-  whats_included?: string[];
-  value_to_bring?: string[];
+  included?: string[];
+  what_to_bring?: string[];
   languages?: string[];
   cancellation_policy?: string;
   important_info?: string;

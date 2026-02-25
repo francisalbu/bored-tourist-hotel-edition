@@ -30,7 +30,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // 2. Experiences
     let query = supabase
       .from('experiences')
-      .select('id, title, short_description, description, category, price, currency, rating, location, image_url, images, video_url, duration, highlights, whats_included, languages, cancellation_policy, max_group_size, important_info, value_to_bring, latitude, longitude')
+      .select('id, title, short_description, description, category, price, currency, rating, location, image_url, images, video_url, duration, highlights, included, languages, cancellation_policy, max_group_size, important_info, what_to_bring, latitude, longitude')
       .eq('is_active', true)
       .not('video_url', 'is', null)
       .order('display_order', { ascending: true, nullsFirst: false });
@@ -42,7 +42,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     const numLimit = limit ? parseInt(String(limit), 10) : 12;
     query = query.limit(numLimit);
 
-    const { data: experiences } = await query;
+    const { data: experiences, error: expError } = await query;
+
+    if (expError) {
+      console.error('[widget-experiences] query error:', expError);
+    }
 
     return res.status(200).json({
       hotel: hotelRow

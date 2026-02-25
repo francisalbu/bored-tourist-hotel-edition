@@ -217,11 +217,7 @@ function AppContent() {
           <div className="fixed top-0 right-0 bottom-0 z-[61] w-[280px] sm:w-[320px] bg-white shadow-2xl flex flex-col animate-slide-in-right">
             {/* Drawer header */}
             <div className="flex items-center justify-between px-5 py-5 border-b border-slate-100">
-              {hotel.logoUrl ? (
-                <img src={hotel.logoUrl} alt={hotel.name} className="h-8 max-w-[140px] object-contain" />
-              ) : (
-                <span className="text-[14px] font-semibold text-slate-800 tracking-tight">{hotel.name}</span>
-              )}
+              <span className="text-[14px] font-semibold text-slate-800 tracking-tight">{hotel.name}</span>
               <button 
                 onClick={() => setShowDrawer(false)}
                 className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"
