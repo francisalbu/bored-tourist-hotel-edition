@@ -23,6 +23,7 @@ function AppContent() {
   const [showHotelPicks, setShowHotelPicks] = useState(false);
   const [mobileFullScreenChat, setMobileFullScreenChat] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
+  const [videoLightboxOpen, setVideoLightboxOpen] = useState(false);
   
   const { experiences, loading, error } = useExperiences();
   const categories = useCategories();
@@ -86,10 +87,8 @@ function AppContent() {
         <div className="sticky top-0 z-30 backdrop-blur-md px-4 md:px-12 py-4 md:py-8 border-b border-slate-200/40" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
            <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-slate-400 mb-1 md:mb-2 font-medium">{hotel.tagline}</span>
-                <div className="flex items-center gap-2">
-                  <span className="text-xl md:text-3xl text-slate-900 font-light tracking-tight">{hotel.location}</span>
-                </div>
+                <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-slate-400 mb-0.5 md:mb-1 font-medium">{hotel.tagline}</span>
+                <span className="text-lg md:text-2xl text-slate-900 font-light tracking-tight">{hotel.location}</span>
               </div>
 
               <button 
@@ -151,7 +150,8 @@ function AppContent() {
                     <VideoCard 
                       key={experience.id} 
                       experience={experience} 
-                      onClick={setSelectedExperience} 
+                      onClick={setSelectedExperience}
+                      onVideoLightbox={setVideoLightboxOpen}
                     />
                   ))}
                </div>
@@ -187,8 +187,8 @@ function AppContent() {
         </div>
       )}
 
-      {/* MOBILE ONLY: Chat Button */}
-      {!mobileFullScreenChat && (
+      {/* MOBILE ONLY: Chat Button - hidden when video lightbox or detail modal is open */}
+      {!mobileFullScreenChat && !videoLightboxOpen && !selectedExperience && (
         <button
           onClick={() => setMobileFullScreenChat(true)}
           className="md:hidden fixed left-1/2 -translate-x-1/2 z-40 flex items-center gap-2.5 bg-white border border-slate-200/60 rounded-full shadow-lg px-4 py-2.5 hover:shadow-xl transition-all"
@@ -217,7 +217,11 @@ function AppContent() {
           <div className="fixed top-0 right-0 bottom-0 z-[61] w-[280px] sm:w-[320px] bg-white shadow-2xl flex flex-col animate-slide-in-right">
             {/* Drawer header */}
             <div className="flex items-center justify-between px-5 py-5 border-b border-slate-100">
-              <span className="text-[10px] uppercase tracking-[0.3em] text-slate-400 font-semibold">{hotel.name}</span>
+              {hotel.logoUrl ? (
+                <img src={hotel.logoUrl} alt={hotel.name} className="h-8 max-w-[140px] object-contain" />
+              ) : (
+                <span className="text-[14px] font-semibold text-slate-800 tracking-tight">{hotel.name}</span>
+              )}
               <button 
                 onClick={() => setShowDrawer(false)}
                 className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-slate-100 transition-colors"

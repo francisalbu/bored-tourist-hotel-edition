@@ -36,12 +36,12 @@ export const HotelPicks: React.FC<HotelPicksProps> = ({ onExperienceClick }) => 
       </div>
 
       {/* Staff Selector */}
-      <div className="flex gap-3 md:gap-4 mb-6 md:mb-8 border-b border-gray-100 pb-6 md:pb-8 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+      <div className="flex gap-3 md:gap-4 mb-6 md:mb-8 border-b border-gray-100 pb-6 md:pb-8 overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide py-1">
         {STAFF_MEMBERS.map((s, index) => (
           <button
             key={s.name}
             onClick={() => setSelectedStaff(index)}
-            className={`flex flex-col items-center gap-2.5 transition-all duration-200 ${
+            className={`flex flex-col items-center gap-2.5 transition-all duration-200 flex-shrink-0 ${
               selectedStaff === index ? 'opacity-100' : 'opacity-40 hover:opacity-70'
             }`}
           >

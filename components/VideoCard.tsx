@@ -5,9 +5,10 @@ import { Star, Clock, Play, X } from 'lucide-react';
 interface VideoCardProps {
   experience: ExperienceDisplay;
   onClick: (experience: ExperienceDisplay) => void;
+  onVideoLightbox?: (open: boolean) => void;
 }
 
-export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick }) => {
+export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick, onVideoLightbox }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showVideoLightbox, setShowVideoLightbox] = useState(false);
@@ -42,6 +43,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick }) => 
     if (isTouchDevice && experience.videoUrl) {
       // Mobile: open video lightbox
       setShowVideoLightbox(true);
+      onVideoLightbox?.(true);
     } else {
       // Desktop: go to experience detail
       onClick(experience);
@@ -139,14 +141,14 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick }) => 
       {showVideoLightbox && experience.videoUrl && (
         <div 
           className="fixed inset-0 z-[200] flex flex-col items-center justify-center"
-          onClick={() => setShowVideoLightbox(false)}
+          onClick={() => { setShowVideoLightbox(false); onVideoLightbox?.(false); }}
         >
           {/* Blur backdrop */}
           <div className="absolute inset-0 bg-black/70 backdrop-blur-xl" />
 
           {/* Close button */}
           <button 
-            onClick={() => setShowVideoLightbox(false)}
+          onClick={() => { setShowVideoLightbox(false); onVideoLightbox?.(false); }}
             className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/15 backdrop-blur-md text-white hover:bg-white/25 transition-colors"
           >
             <X size={20} />
@@ -181,7 +183,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick }) => 
               <div className="flex items-center justify-between">
                 <span className="text-white font-black text-2xl">{experience.currency}{experience.price}</span>
                 <button 
-                  onClick={(e) => { e.stopPropagation(); setShowVideoLightbox(false); onClick(experience); }}
+                  onClick={(e) => { e.stopPropagation(); setShowVideoLightbox(false); onVideoLightbox?.(false); onClick(experience); }}
                   className="px-6 py-3 bg-white text-black font-bold text-sm uppercase tracking-wider rounded-full transition-all active:scale-95"
                 >
                   Book Now
