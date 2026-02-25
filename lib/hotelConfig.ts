@@ -102,7 +102,7 @@ const DEFAULT_FEATURES: SiteFeatures = {
 
 const VILA_GALE: HotelConfig = {
   id: 'vila-gale',
-  name: 'Vila Galé',
+  name: 'Lisbon Hotel',
   logoUrl: 'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp',
   tagline: 'DISCOVER',
   location: 'Lisbon & Surroundings',

@@ -103,7 +103,7 @@ function readGuestFromUrl(): GuestInfo {
   const p = new URLSearchParams(window.location.search);
   return {
     name:    p.get('name')    || 'Alex Johnson',
-    hotel:   p.get('hotel')   || 'Vila Galé Ópera',
+    hotel:   p.get('hotel')   || 'Lisbon Hotel',
     checkIn: p.get('checkin') || '2026-06-18',
     checkOut:p.get('checkout')|| '2026-06-22',
     guests:  parseInt(p.get('guests') || '3', 10),
