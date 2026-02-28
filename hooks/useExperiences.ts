@@ -21,7 +21,7 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
     images: exp.images && exp.images.length > 0 ? exp.images : undefined,
     videoUrl: exp.video_url,
     duration: exp.duration,
-    reviews: 0, // You might want to fetch this from reviews table
+    reviews: exp.review_count || 0,
     address: exp.address,
     highlights: exp.highlights,
     included: exp.included,
@@ -33,6 +33,8 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
     valueToBring: exp.what_to_bring,
     latitude: exp.latitude,
     longitude: exp.longitude,
+    affiliateUrl: exp.affiliate_url,
+    affiliateProvider: exp.affiliate_provider,
   };
 }
 
@@ -54,6 +56,7 @@ export function useExperiences() {
         if (error) throw error;
 
         const mappedData = (data || []).map(mapExperienceToDisplay);
+
         setExperiences(mappedData);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch experiences');

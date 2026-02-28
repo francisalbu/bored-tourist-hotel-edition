@@ -90,6 +90,121 @@
     .amenity h4 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
     .amenity p { font-size: 12px; color: #888; }
 
+    /* ─── Viator Affiliate Section ─── */
+    .viator-section {
+      background: linear-gradient(135deg, #faf8f4 0%, #f0ece4 100%);
+      padding: 60px 0;
+      border-top: 1px solid #e8e5de;
+      border-bottom: 1px solid #e8e5de;
+    }
+    .viator-section .section { padding-top: 0; padding-bottom: 0; }
+    .viator-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fff; border: 1px solid #e8e5de; border-radius: 20px;
+      padding: 6px 14px; font-size: 11px; font-weight: 600;
+      color: #666; letter-spacing: 0.5px; margin: 0 auto 24px;
+      text-transform: uppercase;
+    }
+    .viator-badge img { height: 16px; }
+    .viator-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 28px; margin-top: 8px;
+    }
+    .viator-card {
+      background: #fff; border-radius: 16px; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,.07); transition: transform .3s, box-shadow .3s;
+      display: flex; flex-direction: column;
+    }
+    .viator-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,.12); }
+    .viator-card-img {
+      position: relative; height: 240px; overflow: hidden;
+    }
+    .viator-card-img img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .5s ease;
+    }
+    .viator-card:hover .viator-card-img img { transform: scale(1.05); }
+    .viator-card-img .viator-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,.5) 0%, transparent 50%);
+    }
+    .viator-card-img .viator-tag {
+      position: absolute; top: 14px; left: 14px;
+      background: #e74c3c; color: #fff; font-size: 10px;
+      font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 6px;
+    }
+    .viator-card-img .viator-partner-tag {
+      position: absolute; top: 14px; right: 14px;
+      background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+      color: #333; font-size: 10px; font-weight: 600;
+      padding: 5px 10px; border-radius: 6px;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .viator-card-img .viator-partner-tag svg { color: #2d8c3c; }
+    .viator-card-body { padding: 22px 24px; flex: 1; display: flex; flex-direction: column; }
+    .viator-card-cat {
+      font-size: 11px; font-weight: 700; color: var(--gold);
+      text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px;
+    }
+    .viator-card h3 {
+      font-family: 'Playfair Display', serif; font-size: 22px;
+      font-weight: 600; color: var(--dark); margin-bottom: 10px; line-height: 1.3;
+    }
+    .viator-card p.viator-desc {
+      color: #777; font-size: 14px; line-height: 1.7; margin-bottom: 16px; flex: 1;
+    }
+    .viator-card-meta {
+      display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 18px;
+      padding-bottom: 18px; border-bottom: 1px solid #f0ece4;
+    }
+    .viator-meta-item {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; color: #888;
+    }
+    .viator-meta-item svg { color: var(--gold); flex-shrink: 0; }
+    .viator-highlights {
+      list-style: none; margin-bottom: 18px;
+    }
+    .viator-highlights li {
+      font-size: 13px; color: #666; padding: 4px 0;
+      display: flex; align-items: flex-start; gap: 8px;
+    }
+    .viator-highlights li::before {
+      content: '✓'; color: #2d8c3c; font-weight: 700; flex-shrink: 0;
+    }
+    .viator-card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: 4px;
+    }
+    .viator-price {
+      display: flex; flex-direction: column;
+    }
+    .viator-price-label { font-size: 11px; color: #aaa; text-transform: uppercase; letter-spacing: .04em; }
+    .viator-price-value { font-size: 26px; font-weight: 700; color: var(--dark); }
+    .viator-price-value span { font-size: 14px; font-weight: 400; color: #aaa; }
+    .viator-book-btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--gold); color: #fff; border: none;
+      padding: 12px 28px; font-size: 13px; font-weight: 600;
+      letter-spacing: .5px; text-transform: uppercase;
+      text-decoration: none; border-radius: 8px;
+      cursor: pointer; transition: all .2s;
+    }
+    .viator-book-btn:hover { background: #9a7209; transform: translateY(-1px); }
+    .viator-book-btn svg { transition: transform .2s; }
+    .viator-book-btn:hover svg { transform: translateX(3px); }
+    .viator-powered {
+      text-align: center; margin-top: 24px; font-size: 11px; color: #bbb;
+    }
+    .viator-powered a { color: #999; text-decoration: none; }
+    .viator-powered a:hover { color: var(--gold); }
+
+    @media (max-width: 768px) {
+      .viator-grid { grid-template-columns: 1fr; }
+      .viator-card-img { height: 200px; }
+    }
+
     /* ─── Footer ─── */
     footer {
       background: var(--dark); color: #888; text-align: center;
@@ -138,6 +253,7 @@
       <li><a href="#" class="active">Home</a></li>
       <li><a href="#">Quartos</a></li>
       <li><a href="#experiences">Experiências</a></li>
+      <li><a href="#viator-experiences">Food Tours</a></li>
       <li><a href="#">Restaurante</a></li>
       <li><a href="#">Spa</a></li>
       <li><a href="#">Contacto</a></li>
@@ -206,6 +322,89 @@
   </section>
   <!-- ════════════════════════════════════════════════════════════ -->
 
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <!--  VIATOR AFFILIATE — Curated partner experiences             -->
+  <!-- ════════════════════════════════════════════════════════════ -->
+  <section class="viator-section" id="viator-experiences">
+    <div class="section">
+      <div style="text-align:center">
+        <div class="viator-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          Parceiro Viator
+        </div>
+      </div>
+      <h2 class="section-title">Experiências Gastronómicas</h2>
+      <p class="section-subtitle">Tours de comida selecionados em parceria com a Viator — reserve com confiança e descubra os sabores autênticos de Lisboa.</p>
+
+      <div class="viator-grid" id="viatorGrid">
+        <!-- Card 1: Lisbon Baixa Food Tour -->
+        <div class="viator-card">
+          <div class="viator-card-img">
+            <img src="https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&q=80" alt="Lisbon Baixa Food Tour" />
+            <div class="viator-overlay"></div>
+            <div class="viator-tag">🔥 Popular</div>
+            <div class="viator-partner-tag">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              Viator
+            </div>
+          </div>
+          <div class="viator-card-body">
+            <div class="viator-card-cat">🍷 Food & Drink Tour</div>
+            <h3>Lisbon Baixa District Food Tour with a Local</h3>
+            <p class="viator-desc">Explore o coração gastronómico de Lisboa no bairro da Baixa. Prove petiscos tradicionais, pastéis de nata frescos, queijos artesanais e vinhos locais — tudo guiado por um lisboeta apaixonado pela comida da cidade.</p>
+
+            <div class="viator-card-meta">
+              <div class="viator-meta-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                3 horas
+              </div>
+              <div class="viator-meta-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Grupo pequeno
+              </div>
+              <div class="viator-meta-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Baixa, Lisboa
+              </div>
+              <div class="viator-meta-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Cancelamento grátis
+              </div>
+            </div>
+
+            <ul class="viator-highlights">
+              <li>Prove 10+ especialidades portuguesas autênticas</li>
+              <li>Guia local com conhecimento profundo da gastronomia</li>
+              <li>Todas as degustações incluídas no preço</li>
+              <li>Grupos pequenos para experiência personalizada</li>
+            </ul>
+
+            <div class="viator-card-footer">
+              <div class="viator-price">
+                <span class="viator-price-label">Desde</span>
+                <span class="viator-price-value">€69 <span>/ pessoa</span></span>
+              </div>
+              <a
+                href="https://www.viator.com/tours/Lisbon/Lisbon-Baixa-district-food-tour-with-a-local/d538-5560182P5"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="viator-book-btn"
+                data-viator-product="5560182P5"
+                onclick="trackViatorClick('5560182P5', 'Lisbon Baixa Food Tour')"
+              >
+                Reservar
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="viator-powered">Experiências em parceria com <a href="https://www.viator.com/" target="_blank" rel="noopener noreferrer">Viator – Uma empresa Tripadvisor</a></p>
+    </div>
+  </section>
+  <!-- ════════════════════════════════════════════════════════════ -->
+
   <!-- Amenities -->
   <section class="section">
     <h2 class="section-title">Serviços & Comodidades</h2>
@@ -260,6 +459,46 @@
       cls.addEventListener('click', function(){ nav.classList.remove('open'); cls.style.display='none'; });
       nav.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ nav.classList.remove('open'); cls.style.display='none'; }); });
     })();
+  </script>
+
+  <!-- ══ Viator Affiliate Tracking ══ -->
+  <script>
+    // Viator Partner Configuration
+    var VIATOR_CONFIG = {
+      apiKey: '0a9b6163-6d27-4f03-bab6-e5debd3d7a8c',
+      partnerId: 'P00285354',
+      medium: 'link',
+      mcid: '42383'
+    };
+
+    // Build Viator affiliate URL
+    function buildViatorUrl(productPath) {
+      var base = 'https://www.viator.com' + productPath;
+      var sep = base.indexOf('?') === -1 ? '?' : '&';
+      return base + sep + 'pid=' + VIATOR_CONFIG.partnerId +
+             '&mcid=' + VIATOR_CONFIG.mcid +
+             '&medium=' + VIATOR_CONFIG.medium;
+    }
+
+    // Track affiliate clicks
+    function trackViatorClick(productCode, productName) {
+      console.log('[Viator Affiliate] Click tracked:', {
+        productCode: productCode,
+        productName: productName,
+        partnerId: VIATOR_CONFIG.partnerId,
+        timestamp: new Date().toISOString()
+      });
+
+      // Send to analytics if available
+      if (typeof gtag === 'function') {
+        gtag('event', 'viator_click', {
+          event_category: 'affiliate',
+          event_label: productName,
+          product_code: productCode,
+          partner_id: VIATOR_CONFIG.partnerId
+        });
+      }
+    }
   </script>
 
   <!-- ══ Load Widget Script from production ══ -->

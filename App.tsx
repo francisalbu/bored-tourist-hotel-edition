@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { CategoryFilter } from './components/CategoryFilter';
 import { VideoCard } from './components/VideoCard';
 import { DetailModal } from './components/DetailModal';
@@ -36,6 +36,36 @@ function AppContent() {
   })());
   
   const { memory, loading: memoryLoading, downloadMemories } = useUserMemories(userId);
+
+  // Set Viator affiliate cookie via hidden iframe on first load
+  useEffect(() => {
+    const cookieKey = 'viator_affiliate_set';
+    if (!sessionStorage.getItem(cookieKey)) {
+      const iframe = document.createElement('iframe');
+      iframe.src = 'https://www.viator.com/Lisbon/d538-ttd?pid=P00285354&mcid=42383&medium=link';
+      iframe.style.cssText = 'width:0;height:0;border:none;position:absolute;left:-9999px;';
+      iframe.setAttribute('aria-hidden', 'true');
+      iframe.setAttribute('tabindex', '-1');
+      iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts');
+      iframe.onload = () => {
+        console.log('✅ Viator affiliate cookie iframe loaded successfully');
+        console.log('   PID: P00285354 | MCID: 42383');
+        console.log('   Cookie window: 30 days from now');
+      };
+      iframe.onerror = () => {
+        console.warn('⚠️ Viator affiliate iframe failed to load — cookie may not be set');
+      };
+      document.body.appendChild(iframe);
+      sessionStorage.setItem(cookieKey, '1');
+      // Remove iframe after cookie is set
+      setTimeout(() => {
+        iframe.remove();
+        console.log('🧹 Viator affiliate iframe removed from DOM');
+      }, 5000);
+    } else {
+      console.log('ℹ️ Viator affiliate cookie already set this session');
+    }
+  }, []);
 
   const filteredExperiences = useMemo(() => {
     if (selectedCategory === 'all') return experiences;

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useCallback } from 'react';
 import { ExperienceDisplay } from '../types';
-import { Star, Clock, Play, X } from 'lucide-react';
+import { Star, Clock, Play, X, ExternalLink } from 'lucide-react';
 
 interface VideoCardProps {
   experience: ExperienceDisplay;
@@ -52,8 +52,14 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick, onVid
 
   const handleBookClick = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (experience.affiliateUrl) {
+      window.open(experience.affiliateUrl, '_blank', 'noopener,noreferrer');
+      return;
+    }
     onClick(experience);
   };
+
+  const isAffiliate = !!experience.affiliateUrl;
 
   return (
     <>
@@ -102,6 +108,16 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick, onVid
             </span>
           </div>
 
+          {/* Affiliate Provider Badge */}
+          {isAffiliate && experience.affiliateProvider && (
+            <div className="absolute top-3 right-3 z-[5]">
+              <span className="bg-white/95 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow-sm flex items-center gap-1.5 text-emerald-700">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                {experience.affiliateProvider}
+              </span>
+            </div>
+          )}
+
           {/* Info Overlay (Bottom) */}
           <div className="absolute bottom-0 left-0 right-0 p-4 pt-12 transform transition-transform duration-300">
              <h3 className="text-white font-black text-xl leading-none uppercase tracking-tight mb-3 drop-shadow-md line-clamp-2">
@@ -128,9 +144,14 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick, onVid
 
                 <button 
                   onClick={handleBookClick}
-                  className="relative bg-white/10 hover:bg-white/20 active:bg-white/30 backdrop-blur-md text-white font-semibold uppercase tracking-widest text-[11px] md:text-[11px] px-5 md:px-5 py-3 md:py-2.5 rounded-full border border-white/30 hover:border-white/60 transition-all duration-200 shadow-lg hover:shadow-white/10 hover:-translate-y-0.5 active:translate-y-0 min-w-[80px] text-center"
+                  className={`relative backdrop-blur-md text-white font-semibold uppercase tracking-widest text-[11px] md:text-[11px] px-5 md:px-5 py-3 md:py-2.5 rounded-full border transition-all duration-200 shadow-lg hover:-translate-y-0.5 active:translate-y-0 min-w-[80px] text-center flex items-center gap-1.5 justify-center ${
+                    isAffiliate 
+                      ? 'bg-emerald-600/80 hover:bg-emerald-500/90 border-emerald-400/40 hover:border-emerald-300/70 hover:shadow-emerald-500/20' 
+                      : 'bg-white/10 hover:bg-white/20 active:bg-white/30 border-white/30 hover:border-white/60 hover:shadow-white/10'
+                  }`}
                 >
                   Book
+                  {isAffiliate && <ExternalLink size={11} strokeWidth={2.5} />}
                 </button>
              </div>
           </div>

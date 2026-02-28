@@ -31,6 +31,9 @@ export interface Experience {
   updated_at?: string;
   time_points?: string;
   city?: string;
+  affiliate_url?: string;
+  affiliate_provider?: string;
+  review_count?: number;
 }
 
 // User Memory types
@@ -98,6 +101,8 @@ export interface ExperienceDisplay {
   valueToBring?: string[];
   latitude?: number;
   longitude?: number;
+  affiliateUrl?: string;
+  affiliateProvider?: string;
 }
 
 export interface Category {

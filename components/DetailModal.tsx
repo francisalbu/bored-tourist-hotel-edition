@@ -4,7 +4,7 @@ import {
   X, Heart, MapPin, Clock, Star, ShieldCheck, Zap, Users, Info,
   Share2, Globe, CheckCircle, ChevronLeft, Camera, Play, Award,
   Languages, AlertCircle, Calendar, ChevronDown, Loader2,
-  Car, Train, Navigation, Check
+  Car, Train, Navigation, Check, ExternalLink
 } from 'lucide-react';
 import { BookingFlow } from './BookingFlow';
 import { SelectTimeModal, SlotItem } from './SelectTimeModal';
@@ -498,6 +498,44 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
                   <p className="text-[13px] text-green-600 font-medium mt-1">Free cancellation</p>
                 </div>
 
+                {/* ── Affiliate booking (Viator etc.) ── */}
+                {experience.affiliateUrl ? (
+                  <>
+                    <a
+                      href={experience.affiliateUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="w-full flex items-center justify-center gap-2 py-4 text-white font-semibold text-[15px] rounded-2xl transition-all hover:opacity-90 hover:scale-[1.01] active:scale-[0.99] mb-3"
+                      style={{ backgroundColor: '#16a34a' }}
+                    >
+                      Book on {experience.affiliateProvider || 'Partner'}
+                      <ExternalLink size={16} strokeWidth={2.5} />
+                    </a>
+
+                    <div className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100 mb-4">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="#16a34a"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                      <p className="text-xs text-emerald-800 leading-snug">
+                        <span className="font-semibold">Verified partner experience.</span>
+                        {' '}Booking powered by {experience.affiliateProvider || 'our trusted partner'} — a Tripadvisor company.
+                      </p>
+                    </div>
+
+                    {experience.highlights && experience.highlights.length > 0 && (
+                      <div className="border border-gray-200 rounded-2xl p-5">
+                        <p className="text-[13px] font-semibold text-gray-900 mb-3">What's included</p>
+                        <ul className="space-y-2">
+                          {experience.highlights.map((h, i) => (
+                            <li key={i} className="flex items-start gap-2 text-[13px] text-gray-600">
+                              <Check size={14} className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                              {h}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
 
                 {/* Guest counter */}
                 <div className="border border-gray-200 rounded-2xl px-5 py-4 mb-3 flex items-center justify-between">
@@ -567,6 +605,8 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
                     {' '}Every experience meets our standards for unique, engaging activities.
                   </p>
                 </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -576,6 +616,32 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
 
       {/* ─── Mobile Sticky Bottom Bar ─── */}
       <div className="lg:hidden flex-shrink-0 bg-white border-t border-gray-200 px-4 sm:px-5 py-3.5" style={{ paddingBottom: 'max(14px, env(safe-area-inset-bottom))' }}>
+        {experience.affiliateUrl ? (
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-[11px] text-gray-500">From</p>
+              <div className="flex items-baseline gap-1">
+                <span className="text-xl font-semibold text-gray-900">
+                  {experience.currency}{experience.price}
+                </span>
+                <span className="text-gray-500 text-xs">/ guest</span>
+              </div>
+              <p className="text-[11px] text-emerald-600 font-medium flex items-center gap-1">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                {experience.affiliateProvider}
+              </p>
+            </div>
+            <a
+              href={experience.affiliateUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-5 py-2.5 bg-emerald-600 text-white font-semibold text-sm rounded-full transition-colors flex-shrink-0 flex items-center gap-1.5 hover:bg-emerald-700"
+            >
+              Book on {experience.affiliateProvider || 'Partner'}
+              <ExternalLink size={14} strokeWidth={2.5} />
+            </a>
+          </div>
+        ) : (
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-[11px] text-gray-500">From</p>
@@ -609,6 +675,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
             Book
           </button>
         </div>
+        )}
       </div>
 
       {/* ─── All Photos Lightbox ─── */}
