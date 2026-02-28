@@ -34,6 +34,18 @@ export interface Experience {
   affiliate_url?: string;
   affiliate_provider?: string;
   review_count?: number;
+  user_reviews?: UserReview[];
+}
+
+// Individual review from Viator/GetYourGuide
+export interface UserReview {
+  name: string;
+  country: string;
+  rating: number;
+  date: string;
+  text: string;
+  source: 'viator' | 'getyourguide';
+  verified: boolean;
 }
 
 // User Memory types
@@ -103,6 +115,7 @@ export interface ExperienceDisplay {
   longitude?: number;
   affiliateUrl?: string;
   affiliateProvider?: string;
+  userReviews?: UserReview[];
 }
 
 export interface Category {

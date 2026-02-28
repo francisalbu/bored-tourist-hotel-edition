@@ -7,7 +7,7 @@ import { MemoriesPanel } from './components/MemoriesPanel';
 import { HotelPicks } from './components/HotelPicks';
 import { PreArrivalCreator } from './components/PreArrivalCreator';
 import { ExperienceDisplay } from './types';
-import { Menu, X, Loader2, Sparkles, ChevronRight, Plane } from 'lucide-react';
+import { Menu, X, Loader2, Sparkles, ChevronRight, Plane, Search, ArrowUpDown } from 'lucide-react';
 import { useExperiences, useCategories } from './hooks/useExperiences';
 import { useUserMemories } from './hooks/useUserMemories';
 import { HotelProvider, useHotel } from './contexts/HotelContext';
@@ -24,6 +24,8 @@ function AppContent() {
   const [mobileFullScreenChat, setMobileFullScreenChat] = useState(false);
   const [showDrawer, setShowDrawer] = useState(false);
   const [videoLightboxOpen, setVideoLightboxOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [priceSort, setPriceSort] = useState<'none' | 'asc' | 'desc'>('none');
   
   const { experiences, loading, error } = useExperiences();
   const categories = useCategories();
@@ -68,9 +70,27 @@ function AppContent() {
   }, []);
 
   const filteredExperiences = useMemo(() => {
-    if (selectedCategory === 'all') return experiences;
-    return experiences.filter(exp => exp.category === selectedCategory);
-  }, [selectedCategory, experiences]);
+    let result = selectedCategory === 'all' ? experiences : experiences.filter(exp => exp.category === selectedCategory);
+    
+    // Search filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+      result = result.filter(exp => {
+        const title = (exp.title || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const desc = (exp.description || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const location = (exp.location || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+        const tags = Array.isArray((exp as any).tags) ? (exp as any).tags.join(' ').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '') : '';
+        return title.includes(q) || desc.includes(q) || location.includes(q) || tags.includes(q);
+      });
+    }
+    
+    // Price sorting
+    if (priceSort !== 'none') {
+      result = [...result].sort((a, b) => priceSort === 'asc' ? a.price - b.price : b.price - a.price);
+    }
+    
+    return result;
+  }, [selectedCategory, experiences, searchQuery, priceSort]);
 
   // Render Pre-Arrival Creator view
   if (currentView === 'pre-arrival') {
@@ -131,12 +151,46 @@ function AppContent() {
         </div>
 
         {/* Filters Sticky Bar */}
-        <div className="sticky top-[72px] md:top-[108px] z-20 backdrop-blur-md pb-3 md:pb-8 pt-3 md:pt-4 px-4 md:px-12" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
+        <div className="sticky top-[72px] md:top-[108px] z-20 backdrop-blur-md pb-3 md:pb-6 pt-3 md:pt-4 px-4 md:px-12" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
            <CategoryFilter 
                 categories={categories}
                 selectedCategory={selectedCategory}
-                onSelectCategory={setSelectedCategory}
+                onSelectCategory={(id) => { setSelectedCategory(id); setSearchQuery(''); setPriceSort('none'); }}
            />
+           
+           {/* Search Bar + Price Sort */}
+           <div className="flex items-center gap-2 mt-3">
+             <div className="relative flex-1">
+               <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+               <input
+                 type="text"
+                 value={searchQuery}
+                 onChange={(e) => setSearchQuery(e.target.value)}
+                 placeholder="Search experiences..."
+                 className="w-full pl-9 pr-8 py-2 md:py-2.5 bg-white border border-slate-200/60 rounded-full text-[13px] font-light text-slate-800 placeholder-slate-400 outline-none focus:border-slate-400 transition-colors"
+               />
+               {searchQuery && (
+                 <button
+                   onClick={() => setSearchQuery('')}
+                   className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                 >
+                   <X size={14} />
+                 </button>
+               )}
+             </div>
+             <button
+               onClick={() => setPriceSort(prev => prev === 'none' ? 'asc' : prev === 'asc' ? 'desc' : 'none')}
+               className={`flex items-center gap-1.5 px-3 md:px-4 py-2 md:py-2.5 rounded-full text-[12px] md:text-[13px] font-medium tracking-wide border transition-all whitespace-nowrap ${
+                 priceSort !== 'none'
+                   ? 'bg-slate-900 text-white border-transparent'
+                   : 'bg-white text-slate-600 border-slate-200/60 hover:bg-slate-50'
+               }`}
+             >
+               <ArrowUpDown size={14} />
+               <span className="hidden min-[450px]:inline">{priceSort === 'asc' ? '€ Low → High' : priceSort === 'desc' ? '€ High → Low' : 'Price'}</span>
+               <span className="min-[450px]:hidden">{priceSort === 'asc' ? '€↑' : priceSort === 'desc' ? '€↓' : '€'}</span>
+             </button>
+           </div>
         </div>
 
         {/* Content Grid */}
@@ -168,7 +222,11 @@ function AppContent() {
                {/* Section Title */}
                <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-10">
                   <h2 className="text-2xl md:text-4xl text-slate-900 font-light tracking-tight">
-                    {selectedCategory === 'all' ? "Today's Inspiration" : categories.find(c => c.id === selectedCategory)?.label}
+                    {searchQuery.trim()
+                      ? `Results for "${searchQuery}"`
+                      : selectedCategory === 'all'
+                        ? "Today's Inspiration"
+                        : categories.find(c => c.id === selectedCategory)?.label}
                   </h2>
                   <span className="px-2.5 py-0.5 md:px-3 md:py-1 bg-slate-100 text-slate-600 text-[10px] md:text-[11px] font-medium tracking-wide rounded-full">
                      {filteredExperiences.length}
@@ -188,8 +246,12 @@ function AppContent() {
                
                {filteredExperiences.length === 0 && (
                  <div className="py-32 text-center border border-slate-200/60 rounded-2xl bg-white">
-                    <p className="text-slate-500 font-light">No experiences found in this category.</p>
-                    <button onClick={() => setSelectedCategory('all')} className="mt-4 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide bg-slate-900 text-white shadow-sm">Clear Filters</button>
+                    <p className="text-slate-500 font-light">
+                      {searchQuery.trim()
+                        ? `No experiences found for "${searchQuery}".`
+                        : 'No experiences found in this category.'}
+                    </p>
+                    <button onClick={() => { setSelectedCategory('all'); setSearchQuery(''); setPriceSort('none'); }} className="mt-4 px-6 py-2.5 text-[13px] font-medium rounded-full transition-all tracking-wide bg-slate-900 text-white shadow-sm">Clear Filters</button>
                  </div>
                )}
 

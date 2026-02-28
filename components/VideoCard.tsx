@@ -113,8 +113,8 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick, onVid
           {/* Affiliate Provider Badge */}
           {isAffiliate && experience.affiliateProvider && (
             <div className="absolute top-3 right-3 z-[5]">
-              <span className="bg-white/95 backdrop-blur-md text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded shadow-sm flex items-center gap-1.5 text-emerald-700">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+              <span className="bg-white/90 backdrop-blur-md text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded shadow-sm flex items-center gap-1 text-black/60">
+                <svg width="7" height="7" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                 {experience.affiliateProvider}
               </span>
             </div>
@@ -146,11 +146,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick, onVid
 
                 <button 
                   onClick={handleBookClick}
-                  className={`relative backdrop-blur-md text-white font-semibold uppercase tracking-widest text-[11px] md:text-[11px] px-5 md:px-5 py-3 md:py-2.5 rounded-full border transition-all duration-200 shadow-lg hover:-translate-y-0.5 active:translate-y-0 min-w-[80px] text-center flex items-center gap-1.5 justify-center ${
-                    isAffiliate 
-                      ? 'bg-emerald-600/80 hover:bg-emerald-500/90 border-emerald-400/40 hover:border-emerald-300/70 hover:shadow-emerald-500/20' 
-                      : 'bg-white/10 hover:bg-white/20 active:bg-white/30 border-white/30 hover:border-white/60 hover:shadow-white/10'
-                  }`}
+                  className="relative backdrop-blur-md text-white font-semibold uppercase tracking-widest text-[11px] md:text-[11px] px-5 md:px-5 py-3 md:py-2.5 rounded-full border transition-all duration-200 shadow-lg hover:-translate-y-0.5 active:translate-y-0 min-w-[80px] text-center flex items-center gap-1.5 justify-center bg-white/10 hover:bg-white/20 active:bg-white/30 border-white/30 hover:border-white/60 hover:shadow-white/10"
                 >
                   Book
                   {isAffiliate && <ExternalLink size={11} strokeWidth={2.5} />}

@@ -361,6 +361,59 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
                       </div>
                     ))}
                   </div>
+
+                  {/* Individual Reviews */}
+                  {experience.userReviews && experience.userReviews.length > 0 && (
+                    <div className="mt-8">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="text-[15px] font-semibold text-gray-900">Verified Reviews</h3>
+                        <span className="text-[12px] text-gray-500">{experience.userReviews.length} reviews shown</span>
+                      </div>
+                      <div className="space-y-4 max-h-[480px] overflow-y-auto pr-1" style={{ scrollbarWidth: 'thin' }}>
+                        {experience.userReviews.map((review, idx) => (
+                          <div key={idx} className="p-4 bg-gray-50/80 rounded-xl border border-gray-100">
+                            <div className="flex items-start justify-between gap-3 mb-2">
+                              <div className="flex items-center gap-2.5">
+                                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center text-[13px] font-semibold text-gray-600">
+                                  {review.name.charAt(0)}
+                                </div>
+                                <div>
+                                  <div className="flex items-center gap-1.5">
+                                    <span className="text-[13px] font-semibold text-gray-900">{review.name}</span>
+                                    <CheckCircle size={12} className="text-emerald-500" />
+                                  </div>
+                                  <span className="text-[11px] text-gray-500">{review.country}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                <span className={`text-[9px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded ${
+                                  review.source === 'viator' 
+                                    ? 'bg-blue-50 text-blue-600' 
+                                    : 'bg-orange-50 text-orange-600'
+                                }`}>
+                                  {review.source === 'viator' ? 'Viator' : 'GYG'}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-1 mb-2">
+                              {Array.from({ length: 5 }).map((_, i) => (
+                                <Star
+                                  key={i}
+                                  size={12}
+                                  className={i < review.rating ? 'text-gray-900' : 'text-gray-300'}
+                                  fill={i < review.rating ? 'currentColor' : 'none'}
+                                />
+                              ))}
+                              <span className="text-[11px] text-gray-400 ml-1.5">
+                                {new Date(review.date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                              </span>
+                            </div>
+                            <p className="text-[13px] text-gray-700 leading-relaxed">{review.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 

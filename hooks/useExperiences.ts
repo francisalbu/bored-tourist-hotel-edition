@@ -35,6 +35,7 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
     longitude: exp.longitude,
     affiliateUrl: exp.affiliate_url,
     affiliateProvider: exp.affiliate_provider,
+    userReviews: exp.user_reviews || [],
   };
 }
 

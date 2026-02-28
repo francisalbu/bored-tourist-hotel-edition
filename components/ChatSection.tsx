@@ -205,6 +205,326 @@ const FREE_SPOTS: FreeSpot[] = [
   }
 ];
 
+// ══════════════════════════════════════════════════════════════
+// 🧠 SMART EXPERIENCE MATCHING ENGINE
+// Pre-filters and ranks experiences before sending to the LLM
+// so the AI focuses on the most relevant options.
+// ══════════════════════════════════════════════════════════════
+
+const KEYWORD_TAG_MAP: Record<string, string[]> = {
+  // ── Water Sports ──
+  'surf': ['Surf', 'Surfing', 'Waves', 'Water Sports', 'Surf School'],
+  'surfing': ['Surf', 'Surfing', 'Waves', 'Water Sports'],
+  'dive': ['Scuba Diving', 'Diving', 'Underwater', 'Marine Life', 'First Dive'],
+  'diving': ['Scuba Diving', 'Diving', 'Underwater', 'Marine Life'],
+  'scuba': ['Scuba Diving', 'Diving', 'Underwater'],
+  'snorkel': ['Snorkeling', 'Marine Life', 'Ocean'],
+  'snorkeling': ['Snorkeling', 'Marine Life', 'Ocean', 'Sea Caves'],
+  'kayak': ['Kayak', 'Water Sports', 'Coastal', 'Ocean'],
+  'kayaking': ['Kayak', 'Water Sports', 'Coastal'],
+  'sail': ['Sailing', 'Sailboat', 'Cruise', 'Boat', 'River'],
+  'sailing': ['Sailing', 'Sailboat', 'Cruise', 'Boat'],
+  'boat': ['Boat', 'Cruise', 'Sailing', 'River', 'Tagus River', 'Traditional Boats'],
+  'cruise': ['Cruise', 'Boat', 'Sailing', 'River'],
+  // ── Food & Drink ──
+  'food': ['Food Tour', 'Tastings', 'Culinary', 'Foodie', 'Portuguese Cuisine', 'Local Food'],
+  'eat': ['Food Tour', 'Tastings', 'Culinary', 'Local Food'],
+  'cook': ['Cooking Class', 'Culinary', 'Workshop', 'Hands-On', 'Portuguese Cuisine'],
+  'cooking': ['Cooking Class', 'Culinary', 'Workshop', 'Hands-On'],
+  'tasting': ['Tastings', 'Food Tour', 'Wine Tasting', 'Wine'],
+  'tastings': ['Tastings', 'Food Tour', 'Wine Tasting'],
+  'wine': ['Wine', 'Wine Tour', 'Wine Tasting', 'Winery', 'Vineyard', 'Portuguese Wine'],
+  'pasteis': ['Pastel de Nata', 'Baking', 'Portuguese Pastry'],
+  'pastel de nata': ['Pastel de Nata', 'Baking', 'Portuguese Pastry'],
+  'nata': ['Pastel de Nata', 'Baking', 'Portuguese Pastry'],
+  'vegan': ['Vegan', 'Plant-Based', 'Healthy'],
+  'vegetarian': ['Vegan', 'Plant-Based', 'Healthy'],
+  'restaurant': ['Dinner', 'Restaurant', 'Dining'],
+  'dinner': ['Dinner', 'Restaurant', 'Dining', 'Evening'],
+  'lunch': ['Lunch', 'Food Tour', 'Tastings'],
+  'brunch': ['Brunch', 'Food Tour'],
+  'cheese': ['Cheese', 'Wine Tasting', 'Gourmet'],
+  'petiscos': ['Petiscos', 'Tapas', 'Small Plates'],
+  'tapas': ['Petiscos', 'Tapas', 'Small Plates'],
+  'bacalhau': ['Bacalhau', 'Portuguese Cuisine', 'Food Tour'],
+  // ── Culture & History ──
+  'fado': ['Fado', 'Live Music', 'Portuguese Music', 'Traditional'],
+  'music': ['Live Music', 'Fado', 'Portuguese Music', 'Performance'],
+  'history': ['History', 'Walking Tour', 'Heritage', 'Cultural', 'Educational'],
+  'historical': ['History', 'Heritage', 'Cultural', 'Educational'],
+  'museum': ['Museum', 'Exhibition', 'Cultural', 'Indoor'],
+  'art': ['Art', 'Street Art', 'Urban Art', 'Murals', 'Creative'],
+  'street art': ['Street Art', 'Graffiti', 'Urban Art', 'Murals'],
+  'graffiti': ['Street Art', 'Graffiti', 'Urban Art', 'Murals'],
+  'theatre': ['Theatre', 'Immersive', 'Performance'],
+  'theater': ['Theatre', 'Immersive', 'Performance'],
+  'tile': ['Azulejo', 'Tile Painting', 'Workshop', 'Ceramic'],
+  'azulejo': ['Azulejo', 'Tile Painting', 'Workshop'],
+  'ceramic': ['Azulejo', 'Tile Painting', 'Ceramic', 'Workshop'],
+  'photography': ['Photography', 'Photowalk', 'Creative'],
+  'photo': ['Photography', 'Photowalk', 'Photo Opportunity'],
+  'sketch': ['Sketching', 'Art', 'Drawing', 'Creative'],
+  'draw': ['Sketching', 'Drawing', 'Art', 'Creative'],
+  'jewish': ['Jewish Heritage', 'Sephardic', 'History'],
+  'sephardic': ['Sephardic', 'Jewish Heritage'],
+  'cabaret': ['Cabaret', 'Show', 'Night Life', 'Entertainment'],
+  // ── Adventure & Sports ──
+  'adventure': ['Adventure', 'Adrenaline', 'Off-Road', 'Extreme', 'Micro Adventure'],
+  'adrenaline': ['Adrenaline', 'Adventure', 'Extreme', 'Thrilling'],
+  'extreme': ['Extreme', 'Adrenaline', 'Adventure'],
+  'paragliding': ['Paragliding', 'Flying', 'Aerial', 'Tandem'],
+  'paraglide': ['Paragliding', 'Flying', 'Aerial', 'Tandem'],
+  'fly': ['Paragliding', 'Flying', 'Aerial', 'Helicopter', 'Hot Air Balloon', 'Indoor Skydiving'],
+  'flying': ['Paragliding', 'Flying', 'Aerial', 'Helicopter'],
+  'skydiving': ['Indoor Skydiving', 'Wind Tunnel', 'Adrenaline'],
+  'skydive': ['Indoor Skydiving', 'Wind Tunnel', 'Adrenaline'],
+  'climb': ['Rock Climbing', 'Climbing', 'Adrenaline'],
+  'climbing': ['Rock Climbing', 'Climbing', 'Coastal Cliffs'],
+  'rock climbing': ['Rock Climbing', 'Climbing', 'Coastal Cliffs'],
+  'hike': ['Hiking', 'Nature', 'Coastal', 'Outdoors'],
+  'hiking': ['Hiking', 'Nature', 'Coastal', 'Outdoors'],
+  'trek': ['Hiking', 'Nature', 'Outdoors', 'Adventure'],
+  'trekking': ['Hiking', 'Nature', 'Outdoors'],
+  'walk': ['Walking Tour', 'Guided Tour', 'Outdoors'],
+  'walking': ['Walking Tour', 'Guided Tour'],
+  'jeep': ['Jeep', '4x4', 'Off-Road', 'Safari'],
+  '4x4': ['4x4', 'Jeep', 'Off-Road', 'Safari'],
+  'safari': ['Safari', 'Jeep', '4x4', 'Off-Road'],
+  'buggy': ['Buggy', 'Off-Road', 'Adventure'],
+  'quad': ['Quad', 'ATV', 'Off-Road'],
+  'atv': ['Quad', 'ATV', 'Off-Road'],
+  'bike': ['E-Bike', 'Electric Bike', 'Cycling'],
+  'ebike': ['E-Bike', 'Electric Bike', 'Cycling'],
+  'e-bike': ['E-Bike', 'Electric Bike', 'Cycling'],
+  'cycling': ['Cycling', 'E-Bike', 'Electric Bike'],
+  'bicycle': ['E-Bike', 'Cycling', 'Electric Bike'],
+  'horse': ['Horseback Riding', 'Horse', 'Animals'],
+  'horseback': ['Horseback Riding', 'Horse', 'Beach'],
+  'riding': ['Horseback Riding', 'Horse'],
+  'fishing': ['Fishing', 'Deep Sea', 'Boat', 'Ocean', 'Sport Fishing'],
+  'fish': ['Fishing', 'Deep Sea', 'Sport Fishing'],
+  'cave': ['Caving', 'Caves', 'Underground', 'Geological'],
+  'caving': ['Caving', 'Caves', 'Underground'],
+  'coasteering': ['Coasteering', 'Cliff Jumping', 'Wild Swimming'],
+  'cliff': ['Coasteering', 'Cliff Jumping', 'Cliff', 'Coastal Cliffs'],
+  'escape room': ['Escape Room', 'Escape Game', 'Puzzle', 'Interactive'],
+  'escape game': ['Escape Room', 'Escape Game', 'Puzzle', 'Interactive'],
+  'escape': ['Escape Room', 'Escape Game', 'Puzzle'],
+  'puzzle': ['Puzzle', 'Escape Room', 'Escape Game', 'Treasure Hunt'],
+  'treasure': ['Treasure Hunt', 'Puzzle', 'Interactive'],
+  // ── Wellness ──
+  'spa': ['Spa', 'Massage', 'Wellness', 'Relaxation', 'Self-Care', 'Pampering'],
+  'massage': ['Spa', 'Massage', 'Wellness', 'Relaxation'],
+  'wellness': ['Spa', 'Wellness', 'Relaxation', 'Self-Care'],
+  'relax': ['Relaxation', 'Spa', 'Wellness', 'Relaxing', 'Self-Care'],
+  'relaxing': ['Relaxation', 'Spa', 'Wellness', 'Relaxing'],
+  'pampering': ['Spa', 'Pampering', 'Luxury', 'Self-Care'],
+  // ── Moods & Occasions ──
+  'romantic': ['Romantic', 'Couples', 'Sunset', 'Intimate'],
+  'romance': ['Romantic', 'Couples', 'Sunset', 'Intimate'],
+  'couple': ['Romantic', 'Couples', 'Sunset'],
+  'couples': ['Romantic', 'Couples', 'Sunset'],
+  'date': ['Romantic', 'Couples', 'Intimate', 'Evening'],
+  'honeymoon': ['Romantic', 'Couples', 'Luxury', 'Sunset'],
+  'anniversary': ['Romantic', 'Couples', 'Luxury', 'Intimate'],
+  'sunset': ['Sunset', 'Golden Hour', 'Romantic', 'Evening'],
+  'sunrise': ['Sunrise', 'Hot Air Balloon', 'Aerial'],
+  'family': ['Family Friendly', 'Kids', 'Educational'],
+  'families': ['Family Friendly', 'Kids', 'Educational'],
+  'kids': ['Family Friendly', 'Kids', 'Fun', 'Educational'],
+  'children': ['Family Friendly', 'Kids', 'Fun'],
+  'rain': ['Indoor', 'Rainy Day', 'Museum', 'Workshop'],
+  'rainy': ['Indoor', 'Rainy Day', 'Museum', 'Workshop'],
+  'indoor': ['Indoor', 'Rainy Day', 'Workshop', 'Museum'],
+  'night': ['Night Tour', 'Evening', 'Night Life'],
+  'nightlife': ['Night Life', 'Evening', 'Cabaret', 'Show'],
+  'evening': ['Evening', 'Night Tour', 'Sunset', 'Dinner'],
+  'morning': ['Sunrise', 'Hiking', 'Outdoors'],
+  'free': ['Free Tour'],
+  'budget': ['Free Tour', 'Small Group'],
+  'cheap': ['Free Tour'],
+  'luxury': ['Luxury', 'VIP', 'Private', 'Helicopter'],
+  'vip': ['VIP', 'Luxury', 'Private'],
+  'private': ['Private', 'Intimate', 'One-on-One'],
+  'bucket list': ['Bucket List', 'Unique'],
+  'unique': ['Unique', 'Bucket List', 'Immersive'],
+  'immersive': ['Immersive', 'Interactive', 'Sensory'],
+  'creative': ['Creative', 'Hands-On', 'Workshop', 'Art', 'Learn'],
+  'workshop': ['Workshop', 'Hands-On', 'Creative', 'Learn'],
+  'learn': ['Learn', 'Workshop', 'Educational', 'Hands-On'],
+  'team': ['Team Building', 'Groups', 'Fun'],
+  'group': ['Small Group', 'Team Building', 'Groups'],
+  // ── Locations ──
+  'sintra': ['Sintra', 'Palaces', 'Day Trip'],
+  'cascais': ['Cascais', 'Coastal', 'Town'],
+  'alfama': ['Alfama', 'Old Town', 'History'],
+  'belem': ['Belém', 'History', 'Monuments'],
+  'belém': ['Belém', 'History', 'Monuments'],
+  'arrábida': ['Arrábida', 'Nature', 'Beach'],
+  'arrabida': ['Arrábida', 'Nature', 'Beach'],
+  'sesimbra': ['Sesimbra', 'Beach', 'Ocean'],
+  'évora': ['Évora', 'Alentejo', 'UNESCO'],
+  'evora': ['Évora', 'Alentejo', 'UNESCO'],
+  'alentejo': ['Alentejo', 'Évora', 'Countryside'],
+  'nazaré': ['Nazaré', 'Big Waves', 'Day Trip'],
+  'nazare': ['Nazaré', 'Big Waves', 'Day Trip'],
+  'óbidos': ['Óbidos', 'Medieval', 'Village'],
+  'obidos': ['Óbidos', 'Medieval', 'Village'],
+  'fátima': ['Fátima', 'Religious'],
+  'fatima': ['Fátima', 'Religious'],
+  'ericeira': ['Ericeira', 'Surf', 'Beach'],
+  'comporta': ['Comporta', 'Beach', 'Nature Reserve'],
+  'caparica': ['Costa da Caparica', 'Beach', 'Surf'],
+  'carcavelos': ['Carcavelos', 'Beach', 'Surf'],
+  'mouraria': ['Mouraria', 'History', 'Cultural'],
+  'baixa': ['Baixa', 'Downtown', 'Walking Tour'],
+  // ── General ──
+  'tour': ['Walking Tour', 'Guided Tour', 'City Tour', 'Day Trip'],
+  'walking tour': ['Walking Tour', 'Guided Tour'],
+  'day trip': ['Day Trip', 'Full Day'],
+  'excursion': ['Day Trip', 'Full Day'],
+  'beach': ['Beach', 'Coastal', 'Ocean'],
+  'sea': ['Ocean', 'Coastal', 'Marine Life', 'Atlantic'],
+  'ocean': ['Ocean', 'Coastal', 'Atlantic', 'Water Sports'],
+  'nature': ['Nature', 'Outdoors', 'Scenic', 'Ecological'],
+  'outdoor': ['Outdoors', 'Nature', 'Adventure'],
+  'outdoors': ['Outdoors', 'Nature', 'Adventure'],
+  'dolphin': ['Dolphins', 'Wildlife', 'Marine Biology'],
+  'dolphins': ['Dolphins', 'Wildlife', 'Marine Biology'],
+  'whale': ['Dolphins', 'Wildlife', 'Ocean'],
+  'animal': ['Animals', 'Wildlife', 'Dolphins', 'Birds'],
+  'wildlife': ['Wildlife', 'Animals', 'Dolphins', 'Birds', 'Nature'],
+  'bird': ['Birdwatching', 'Birds', 'Nature Reserve'],
+  'birdwatching': ['Birdwatching', 'Birds', 'Nature Reserve'],
+  'balloon': ['Hot Air Balloon', 'Balloon', 'Aerial'],
+  'helicopter': ['Helicopter', 'Aerial', 'VIP'],
+  'car': ['Vintage Car', 'Electric Car', 'Self-Drive', 'Citroën 2CV'],
+  'vintage': ['Vintage Car', 'Citroën 2CV', 'Retro', 'Nostalgic'],
+  'aquarium': ['Aquarium', 'Oceanário', 'Marine Life'],
+  'oceanário': ['Aquarium', 'Oceanário', 'Marine Life'],
+  'oceanario': ['Aquarium', 'Oceanário', 'Marine Life'],
+  'dinosaur': ['Dinosaur', 'Jurassic', 'Fossils'],
+  'fossil': ['Dinosaur', 'Jurassic', 'Fossils'],
+  'spy': ['Spies', 'WWII', 'Espionage', 'Mystery'],
+  'spies': ['Spies', 'WWII', 'Espionage'],
+  'mystery': ['Mystery', 'Secrets', 'Dark History', 'Storytelling'],
+  'dark': ['Dark History', 'Mystery', 'Gothic', 'Secrets'],
+  'ghost': ['Dark History', 'Mystery', 'Night Tour'],
+  'bridge': ['Ponte 25 de Abril', 'Climbing', 'Panoramic Views'],
+  'panoramic': ['Panoramic Views', 'Scenic', 'Viewpoints'],
+  'view': ['Panoramic Views', 'Scenic', 'Viewpoints'],
+  'viewpoint': ['Panoramic Views', 'Viewpoints', 'Scenic'],
+  // ── Portuguese / multi-language keywords ──
+  'mergulho': ['Scuba Diving', 'Diving', 'Underwater'],
+  'mergulhar': ['Scuba Diving', 'Diving', 'Underwater'],
+  'comida': ['Food Tour', 'Tastings', 'Culinary', 'Portuguese Cuisine'],
+  'cozinhar': ['Cooking Class', 'Culinary', 'Workshop'],
+  'vinho': ['Wine', 'Wine Tour', 'Wine Tasting'],
+  'vela': ['Sailing', 'Sailboat'],
+  'barco': ['Boat', 'Cruise', 'Sailing'],
+  'cavalo': ['Horseback Riding', 'Horse'],
+  'bicicleta': ['E-Bike', 'Cycling', 'Electric Bike'],
+  'praia': ['Beach', 'Coastal', 'Ocean'],
+  'pôr do sol': ['Sunset', 'Golden Hour', 'Romantic'],
+  'por do sol': ['Sunset', 'Golden Hour', 'Romantic'],
+  'romântico': ['Romantic', 'Couples', 'Intimate'],
+  'romantico': ['Romantic', 'Couples', 'Intimate'],
+  'aventura': ['Adventure', 'Adrenaline', 'Extreme'],
+  'família': ['Family Friendly', 'Kids'],
+  'familia': ['Family Friendly', 'Kids'],
+  'crianças': ['Family Friendly', 'Kids', 'Fun'],
+  'criancas': ['Family Friendly', 'Kids', 'Fun'],
+  'chuva': ['Indoor', 'Rainy Day', 'Museum'],
+  'relaxar': ['Relaxation', 'Spa', 'Wellness'],
+  'golfinhos': ['Dolphins', 'Wildlife', 'Marine Biology'],
+  'escalada': ['Rock Climbing', 'Climbing'],
+  'caminhada': ['Hiking', 'Walking Tour', 'Outdoors'],
+  'gruta': ['Caving', 'Caves', 'Underground'],
+  'espeleologia': ['Caving', 'Caves', 'Underground'],
+  'parapente': ['Paragliding', 'Flying', 'Aerial'],
+  'balão': ['Hot Air Balloon', 'Balloon', 'Aerial'],
+  'balao': ['Hot Air Balloon', 'Balloon', 'Aerial'],
+  'pesca': ['Fishing', 'Deep Sea', 'Sport Fishing'],
+  'fotografia': ['Photography', 'Photowalk', 'Creative'],
+  'azulejos': ['Azulejo', 'Tile Painting', 'Workshop'],
+  'helicóptero': ['Helicopter', 'Aerial', 'VIP'],
+  'helicoptero': ['Helicopter', 'Aerial', 'VIP'],
+  'noite': ['Night Tour', 'Evening', 'Night Life'],
+  'cultura': ['Cultural', 'History', 'Heritage'],
+  'história': ['History', 'Heritage', 'Cultural'],
+  'historia': ['History', 'Heritage', 'Cultural'],
+};
+
+/**
+ * Scores how well an experience matches a user message.
+ * Uses keyword→tag mapping + direct text matching.
+ * Returns a numeric score (0 = no match).
+ */
+function scoreExperienceMatch(exp: any, rawMessage: string): number {
+  // Normalize: lowercase, remove accents for comparison
+  const msg = rawMessage.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const tags: string[] = Array.isArray(exp.tags) ? exp.tags : [];
+  const tagsLower = tags.map((t: string) => t.toLowerCase());
+  const titleLower = (exp.title || '').toLowerCase();
+  const descLower = (exp.shortDescription || exp.description || '').toLowerCase();
+  const categoryLower = (exp.category || '').toLowerCase();
+
+  let score = 0;
+
+  // 1) Multi-word keywords first (longer matches = more specific)
+  const sortedKeywords = Object.keys(KEYWORD_TAG_MAP).sort((a, b) => b.length - a.length);
+  const matchedKeywords = new Set<string>();
+
+  for (const keyword of sortedKeywords) {
+    const normalizedKeyword = keyword.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    if (!msg.includes(normalizedKeyword)) continue;
+
+    // Skip single-word if a multi-word containing it already matched
+    if (!keyword.includes(' ') && Array.from(matchedKeywords).some(mk => mk.includes(keyword))) continue;
+    matchedKeywords.add(keyword);
+
+    const matchTags = KEYWORD_TAG_MAP[keyword];
+    for (const matchTag of matchTags) {
+      if (tagsLower.includes(matchTag.toLowerCase())) {
+        score += 10; // Strong: keyword in message AND tag on experience
+      }
+    }
+    if (titleLower.includes(normalizedKeyword)) score += 5;
+    if (descLower.includes(normalizedKeyword)) score += 2;
+  }
+
+  // 2) Direct word-to-tag matching (catches terms not in the map)
+  const words = msg.split(/\s+/).filter(w => w.length > 3);
+  for (const word of words) {
+    for (const tag of tagsLower) {
+      if (tag === word || tag.includes(word)) {
+        score += 3;
+      }
+    }
+    if (titleLower.includes(word) && word.length > 4) score += 2;
+  }
+
+  // 3) Category-level bonus
+  const categoryMap: Record<string, string[]> = {
+    'local cooking': ['food', 'cook', 'eat', 'tasting', 'wine', 'cheese', 'culinary', 'gastronomia', 'comida', 'cozinhar'],
+    'micro adventures': ['adventure', 'adrenaline', 'extreme', 'buggy', 'jeep', 'quad', 'aventura'],
+    'outdoors': ['outdoor', 'nature', 'hike', 'beach', 'kayak', 'surf', 'sail', 'natureza', 'praia'],
+    'culture dive': ['culture', 'history', 'museum', 'art', 'fado', 'tour', 'cultura', 'historia'],
+    'sports': ['sport', 'climb', 'dive', 'surf', 'fish', 'desporto'],
+    'wellness': ['spa', 'massage', 'relax', 'wellness', 'bem-estar', 'relaxar'],
+    'learn & create': ['workshop', 'learn', 'creative', 'photo', 'sketch', 'tile', 'aprender'],
+  };
+  for (const [cat, keywords] of Object.entries(categoryMap)) {
+    if (categoryLower === cat.toLowerCase()) {
+      for (const kw of keywords) {
+        if (msg.includes(kw)) { score += 5; break; }
+      }
+    }
+  }
+
+  return score;
+}
+
 interface ChatSectionProps {
   onExperienceClick?: (experience: ExperienceDisplay) => void;
   userId?: string; // User identifier for memories
@@ -517,15 +837,24 @@ export const ChatSection: React.FC<ChatSectionProps> = ({
         location: exp.location,
         address: exp.address,
         rating: exp.rating,
+        reviews: exp.review_count || 0,
         maxGroupSize: exp.max_group_size,
         highlights: exp.highlights || [],
+        whatsIncluded: exp.included || [],
+        languages: exp.languages || [],
         importantInfo: exp.important_info,
         cancellationPolicy: exp.cancellation_policy,
         videoUrl: exp.video_url,
         imageUrl: exp.images && exp.images.length > 0 ? exp.images[0] : null,
         thumbnail: exp.images && exp.images.length > 0 ? exp.images[0] : null,
         images: exp.images || [],
-        tags: exp.tags || []
+        tags: exp.tags || [],
+        affiliateUrl: exp.affiliate_url,
+        affiliateProvider: exp.affiliate_provider,
+        userReviews: exp.user_reviews || [],
+        reviewCount: exp.review_count,
+        latitude: exp.latitude,
+        longitude: exp.longitude
       }));
       
       setExperiences(mappedData);
@@ -634,16 +963,49 @@ Keep it human, conversational, and insightful - not a database dump.`;
     setIsLoading(true);
 
     try {
+      const apiKey = (import.meta.env.VITE_OPENAI_API_KEY || '').trim();
+      if (!apiKey || apiKey === 'sk-proj-your-key-here') {
+        throw new Error('OpenAI API key not configured');
+      }
       const openai = new OpenAI({
-        apiKey: import.meta.env.VITE_OPENAI_API_KEY || 'sk-proj-your-key-here',
+        apiKey,
         dangerouslyAllowBrowser: true
       });
       
-      const experiencesContext = experiences.map((exp) => {
-        const tags = Array.isArray(exp.tags) ? exp.tags.join(', ') : '';
-        const desc = exp.description || exp.shortDescription || '';
-        return `[${exp.id}] ${exp.title} (${exp.category}) - €${exp.price}, ${exp.duration}, ${exp.location}. Tags: [${tags}]. ${desc}`;
+      // ── Smart Pre-Filtering: score & rank experiences against user message ──
+      const allUserMessages = [...messages.filter(m => m.role === 'user').map(m => m.text), userMessage.text].join(' ');
+      const scored = experiences.map(exp => ({
+        ...exp,
+        _score: scoreExperienceMatch(exp, allUserMessages)
+      }));
+      const topMatches = scored
+        .filter(e => e._score > 0)
+        .sort((a, b) => b._score - a._score)
+        .slice(0, 15);
+      const rest = scored.filter(e => !topMatches.includes(e));
+
+      // Top matches: full detail so the LLM has everything it needs
+      const topMatchesContext = topMatches.length > 0
+        ? topMatches.map(exp => {
+            const tags = Array.isArray(exp.tags) ? exp.tags.join(', ') : '';
+            const desc = exp.shortDescription || exp.description || '';
+            return `⭐ [${exp.id}] ${exp.title} (${exp.category}) — €${exp.price}, ${exp.duration}, ${exp.location}\n   Tags: [${tags}]\n   ${desc}`;
+          }).join('\n\n')
+        : '';
+
+      // Rest: ultra-compact (id + title + category only) to save tokens
+      const restContext = rest.map(exp => {
+        const tags = Array.isArray(exp.tags) ? exp.tags.slice(0, 4).join(', ') : '';
+        return `[${exp.id}] ${exp.title} (${exp.category}) €${exp.price} [${tags}]`;
       }).join('\n');
+
+      // Build the two-tier catalog
+      const experiencesContext = topMatches.length > 0
+        ? `🎯 TOP MATCHES (most relevant to this guest — prioritize these!):\n${topMatchesContext}\n\n📋 OTHER EXPERIENCES (use ID to recommend):\n${restContext}`
+        : experiences.map(exp => {
+            const tags = Array.isArray(exp.tags) ? exp.tags.slice(0, 5).join(', ') : '';
+            return `[${exp.id}] ${exp.title} (${exp.category}) €${exp.price}, ${exp.duration}. [${tags}]`;
+          }).join('\n');
       
       const freeSpotsContext = FREE_SPOTS.map(spot =>
         `[F${spot.id}] **${spot.title}** (${spot.category}) - FREE, ${spot.location}. ${spot.description}`
@@ -814,24 +1176,85 @@ EVENT_IDS: [agenda-197328]
 
 Which sounds interesting?"
 
-🚨 CRITICAL MATCHING RULES:
-1. When a guest asks for a specific activity (e.g. "diving", "surf", "cooking"), you MUST search the catalog by TAGS and DESCRIPTION to find experiences that EXACTLY match.
-   - "diving" / "scuba" → look for tags containing "Scuba", "Diving", "Underwater", "Ocean"
-   - "surf" → look for tags containing "Surf", "Surfing", "Wave"
-   - "cooking" / "food" → look for tags containing "Cooking", "Food", "Culinary", "Tasting"
-   - "spa" / "massage" → look for tags containing "Massage", "Spa", "Wellness", "Facial"
-   - "adventure" → look for tags containing "Adventure", "Adrenaline", "Off-Road"
-   - "romantic" / "couples" → look for tags containing "Romantic", "Couples"
-   - "dinner" / "restaurant" → look for category "Tables" or tags with "Dinner", "Restaurant"
-2. NEVER recommend an experience that doesn't match the guest's request. A "Cave Tour" is NOT diving. A "Hiking" trail is NOT surfing.
-3. If NO experience in the catalog matches what the guest asks for, say honestly: "We don't currently have that exact experience available, but here are some similar options..." or suggest the closest match while being transparent.
-4. NEVER recommend in the first message — ask questions first (unless they ask about events or a specific activity)
-5. Write COMPLETE, COHESIVE sentences — never break text awkwardly
-6. Use EXPERIENCE_IDS for paid, FREE_SPOT_IDS for free, EVENT_IDS for events
-7. Let visual cards show photos/details — keep your text SHORT
-8. ALWAYS end with a question
-9. When asked about events, use EVENT_IDS — never say you can't access data
-10. For dinner/restaurant requests: recommend from "Tables" category experiences AND suggest FREE_SPOTS that are restaurants
+🚨 CRITICAL MATCHING RULES — YOU MUST FOLLOW THESE PERFECTLY:
+
+📌 RULE 1 — ALWAYS USE THE ⭐ TOP MATCHES SECTION FIRST:
+The catalog has a "🎯 TOP MATCHES" section pre-filtered for this guest. ALWAYS check there first and prioritize those experiences. They are the most relevant to what the guest is asking.
+
+📌 RULE 2 — MATCH BY TAGS, NEVER BY VIBES:
+When a guest asks for a specific activity, find experiences whose TAGS contain matching keywords:
+   - "diving" / "scuba" / "mergulho" → Tags: Scuba Diving, Diving, Underwater, First Dive
+   - "surf" / "surfing" → Tags: Surf, Surfing, Waves, Water Sports, Surf School
+   - "kayak" / "canoeing" → Tags: Kayak, Water Sports, Coastal
+   - "snorkel" → Tags: Snorkeling, Marine Life, Sea Caves
+   - "cooking" / "cook" / "cozinhar" → Tags: Cooking Class, Culinary, Workshop, Hands-On
+   - "food" / "eat" / "tasting" / "comida" → Tags: Food Tour, Tastings, Culinary, Foodie
+   - "wine" / "vinho" → Tags: Wine, Wine Tour, Wine Tasting, Winery
+   - "pastel de nata" / "pasteis" → Tags: Pastel de Nata, Baking, Portuguese Pastry
+   - "fado" / "music" → Tags: Fado, Live Music, Portuguese Music
+   - "spa" / "massage" / "wellness" → Tags: Spa, Massage, Wellness, Relaxation
+   - "adventure" / "aventura" / "adrenaline" → Tags: Adventure, Adrenaline, Off-Road, Extreme
+   - "romantic" / "couples" / "romântico" → Tags: Romantic, Couples, Sunset, Intimate
+   - "paragliding" / "parapente" → Tags: Paragliding, Flying, Aerial, Tandem
+   - "climbing" / "escalada" → Tags: Rock Climbing, Climbing, Coastal Cliffs
+   - "fishing" / "pesca" → Tags: Fishing, Deep Sea, Sport Fishing
+   - "horse" / "horseback" / "cavalo" → Tags: Horseback Riding, Horse
+   - "bike" / "cycling" / "bicicleta" → Tags: E-Bike, Electric Bike, Cycling
+   - "jeep" / "4x4" / "safari" → Tags: Jeep, 4x4, Off-Road, Safari
+   - "buggy" → Tags: Buggy, Off-Road
+   - "quad" / "atv" → Tags: Quad, ATV, Off-Road
+   - "balloon" / "balão" → Tags: Hot Air Balloon, Balloon, Aerial
+   - "helicopter" / "helicóptero" → Tags: Helicopter, Aerial, VIP
+   - "skydiving" → Tags: Indoor Skydiving, Wind Tunnel
+   - "hike" / "hiking" / "caminhada" → Tags: Hiking, Nature, Coastal
+   - "cave" / "caving" / "gruta" → Tags: Caving, Caves, Underground
+   - "escape room" / "escape game" → Tags: Escape Room, Escape Game, Puzzle
+   - "tile" / "azulejo" → Tags: Azulejo, Tile Painting, Workshop
+   - "art" / "street art" → Tags: Street Art, Art, Urban Art, Murals
+   - "photography" / "photo" / "fotografia" → Tags: Photography, Photowalk
+   - "sketch" / "drawing" → Tags: Sketching, Drawing, Art
+   - "dolphin" / "golfinhos" → Tags: Dolphins, Wildlife, Marine Biology
+   - "bird" / "birdwatching" → Tags: Birdwatching, Birds, Nature Reserve
+   - "aquarium" / "oceanário" → Tags: Aquarium, Oceanário, Marine Life
+   - "sunset" / "pôr do sol" → Tags: Sunset, Golden Hour, Romantic
+   - "family" / "kids" / "children" / "família" → Tags: Family Friendly, Kids, Educational
+   - "rain" / "indoor" / "chuva" → Tags: Indoor, Rainy Day, Museum, Workshop
+   - "night" / "evening" / "noite" → Tags: Night Tour, Evening, Night Life
+   - "dinner" / "restaurant" → Tags: Dinner, Restaurant, Dining
+   - "cabaret" / "show" → Tags: Cabaret, Show, Night Life
+   - "history" / "museum" / "história" → Tags: History, Heritage, Cultural, Museum
+   - "theatre" / "theater" → Tags: Theatre, Immersive, Performance
+   - "luxury" / "vip" → Tags: Luxury, VIP, Private
+   - "free tour" → Tags: Free Tour
+
+📌 RULE 3 — PRECISION OVER RECALL:
+NEVER recommend an experience that doesn't genuinely match. Mistakes to avoid:
+   ❌ Caving is NOT diving/scuba. ❌ Hiking is NOT surfing. ❌ A food tour is NOT a cooking class.
+   ❌ A sunset cruise is NOT a sailing lesson. ❌ An escape game is NOT an outdoor adventure.
+   ✅ Only recommend experiences whose tags ACTUALLY contain the relevant keywords.
+
+📌 RULE 4 — SINTRA & CASCAIS & DAY TRIPS:
+When someone asks about Sintra or Cascais, show ALL relevant experiences (day trips, jeep tours, e-bike tours, etc.) — don't just show one.
+
+📌 RULE 5 — MULTIPLE MATCHES = SHOW VARIETY:
+When several experiences match, show 2-4 options from different price ranges or styles. Let the guest choose.
+
+📌 RULE 6 — HONEST WHEN NO MATCH:
+If NO experience in the catalog matches, be honest: "We don't have that exact experience yet, but here are some similar options..." Never force a bad match.
+
+📌 RULE 7 — CONVERSATION FLOW:
+- NEVER recommend in the first message — ask questions first (unless they directly ask for a specific activity)
+- When they ask for something specific ("I want to surf"), skip discovery and go straight to matching
+- ALWAYS end with a question to keep the conversation flowing
+
+📌 RULE 8 — FORMAT:
+- Use EXPERIENCE_IDS for paid experiences, FREE_SPOT_IDS for free spots, EVENT_IDS for events
+- Let visual cards show photos/details — keep your text SHORT and personal
+- Write COMPLETE, COHESIVE sentences — never break text awkwardly
+- When asked about events, use EVENT_IDS — never say you can't access event data
+
+📌 RULE 9 — LANGUAGE MATCHING:
+The guest may write in Portuguese, English, Spanish, French, etc. ALWAYS understand the intent regardless of language and match to the right experiences. "Quero mergulhar" = diving. "Quero ir à praia" = beach activities.
 
 AVAILABLE EVENTS (${todayEvents.length}):
 ${todayEvents.length > 0 ? todayEvents.map((e: any) => '[' + e.id + '] ' + e.name + ' - ' + e.date + ' at ' + e.venue).join('\n') : 'No events currently loaded'}
@@ -839,14 +1262,14 @@ ${todayEvents.length > 0 ? todayEvents.map((e: any) => '[' + e.id + '] ' + e.nam
 Remember: Use IDs and let the visual cards do the work!`;
 
       const response = await openai.chat.completions.create({
-        model: 'gpt-4-turbo-preview',
+        model: 'gpt-4o',
         messages: [
           { role: 'system', content: systemPrompt },
           ...messages.map(m => ({ role: m.role, content: m.text })),
           { role: 'user', content: userMessage.text }
         ],
-        temperature: 0.4,
-        max_tokens: 500
+        temperature: 0.3,
+        max_tokens: 700
       });
 
       const aiText = response.choices[0]?.message?.content || "I'm having a moment - mind trying that again?";
@@ -903,12 +1326,30 @@ Remember: Use IDs and let the visual cards do the work!`;
         });
       }
       
-    } catch (error) {
+    } catch (error: any) {
       console.error("Chat error:", error);
+      console.error("Error details:", {
+        message: error?.message,
+        status: error?.status,
+        code: error?.code,
+        type: error?.type
+      });
+      let errorMsg: string;
+      if (error?.message === 'OpenAI API key not configured') {
+        errorMsg = "⚠️ The AI concierge isn't configured yet. Please set up the OpenAI API key.";
+      } else if (error?.status === 401 || error?.code === 'invalid_api_key') {
+        errorMsg = "⚠️ There's an issue with the AI configuration. Please check the API key.";
+      } else if (error?.status === 429) {
+        errorMsg = "I'm getting too many requests right now. Give me a moment and try again!";
+      } else if (error?.code === 'context_length_exceeded' || error?.message?.includes('maximum context')) {
+        errorMsg = "I'm trying to process too much information. Let me simplify — what are you looking for?";
+      } else {
+        errorMsg = "Oops, lost my train of thought. Can you try that again?";
+      }
       setMessages(prev => [...prev, { 
         id: (Date.now() + 1).toString(), 
         role: 'assistant', 
-        text: "Oops, lost my train of thought. Can you try that again?" 
+        text: errorMsg 
       }]);
     } finally {
       setIsLoading(false);
