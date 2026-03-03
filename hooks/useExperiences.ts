@@ -4,9 +4,8 @@ import { Experience, ExperienceDisplay } from '../types';
 
 // Map database experience to display format
 export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
-  // Use first image from images array if available, fallback to image_url
   const imageUrl = exp.images && exp.images.length > 0 ? exp.images[0] : exp.image_url;
-  
+
   return {
     id: exp.id,
     title: exp.title,
@@ -39,6 +38,34 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
   };
 }
 
+/**
+ * Resolve which hotel to show experiences for.
+ * Priority:
+ *  1. VITE_HOTEL_ID env var (set at build time per Vercel deployment)
+ *  2. Subdomain of the current page (e.g. lisb-onhostel.boredtourist.com)
+ *  3. null → fall back to global experiences table
+ */
+function resolveHotelId(): string | null {
+  // 1. Build-time env var
+  const envId =
+    typeof import.meta !== 'undefined'
+      ? (import.meta as any).env?.VITE_HOTEL_ID
+      : undefined;
+  if (envId && envId !== 'vila-gale') return envId as string;
+
+  // 2. Subdomain detection (works for any *.boredtourist.com URL)
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname; // e.g. "lisb-onhostel.boredtourist.com"
+    const parts = hostname.split('.');
+    // If there are 3+ parts and the subdomain is not "www" or "app"
+    if (parts.length >= 3 && parts[0] !== 'www' && parts[0] !== 'app') {
+      return parts[0]; // e.g. "lisb-onhostel"
+    }
+  }
+
+  return null;
+}
+
 export function useExperiences() {
   const [experiences, setExperiences] = useState<ExperienceDisplay[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,17 +75,44 @@ export function useExperiences() {
     async function fetchExperiences() {
       try {
         setLoading(true);
-        const { data, error } = await supabase
+
+        const hotelId = resolveHotelId();
+
+        if (hotelId) {
+          // ── Hotel-scoped fetch ──────────────────────────────────────
+          // Read hotel_experiences to get per-hotel is_active + display_order
+          // then join with the full experiences data
+          const { data: hotelRows, error: heError } = await supabase
+            .from('hotel_experiences')
+            .select('experience_id, display_order, is_active, experiences(*)')
+            .eq('hotel_id', hotelId)
+            .eq('is_active', true)
+            .order('display_order', { ascending: true, nullsFirst: false });
+
+          if (heError) throw heError;
+
+          if (hotelRows && hotelRows.length > 0) {
+            const mapped = (hotelRows as any[])
+              .filter((row) => row.experiences)
+              .map((row) => mapExperienceToDisplay(row.experiences as Experience));
+            setExperiences(mapped);
+            return;
+          }
+
+          // Hotel has no catalog rows yet — fall through to global fetch
+          console.info(`[useExperiences] No hotel_experiences rows for "${hotelId}", falling back to global list`);
+        }
+
+        // ── Global fallback ─────────────────────────────────────────
+        const { data, error: expError } = await supabase
           .from('experiences')
           .select('*')
           .eq('is_active', true)
           .order('display_order', { ascending: true, nullsFirst: false });
 
-        if (error) throw error;
+        if (expError) throw expError;
 
-        const mappedData = (data || []).map(mapExperienceToDisplay);
-
-        setExperiences(mappedData);
+        setExperiences((data || []).map(mapExperienceToDisplay));
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch experiences');
         console.error('Error fetching experiences:', err);
@@ -74,9 +128,8 @@ export function useExperiences() {
 }
 
 export function useCategories() {
-  // Bored. marketplace + hotel service categories
   const categories = [
-    { id: 'all', label: 'All', icon: '🔥' },
+    { id: 'all', label: 'All', icon: '��' },
     { id: 'Outdoors', label: 'Outdoors', icon: '🏞️' },
     { id: 'Sports', label: 'Sports', icon: '⚽' },
     { id: 'Culture Dive', label: 'Culture Dive', icon: '🎭' },
