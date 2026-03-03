@@ -4,13 +4,20 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
  * Affiliate Redirect Endpoint (Viator, GetYourGuide, etc.)
  *
  * WHY THIS EXISTS:
- * On mobile, if the user has the Viator/GYG app installed, clicking a
- * direct link triggers iOS Universal Links / Android App Links, which
- * opens the app's home screen instead of the specific experience.
+ * 1. iOS/Android Universal Links — if the user has the Viator/GYG app
+ *    installed, clicking a direct link opens the app's HOME SCREEN instead
+ *    of the specific experience. JS-based navigation from a page on our
+ *    own domain bypasses app interception.
  *
- * By loading an intermediate HTML page on OUR domain first, and then
- * redirecting via JavaScript, we bypass app interception — JS-based
- * navigation from a loaded page does NOT trigger universal links.
+ * 2. Viator "You selected" landing page — when Viator detects affiliate
+ *    params (?pid=…) in the product URL it shows an intermediate city
+ *    listing page ("Explore Lisbon / You selected …") instead of taking
+ *    the user straight to the activity. The fix is a two-step flow:
+ *      a) Load a hidden <iframe> pointing to viator.com/?pid=…&mcid=…
+ *         This sets the Viator affiliate cookie.
+ *      b) Once the cookie is set, redirect to the CLEAN product URL
+ *         (without affiliate params). The cookie ensures commission
+ *         is still tracked for any booking made.
  *
  * Usage: /api/viator-redirect?url=<encoded_affiliate_url>
  */
@@ -22,8 +29,43 @@ const ALLOWED_DOMAINS = [
   'getyourguide.com',
 ];
 
+const VIATOR_PID   = 'P00285354';
+const VIATOR_MCID  = '42383';
+// The affiliate cookie-setter URL — loads in a hidden iframe before redirect
+const VIATOR_COOKIE_URL = `https://www.viator.com/en-GB/?pid=${VIATOR_PID}&mcid=${VIATOR_MCID}&medium=link`;
+// Params that must be stripped from product URL to avoid "You selected" page
+const VIATOR_STRIP_PARAMS = ['pid', 'mcid', 'medium', 'api_version'];
+
+/** Remove Viator affiliate query params from a product URL */
+function cleanViatorUrl(raw: string): string {
+  try {
+    const u = new URL(raw);
+    VIATOR_STRIP_PARAMS.forEach(p => u.searchParams.delete(p));
+    // Remove trailing '?' if no params remain
+    return u.toString().replace(/\?$/, '');
+  } catch {
+    return raw;
+  }
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+function escapeJs(s: string): string {
+  return s
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/'/g, "\\'");
+}
+
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  let rawUrl = (req.query.url as string) || '';
+  const rawUrl = (req.query.url as string) || '';
 
   // Validate the URL
   let targetUrl: URL;
@@ -37,22 +79,18 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Redirect domain not allowed' });
   }
 
-  // Escape for safe HTML / JS embedding
-  const safeUrl = rawUrl
-    .replace(/&/g, '&amp;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#39;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
+  const isViator = targetUrl.hostname.includes('viator.com');
 
-  const jsUrl = rawUrl
-    .replace(/\\/g, '\\\\')
-    .replace(/"/g, '\\"')
-    .replace(/'/g, "\\'");
+  // For Viator: strip affiliate params so we land on the product directly
+  // (cookie is set via hidden iframe instead — avoids "You selected" page)
+  const finalUrl  = isViator ? cleanViatorUrl(rawUrl) : rawUrl;
+  const safeFinal = escapeHtml(finalUrl);
+  const jsFinal   = escapeJs(finalUrl);
+  const safeCookie = escapeHtml(VIATOR_COOKIE_URL);
 
-  // Serve an HTML page that redirects via JS (bypasses universal links)
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
+
   res.send(`<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,14 +116,42 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     <div class="spin"></div>
     <p>Opening booking page…</p>
     <p style="margin-top:12px">
-      <a href="${safeUrl}">Click here if not redirected</a>
+      <a href="${safeFinal}">Click here if not redirected</a>
     </p>
   </div>
+${isViator ? `
+  <!--
+    Step 1 — hidden iframe sets the Viator affiliate cookie.
+    Once it fires onload we redirect to the clean product URL.
+    Fallback timer (2 s) handles browsers that block cross-origin onload.
+  -->
+  <iframe
+    id="affframe"
+    src="${safeCookie}"
+    style="position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none"
+    onload="onCookieReady()"
+  ></iframe>
   <script>
-    // JS redirect does NOT trigger iOS Universal Links / Android App Links
-    // Small delay ensures the page is fully loaded first
-    setTimeout(function(){window.location.replace("${jsUrl}");},400);
+    var done = false;
+    function go() {
+      if (done) return;
+      done = true;
+      // Step 2 — JS redirect bypasses iOS Universal Links AND lands on product
+      window.location.replace("${jsFinal}");
+    }
+    function onCookieReady() {
+      // Short extra pause so cookie is fully written before navigation
+      setTimeout(go, 300);
+    }
+    // Safety fallback — redirect even if iframe never fires (e.g. Safari ITP)
+    setTimeout(go, 2000);
   </script>
+` : `
+  <script>
+    // Non-Viator (GYG etc.) — direct JS redirect bypasses Universal Links
+    setTimeout(function(){ window.location.replace("${jsFinal}"); }, 400);
+  </script>
+`}
 </body>
 </html>`);
 }
