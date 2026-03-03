@@ -85,7 +85,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick, onVid
           <img 
             src={experience.imageUrl} 
             alt={experience.title}
-            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[2000ms] ease-in-out group-hover:scale-110 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
+            className={`absolute inset-0 w-full h-full object-cover transition-transform duration-[4000ms] ease-in-out group-hover:scale-110 ${isPlaying ? 'opacity-0' : 'opacity-100'}`}
           />
 
           {/* Gradient Overlay */}
