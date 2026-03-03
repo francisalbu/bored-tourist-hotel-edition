@@ -23,7 +23,7 @@ const ALLOWED_DOMAINS = [
 ];
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  const rawUrl = (req.query.url as string) || '';
+  let rawUrl = (req.query.url as string) || '';
 
   // Validate the URL
   let targetUrl: URL;
@@ -35,6 +35,17 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!ALLOWED_DOMAINS.includes(targetUrl.hostname)) {
     return res.status(400).json({ error: 'Redirect domain not allowed' });
+  }
+
+  // Force Viator URLs to English locale
+  if (targetUrl.hostname.includes('viator.com')) {
+    // Remove any existing language prefix like /pt/, /es/, /fr/ etc.
+    targetUrl.pathname = targetUrl.pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?\//, '/en-US/');
+    // If no language prefix was present, add /en-US/ prefix
+    if (!targetUrl.pathname.startsWith('/en-US/')) {
+      targetUrl.pathname = '/en-US' + targetUrl.pathname;
+    }
+    rawUrl = targetUrl.toString();
   }
 
   // Escape for safe HTML / JS embedding

@@ -15,15 +15,17 @@ const HotelContext = createContext<HotelConfig | null>(null);
  *   --hotel-primary, --hotel-accent, --hotel-bg, etc.
  */
 export function HotelProvider({ children }: { children: React.ReactNode }) {
-  const [config, setConfig] = useState<HotelConfig>(getHotelConfig());
+  // Start as null to prevent flashing the wrong hotel before Supabase resolves
+  const [config, setConfig] = useState<HotelConfig | null>(null);
 
   // Fetch live config from Supabase (Dashboard-managed)
   useEffect(() => {
     let cancelled = false;
     async function loadRemoteConfig() {
       const remote = await fetchHotelConfigFromDB();
-      if (remote && !cancelled) {
-        setConfig(remote);
+      if (!cancelled) {
+        // Use remote config if available, otherwise fall back to local
+        setConfig(remote ?? getHotelConfig());
       }
     }
     loadRemoteConfig();
@@ -32,6 +34,8 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
 
   // Inject CSS variables + Google Fonts whenever config changes
   useEffect(() => {
+    if (!config) return; // nothing to inject until config is loaded
+
     // ── 1. Load Google Fonts (only non-system fonts) ──────────────────────
     const fontsNeeded = [
       ...new Set([config.theme.fontHeading, config.theme.fontBody]),
@@ -88,6 +92,18 @@ export function HotelProvider({ children }: { children: React.ReactNode }) {
     `;
     document.head.appendChild(style);
   }, [config]); // re-run whenever config changes (initial + after Supabase fetch)
+
+  // Block render until correct hotel config is resolved — prevents flashing
+  // the wrong hotel (e.g. Lisbon fallback) before Supabase subdomain lookup
+  if (!config) {
+    return (
+      <div style={{
+        position: 'fixed', inset: 0,
+        background: '#ffffff',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }} />
+    );
+  }
 
   return (
     <HotelContext.Provider value={config}>{children}</HotelContext.Provider>

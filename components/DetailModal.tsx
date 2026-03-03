@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { ExperienceDisplay } from '../types';
 import {
-  X, Heart, MapPin, Clock, Star, ShieldCheck, Zap, Users, Info,
+  X, MapPin, Clock, Star, ShieldCheck, Zap, Users, Info,
   Share2, Globe, CheckCircle, ChevronLeft, Camera, Play, Award,
   Languages, AlertCircle, Calendar, ChevronDown, Loader2,
   Car, Train, Navigation, Check, ExternalLink
@@ -24,7 +24,19 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
 
 /** Route affiliate links through our redirect endpoint to bypass iOS/Android app interception */
 function affiliateRedirectUrl(url: string): string {
-  return `/api/viator-redirect?url=${encodeURIComponent(url)}`;
+  // Force Viator links to English locale
+  let finalUrl = url;
+  try {
+    const parsed = new URL(url);
+    if (parsed.hostname.includes('viator.com')) {
+      parsed.pathname = parsed.pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?\//, '/en-US/');
+      if (!parsed.pathname.startsWith('/en-US/')) {
+        parsed.pathname = '/en-US' + parsed.pathname;
+      }
+      finalUrl = parsed.toString();
+    }
+  } catch {}
+  return `/api/viator-redirect?url=${encodeURIComponent(finalUrl)}`;
 }
 
 interface DetailModalProps {
@@ -90,11 +102,28 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
         </button>
 
         <div className="flex items-center gap-1">
-          <button className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-full transition-colors underline">
+          <button
+            onClick={async () => {
+              const shareUrl = experience.affiliateUrl || window.location.href;
+              const shareData = {
+                title: experience.title,
+                text: `Check out this experience: ${experience.title} — ${experience.currency}${experience.price}/guest`,
+                url: shareUrl,
+              };
+              try {
+                if (navigator.share) {
+                  await navigator.share(shareData);
+                } else {
+                  await navigator.clipboard.writeText(`${experience.title}\n${shareUrl}`);
+                  alert('Link copied to clipboard!');
+                }
+              } catch (err) {
+                // user cancelled share dialog
+              }
+            }}
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-full transition-colors underline"
+          >
             <Share2 size={14} /> Share
-          </button>
-          <button className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-full transition-colors underline">
-            <Heart size={14} /> Save
           </button>
         </div>
       </div>

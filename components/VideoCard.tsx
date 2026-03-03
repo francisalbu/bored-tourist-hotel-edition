@@ -52,12 +52,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick, onVid
 
   const handleBookClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (experience.affiliateUrl) {
-      // Route through our redirect endpoint to bypass app interception on mobile
-      const redirectUrl = `/api/viator-redirect?url=${encodeURIComponent(experience.affiliateUrl)}`;
-      window.open(redirectUrl, '_blank', 'noopener,noreferrer');
-      return;
-    }
+    // Always open the detail modal first — user can then book from there
     onClick(experience);
   };
 
