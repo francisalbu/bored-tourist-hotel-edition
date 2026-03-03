@@ -103,13 +103,13 @@ const DEFAULT_FEATURES: SiteFeatures = {
 const VILA_GALE: HotelConfig = {
   id: 'vila-gale',
   name: 'Lisbon Hotel',
-  logoUrl: 'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp',
+  logoUrl: 'https://cdn2.paraty.es/lisbon-hostel/images/c9cfe02d730577d=s300',
   tagline: 'DISCOVER',
   location: 'Lisbon & Surroundings',
   latitude: 38.7170,
   longitude: -9.1383,
   conciergeAvatarUrl:
-    'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp',
+    'https://cdn2.paraty.es/lisbon-hostel/images/c9cfe02d730577d=s300',
   theme: {
     primaryColor: '#0f172a',
     primaryTextColor: '#ffffff',
