@@ -2,6 +2,7 @@
 export interface Experience {
   id: string;
   title: string;
+  short_title?: string;
   description: string;
   short_description?: string;
   category: string;
@@ -90,6 +91,7 @@ export interface UserMemoryDisplay {
 export interface ExperienceDisplay {
   id: string;
   title: string;
+  shortTitle?: string;
   description: string;
   fullDescription?: string;
   category: string;

@@ -9,6 +9,7 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
   return {
     id: exp.id,
     title: exp.title,
+    shortTitle: exp.short_title || undefined,
     description: exp.short_description || exp.description,
     fullDescription: exp.description,
     category: exp.category,

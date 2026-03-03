@@ -118,7 +118,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick, onVid
           {/* Info Overlay (Bottom) */}
           <div className="absolute bottom-0 left-0 right-0 p-4 pt-12 transform transition-transform duration-300">
              <h3 className="text-white font-black text-xl leading-none uppercase tracking-tight mb-3 drop-shadow-md line-clamp-2">
-               {experience.title}
+               {experience.shortTitle || experience.title}
              </h3>
              
              <div className="flex items-end justify-between gap-2">
@@ -187,7 +187,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({ experience, onClick, onVid
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-5 pt-16">
               <span className="text-white/60 text-[10px] font-bold uppercase tracking-widest">{experience.category}</span>
               <h3 className="text-white font-black text-xl leading-tight uppercase tracking-tight mt-1 mb-2">
-                {experience.title}
+                {experience.shortTitle || experience.title}
               </h3>
               <div className="flex items-center gap-3 text-white/70 text-xs font-bold mb-4">
                 <span className="flex items-center gap-1"><Clock size={11} strokeWidth={3} /> {experience.duration}</span>
