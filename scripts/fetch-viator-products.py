@@ -260,7 +260,7 @@ def main():
             cancellation = "No refunds"
         
         # Build the clean direct URL
-        affiliate_url = f"https://www.viator.com/tours/Lisbon/{url_path}/d538-{code}"
+        affiliate_url = f"https://www.viator.com/en-GB/tours/Lisbon/{url_path}/d538-{code}"
         
         # Format images as jsonb
         images_json = json.dumps(images)

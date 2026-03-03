@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   99,
-  'https://www.viator.com/tours/Sintra/Sintra-e-bike-Tour/d50861-8232P8?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Sintra/Sintra-e-bike-Tour/d50861-8232P8?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

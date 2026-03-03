@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   110,
-  'https://www.viator.com/tours/Porto/Douro-Valley-Tour-with-Visit-to-two-Vineyards-River-Cruise-and-Lunch-at-Winery/d26879-7372P39?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Douro-Valley-Tour-with-Visit-to-two-Vineyards-River-Cruise-and-Lunch-at-Winery/d26879-7372P39?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -72,7 +72,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   111,
-  'https://www.viator.com/tours/Porto/SPIRITUS-A-melhor-maneira-de-viajar-e-sentir/d26879-204176P3?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/SPIRITUS-A-melhor-maneira-de-viajar-e-sentir/d26879-204176P3?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -110,7 +110,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   112,
-  'https://www.viator.com/tours/Porto/Private-Cruise-on-the-Douro-River/d26879-264534P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Private-Cruise-on-the-Douro-River/d26879-264534P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -146,7 +146,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   113,
-  'https://www.viator.com/tours/Porto/FOOD-TOURS-IN-PORTO-TO-EAT-LIKE-A-LOCAL/d26879-154994P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/FOOD-TOURS-IN-PORTO-TO-EAT-LIKE-A-LOCAL/d26879-154994P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -182,7 +182,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   114,
-  'https://www.viator.com/tours/Porto/Private-Sunset-Sailing-Cruise-on-the-Douro-River/d26879-174294P3?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Private-Sunset-Sailing-Cruise-on-the-Douro-River/d26879-174294P3?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -218,7 +218,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   115,
-  'https://www.viator.com/tours/Porto/Cook-and-Taste-Porto/d26879-14873P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Cook-and-Taste-Porto/d26879-14873P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

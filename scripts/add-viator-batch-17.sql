@@ -36,6 +36,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   93,
-  'https://www.viator.com/tours/Lisbon/Azulejosdesign-with-at-Formettes-Create-your-own-Portuguese-tile/d538-5511908P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Lisbon/Azulejosdesign-with-at-Formettes-Create-your-own-Portuguese-tile/d538-5511908P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );

@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   63,
-  'https://www.viator.com/tours/Lisbon/Hiking-tour-to-the-highest-limestone-cliff-of-continental-Europe/d538-66870P3',
+  'https://www.viator.com/en-GB/tours/Lisbon/Hiking-tour-to-the-highest-limestone-cliff-of-continental-Europe/d538-66870P3',
   'Viator'
 );
 
@@ -72,7 +72,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   64,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Fado-and-Fado-Music-Wine-and-History/d538-5538552P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Fado-and-Fado-Music-Wine-and-History/d538-5538552P1',
   'Viator'
 );
 
@@ -108,7 +108,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   65,
-  'https://www.viator.com/tours/Lisbon/Belem-district-and-the-Salazar-dictatorship-legacy/d538-17131P6',
+  'https://www.viator.com/en-GB/tours/Lisbon/Belem-district-and-the-Salazar-dictatorship-legacy/d538-17131P6',
   'Viator'
 );
 
@@ -144,7 +144,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   66,
-  'https://www.viator.com/tours/Lisbon/Evora-and-Monsaraz/d538-85308P3',
+  'https://www.viator.com/en-GB/tours/Lisbon/Evora-and-Monsaraz/d538-85308P3',
   'Viator'
 );
 
@@ -182,7 +182,7 @@ NOTE: If you booked our activity but selected the "NO PICKUP" option then you wi
   'Lisbon',
   true,
   67,
-  'https://www.viator.com/tours/Lisbon/Lisbons-Best-Gem-Kayak-and-Snorkeling-Adventure/d538-63327P5',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbons-Best-Gem-Kayak-and-Snorkeling-Adventure/d538-63327P5',
   'Viator'
 );
 

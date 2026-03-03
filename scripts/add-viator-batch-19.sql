@@ -36,6 +36,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   104,
-  'https://www.viator.com/tours/Lisbon/Paragliding-near-Lisbon-with-instructor-No-experience-requiered/d538-375146P2?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Lisbon/Paragliding-near-Lisbon-with-instructor-No-experience-requiered/d538-375146P2?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );

@@ -35,7 +35,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   14,
-  'https://www.viator.com/tours/Lisbon/Dolphin-Watching-Lisbon/d538-116939P8',
+  'https://www.viator.com/en-GB/tours/Lisbon/Dolphin-Watching-Lisbon/d538-116939P8',
   'Viator'
 );
 
@@ -71,7 +71,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   15,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Awakens-A-Culinary-Crossroads-Reborn-with-Culinary-Backstreets/d538-203526P19',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Awakens-A-Culinary-Crossroads-Reborn-with-Culinary-Backstreets/d538-203526P19',
   'Viator'
 );
 
@@ -107,7 +107,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   16,
-  'https://www.viator.com/tours/Lisbon/Private-Setubal-Region-Wine-Tasting-Tour-Full-Day-from-Lisbon/d538-11392P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Private-Setubal-Region-Wine-Tasting-Tour-Full-Day-from-Lisbon/d538-11392P1',
   'Viator'
 );
 
@@ -143,7 +143,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   17,
-  'https://www.viator.com/tours/Lisbon/Pastel-de-Nata-Workshop-at-REAL-Bakery/d538-86153P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Pastel-de-Nata-Workshop-at-REAL-Bakery/d538-86153P1',
   'Viator'
 );
 
@@ -179,6 +179,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   18,
-  'https://www.viator.com/tours/Lisbon/All-Inclusive-Kayak-Adventure/d538-304603P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/All-Inclusive-Kayak-Adventure/d538-304603P1',
   'Viator'
 );

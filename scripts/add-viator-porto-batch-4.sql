@@ -40,7 +40,7 @@ https://maps.app.goo.gl/6FYge1go2hr2YHCNA',
   'Porto',
   true,
   122,
-  'https://www.viator.com/tours/Porto/9-Hour-Suspension-Bridge-516-Arouca-and-Passadicos-do-Paiva/d26879-118678P21?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/9-Hour-Suspension-Bridge-516-Arouca-and-Passadicos-do-Paiva/d26879-118678P21?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -76,7 +76,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   123,
-  'https://www.viator.com/tours/Porto/HIKE-in-DOURO-VALLEY-w-winery-and-Boat-Cruise/d26879-58705P7?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/HIKE-in-DOURO-VALLEY-w-winery-and-Boat-Cruise/d26879-58705P7?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -112,7 +112,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   124,
-  'https://www.viator.com/tours/Porto/Fado-at-6h/d26879-75688P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Fado-at-6h/d26879-75688P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -148,7 +148,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   125,
-  'https://www.viator.com/tours/Porto/Braga-and-Guimaraes-with-Lunch-Included-Small-Group-Full-Day/d26879-26918P6?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Braga-and-Guimaraes-with-Lunch-Included-Small-Group-Full-Day/d26879-26918P6?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -186,7 +186,7 @@ The stone pillar is right on the center of the square in front of the Cathedral'
   'Porto',
   true,
   126,
-  'https://www.viator.com/tours/Porto/Porto-Jewish-Heritage-Walking-Tour/d26879-7372P18?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Porto-Jewish-Heritage-Walking-Tour/d26879-7372P18?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -222,7 +222,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   127,
-  'https://www.viator.com/tours/Porto/Polaris-RZR-Buggy-Tour-4x4/d26879-43382P8?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Polaris-RZR-Buggy-Tour-4x4/d26879-43382P8?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

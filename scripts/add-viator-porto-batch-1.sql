@@ -40,7 +40,7 @@ Look out for our friendly staff dressed in red and clearly identified with Livin
   'Porto',
   true,
   105,
-  'https://www.viator.com/tours/Porto/Douro-Valley-Wine-Tour-with-Lunch-Tastings-and-River-Cruise/d26879-7592P12?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Douro-Valley-Wine-Tour-with-Lunch-Tastings-and-River-Cruise/d26879-7592P12?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -76,7 +76,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   106,
-  'https://www.viator.com/tours/Porto/Private-Tile-Painting-Workshop-in-Porto/d26879-384973P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Private-Tile-Painting-Workshop-in-Porto/d26879-384973P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -116,7 +116,7 @@ The classes will be given on the main beach of Porto - Praia International',
   'Porto',
   true,
   107,
-  'https://www.viator.com/tours/Porto/Porto-Surf-Experience/d26879-442666P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Porto-Surf-Experience/d26879-442666P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -153,7 +153,7 @@ It''s mandatory to arrive before the class starts because it''s not possible to 
   'Porto',
   true,
   108,
-  'https://www.viator.com/tours/Porto/Pastel-de-Nata-Pastery-Class/d26879-122201P7?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Pastel-de-Nata-Pastery-Class/d26879-122201P7?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -189,7 +189,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   109,
-  'https://www.viator.com/tours/Porto/Porto-Douro-River-Boat-Cruise-with-Port-Wine-and-Snacks/d26879-406702P4?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Porto-Douro-River-Boat-Cruise-with-Port-Wine-and-Snacks/d26879-406702P4?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

@@ -35,7 +35,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   197,
-  'https://www.viator.com/tours/Madeira/Scuba-Diving-Experience-for-Beginners/d5392-409330P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/Scuba-Diving-Experience-for-Beginners/d5392-409330P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -71,7 +71,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   198,
-  'https://www.viator.com/tours/Madeira/Madeira-Scenic-Tour-by-Sidecar/d5392-9951P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/Madeira-Scenic-Tour-by-Sidecar/d5392-9951P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -107,7 +107,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   199,
-  'https://www.viator.com/tours/Funchal/Fado-Show-with-Wine-and-History-in-Madeira/d22388-5538552P6?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Funchal/Fado-Show-with-Wine-and-History-in-Madeira/d22388-5538552P6?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -143,7 +143,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   200,
-  'https://www.viator.com/tours/Madeira/Fanal-Assobiadores-Levada-Walk/d5392-23651P17?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/Fanal-Assobiadores-Levada-Walk/d5392-23651P17?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -182,7 +182,7 @@ https://youtube.com/shorts/xM2QYD9PIr4?si=uL2DD-DL-rO3YViy
   'Funchal',
   true,
   201,
-  'https://www.viator.com/tours/Funchal/TRY-SCUBA-DIVING/d22388-39129P5?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Funchal/TRY-SCUBA-DIVING/d22388-39129P5?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -218,7 +218,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   202,
-  'https://www.viator.com/tours/Madeira/Madeira-Levada-Walk-Rabacal-Lakes-and-Fountains/d5392-7543P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/Madeira-Levada-Walk-Rabacal-Lakes-and-Fountains/d5392-7543P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

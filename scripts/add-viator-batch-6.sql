@@ -35,7 +35,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   19,
-  'https://www.viator.com/tours/Lisbon/The-Surf-Instructor/d538-160709P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/The-Surf-Instructor/d538-160709P1',
   'Viator'
 );
 
@@ -71,7 +71,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   20,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Street-Art-Walk-and-Workshop/d538-263176P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Street-Art-Walk-and-Workshop/d538-263176P1',
   'Viator'
 );
 
@@ -107,7 +107,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   21,
-  'https://www.viator.com/tours/Lisbon/Traditional-Portuguese-Cooking-Class/d538-325678P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Traditional-Portuguese-Cooking-Class/d538-325678P1',
   'Viator'
 );
 
@@ -143,7 +143,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   22,
-  'https://www.viator.com/tours/Lisbon/An-intimate-live-Fado-music-show-with-our-amazing-artists/d538-400715P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/An-intimate-live-Fado-music-show-with-our-amazing-artists/d538-400715P1',
   'Viator'
 );
 
@@ -179,6 +179,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   23,
-  'https://www.viator.com/tours/Lisbon/Relaxing-Time-in-a-sailboat-A-different-way-to-look-at-Lisbon/d538-69837P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Relaxing-Time-in-a-sailboat-A-different-way-to-look-at-Lisbon/d538-69837P1',
   'Viator'
 );

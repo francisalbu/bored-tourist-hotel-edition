@@ -35,7 +35,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   24,
-  'https://www.viator.com/tours/Lisbon/Arrabida-Jeep-tour-to-the-most-beautiful-beach-of-Europe/d538-66870P4',
+  'https://www.viator.com/en-GB/tours/Lisbon/Arrabida-Jeep-tour-to-the-most-beautiful-beach-of-Europe/d538-66870P4',
   'Viator'
 );
 
@@ -71,7 +71,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   25,
-  'https://www.viator.com/tours/Lisbon/The-Slave-Trade-in-Lisbon-A-historical-walking-tour/d538-14060P13',
+  'https://www.viator.com/en-GB/tours/Lisbon/The-Slave-Trade-in-Lisbon-A-historical-walking-tour/d538-14060P13',
   'Viator'
 );
 
@@ -107,7 +107,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   26,
-  'https://www.viator.com/tours/Lisbon/Portuguese-Petiscos-Cooking-Class/d538-325678P3',
+  'https://www.viator.com/en-GB/tours/Lisbon/Portuguese-Petiscos-Cooking-Class/d538-325678P3',
   'Viator'
 );
 
@@ -143,7 +143,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   27,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Painting-Workshop-in-Majolica/d538-5636223P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Painting-Workshop-in-Majolica/d538-5636223P1',
   'Viator'
 );
 
@@ -179,6 +179,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   28,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Street-Photography-Photowalks/d538-5614014P2',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Street-Photography-Photowalks/d538-5614014P2',
   'Viator'
 );

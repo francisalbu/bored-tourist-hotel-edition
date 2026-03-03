@@ -36,6 +36,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   85,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Self-Driving-Interactive-Sightseeing-Tour/d538-5509LSBGOCAR?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Self-Driving-Interactive-Sightseeing-Tour/d538-5509LSBGOCAR?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );

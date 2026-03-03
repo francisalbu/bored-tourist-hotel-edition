@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   34,
-  'https://www.viator.com/tours/Lisbon/Setubal-Wine-Tour-with-Visit-and-Tasting-at-2-Wineries/d538-114041P9',
+  'https://www.viator.com/en-GB/tours/Lisbon/Setubal-Wine-Tour-with-Visit-and-Tasting-at-2-Wineries/d538-114041P9',
   'Viator'
 );
 
@@ -72,7 +72,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   35,
-  'https://www.viator.com/tours/Lisbon/Kayak-and-Snorkeling-Adventure-in-Lisbon/d538-63327P5',
+  'https://www.viator.com/en-GB/tours/Lisbon/Kayak-and-Snorkeling-Adventure-in-Lisbon/d538-63327P5',
   'Viator'
 );
 
@@ -108,7 +108,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   36,
-  'https://www.viator.com/tours/Sesimbra/Kayak-Adventure-in-Sesimbra/d50533-100456P2',
+  'https://www.viator.com/en-GB/tours/Sesimbra/Kayak-Adventure-in-Sesimbra/d50533-100456P2',
   'Viator'
 );
 
@@ -144,7 +144,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   37,
-  'https://www.viator.com/tours/Lisbon/Portuguese-Cooking-Class-in-Lisbon/d538-451173P2',
+  'https://www.viator.com/en-GB/tours/Lisbon/Portuguese-Cooking-Class-in-Lisbon/d538-451173P2',
   'Viator'
 );
 
@@ -180,6 +180,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   38,
-  'https://www.viator.com/tours/Lisbon/Portuguese-Cooking-Experience-in-Lisbon/d538-18875P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Portuguese-Cooking-Experience-in-Lisbon/d538-18875P1',
   'Viator'
 );

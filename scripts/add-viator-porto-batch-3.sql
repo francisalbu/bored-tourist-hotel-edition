@@ -39,7 +39,7 @@ Look for the guide with a red jacket/t-shirt saying "Porto Walkers".',
   'Porto',
   true,
   116,
-  'https://www.viator.com/tours/Porto/Skip-the-Line-Port-Wine-Lodges-Tour-Including-7-Wine-Tastings/d26879-31913P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Skip-the-Line-Port-Wine-Lodges-Tour-Including-7-Wine-Tastings/d26879-31913P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -75,7 +75,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   117,
-  'https://www.viator.com/tours/Porto/Douro-Valley-Small-Group-Tour-with-Wine-Tasting-Portuguese-Lunch-and-Optional-River-Cruise/d26879-12546DOUROVALLEY?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Douro-Valley-Small-Group-Tour-with-Wine-Tasting-Portuguese-Lunch-and-Optional-River-Cruise/d26879-12546DOUROVALLEY?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -111,7 +111,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   118,
-  'https://www.viator.com/tours/Porto/Porto-Food-Tour-Full-Meal-and-Drinks/d26879-48293P7?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Porto-Food-Tour-Full-Meal-and-Drinks/d26879-48293P7?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -150,7 +150,7 @@ The guide cannot wait for latecomers due to the strict schedule of the itinerary
   'Porto',
   true,
   119,
-  'https://www.viator.com/tours/Porto/Excursion-to-Aveiro-and-Costa-Nova-with-moliceiro-boat-ride/d26879-6877P104?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Excursion-to-Aveiro-and-Costa-Nova-with-moliceiro-boat-ride/d26879-6877P104?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -186,7 +186,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   120,
-  'https://www.viator.com/tours/Porto/Livraria-Lello-Entry-Ticket-Portos-Most-Iconic-Bookstore/d26879-8996P137?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Livraria-Lello-Entry-Ticket-Portos-Most-Iconic-Bookstore/d26879-8996P137?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -222,7 +222,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   121,
-  'https://www.viator.com/tours/Porto/Porto-Highlights-E-Bike-Tour/d26879-5902P10?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Porto-Highlights-E-Bike-Tour/d26879-5902P10?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Óbidos',
   true,
   39,
-  'https://www.viator.com/tours/Lisbon/Medieval-Obidos-History-and-Tasting/d538-73338P6',
+  'https://www.viator.com/en-GB/tours/Lisbon/Medieval-Obidos-History-and-Tasting/d538-73338P6',
   'Viator'
 );
 
@@ -72,7 +72,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   40,
-  'https://www.viator.com/tours/Lisbon/Private-Tour-Evora-and-Almendres-Cromlech-Day-Trip-from-Lisbon/d538-6999GOLDEN',
+  'https://www.viator.com/en-GB/tours/Lisbon/Private-Tour-Evora-and-Almendres-Cromlech-Day-Trip-from-Lisbon/d538-6999GOLDEN',
   'Viator'
 );
 
@@ -108,7 +108,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   41,
-  'https://www.viator.com/tours/Lisbon/Dolphin-watching/d538-67744P12',
+  'https://www.viator.com/en-GB/tours/Lisbon/Dolphin-watching/d538-67744P12',
   'Viator'
 );
 
@@ -144,7 +144,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   42,
-  'https://www.viator.com/tours/Lisbon/Corinthia-Signature-Massage/d538-121012P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Corinthia-Signature-Massage/d538-121012P1',
   'Viator'
 );
 
@@ -180,7 +180,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   43,
-  'https://www.viator.com/tours/Setubal-District/Coasteering/d5016-75380P4',
+  'https://www.viator.com/en-GB/tours/Setubal-District/Coasteering/d5016-75380P4',
   'Viator'
 );
 
@@ -216,6 +216,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   44,
-  'https://www.viator.com/tours/Lisbon/Faith-and-Heritage-Fatima-Batalha-Nazare-and-Obidos-Small-Group-Tour/d538-6999P16',
+  'https://www.viator.com/en-GB/tours/Lisbon/Faith-and-Heritage-Fatima-Batalha-Nazare-and-Obidos-Small-Group-Tour/d538-6999P16',
   'Viator'
 );

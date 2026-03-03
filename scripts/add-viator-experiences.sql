@@ -49,7 +49,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   3,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Baixa-district-food-tour-with-a-local/d538-5560182P5',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Baixa-district-food-tour-with-a-local/d538-5560182P5',
   'Viator'
 ),
 (
@@ -77,7 +77,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   4,
-  'https://www.viator.com/tours/Lisbon/Eats-Street-Art-and-Undiscovered-Lisbon-Food-Tour/d538-156455P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Eats-Street-Art-and-Undiscovered-Lisbon-Food-Tour/d538-156455P1',
   'Viator'
 ),
 (
@@ -105,6 +105,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   5,
-  'https://www.viator.com/tours/Lisbon/Sintra-and-Cascais-Small-Group-Day-Trip-from-Lisbon/d538-5383SINTRACASCAIS',
+  'https://www.viator.com/en-GB/tours/Lisbon/Sintra-and-Cascais-Small-Group-Day-Trip-from-Lisbon/d538-5383SINTRACASCAIS',
   'Viator'
 );

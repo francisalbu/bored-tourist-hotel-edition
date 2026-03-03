@@ -41,7 +41,7 @@ next to Sé Boutique Hotel
   'Funchal',
   true,
   181,
-  'https://www.viator.com/tours/Madeira/Madeira-Exquisite-Food-on-Foot-Tours/d5392-43786P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/Madeira-Exquisite-Food-on-Foot-Tours/d5392-43786P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -77,7 +77,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   182,
-  'https://www.viator.com/tours/Funchal/AROUND-THE-ISLAND-TWO-DAYS-TOUR/d22388-112367P38?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Funchal/AROUND-THE-ISLAND-TWO-DAYS-TOUR/d22388-112367P38?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -113,7 +113,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   183,
-  'https://www.viator.com/tours/Madeira/Sunrise-At-Pico-Do-Arieiro-Hike-To-Pico-Ruivo/d5392-192925P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/Sunrise-At-Pico-Do-Arieiro-Hike-To-Pico-Ruivo/d5392-192925P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -149,7 +149,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   184,
-  'https://www.viator.com/tours/Funchal/Jeep-Tours-4x4/d22388-125569P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Funchal/Jeep-Tours-4x4/d22388-125569P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -185,7 +185,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   185,
-  'https://www.viator.com/tours/Funchal/Northern-Wonders-Jeep-Tour/d22388-16720P4?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Funchal/Northern-Wonders-Jeep-Tour/d22388-16720P4?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -223,7 +223,7 @@ Parking: The marina''s car parking lot is the closest and least expensive one in
   'Funchal',
   true,
   186,
-  'https://www.viator.com/tours/Calheta/Whale-and-Dolphin-Watching-or-Swim-with-Dolphins-in-Madeira/d50841-23523P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Calheta/Whale-and-Dolphin-Watching-or-Swim-with-Dolphins-in-Madeira/d50841-23523P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -259,7 +259,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   187,
-  'https://www.viator.com/tours/Madeira/Madeira-Nuns-Valley-Tour/d5392-23651P5?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/Madeira-Nuns-Valley-Tour/d5392-23651P5?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -295,7 +295,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   188,
-  'https://www.viator.com/tours/Funchal/History-Tellers/d22388-10440P2?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Funchal/History-Tellers/d22388-10440P2?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

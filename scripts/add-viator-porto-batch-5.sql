@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   128,
-  'https://www.viator.com/tours/Porto/Rabelo-Tour/d26879-194996P4?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Rabelo-Tour/d26879-194996P4?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -72,7 +72,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   129,
-  'https://www.viator.com/tours/Porto/Geres-National-Park-Nature-and-Countryside/d26879-66616P4?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Geres-National-Park-Nature-and-Countryside/d26879-66616P4?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -108,7 +108,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   130,
-  'https://www.viator.com/tours/Porto/Portuguese-Gastronomy-Guided-Workshop-in-Porto/d26879-19333P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Portuguese-Gastronomy-Guided-Workshop-in-Porto/d26879-19333P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -144,7 +144,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   131,
-  'https://www.viator.com/tours/Porto/Secret-Food-Tours-Porto/d26879-7812P85?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Secret-Food-Tours-Porto/d26879-7812P85?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -180,7 +180,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   132,
-  'https://www.viator.com/tours/Porto/Caminhe-pelo-Porto-e-descubra-a-historia-LGBTQIA/d26879-405446P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Caminhe-pelo-Porto-e-descubra-a-historia-LGBTQIA/d26879-405446P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -216,7 +216,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   133,
-  'https://www.viator.com/tours/Porto/Best-of-Porto-Walking-Tour/d26879-168365P4?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Best-of-Porto-Walking-Tour/d26879-168365P4?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

@@ -35,7 +35,7 @@ INSERT INTO experiences (
   'Viana do Castelo',
   true,
   142,
-  'https://www.viator.com/tours/Porto/Tour-4X4-Discovering-the-Serra-dArga-in-Alto-Minho/d27331-176562P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Tour-4X4-Discovering-the-Serra-dArga-in-Alto-Minho/d27331-176562P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -71,7 +71,7 @@ INSERT INTO experiences (
   'Viana do Castelo',
   true,
   143,
-  'https://www.viator.com/tours/Porto/CITY-and-MOUNTAIN-BIKE-TOUR/d26879-63975P3?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/CITY-and-MOUNTAIN-BIKE-TOUR/d26879-63975P3?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

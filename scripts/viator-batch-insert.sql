@@ -39,7 +39,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   5,
-  'https://www.viator.com/tours/Lisbon/Sintra-and-Cascais-Small-Group-Day-Trip-from-Lisbon/d538-5383SINTRACASCAIS',
+  'https://www.viator.com/en-GB/tours/Lisbon/Sintra-and-Cascais-Small-Group-Day-Trip-from-Lisbon/d538-5383SINTRACASCAIS',
   'Viator'
 );
 
@@ -75,7 +75,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   6,
-  'https://www.viator.com/tours/Lisbon/Alfama-Tour-Lisbon-Old-Town/d538-268183P3',
+  'https://www.viator.com/en-GB/tours/Lisbon/Alfama-Tour-Lisbon-Old-Town/d538-268183P3',
   'Viator'
 );
 
@@ -111,7 +111,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   7,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Small-Group-Gourmet-Portuguese-Food-and-Wine-Tour/d538-5383GOURMET',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Small-Group-Gourmet-Portuguese-Food-and-Wine-Tour/d538-5383GOURMET',
   'Viator'
 );
 
@@ -147,7 +147,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   8,
-  'https://www.viator.com/tours/Lisbon/Lisbon-2-Hour-Small-Group-Sailing-Tour/d538-15420P3',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-2-Hour-Small-Group-Sailing-Tour/d538-15420P3',
   'Viator'
 );
 
@@ -183,7 +183,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   9,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Traditional-Boats-Sunset-Cruise/d538-54249P2',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Traditional-Boats-Sunset-Cruise/d538-54249P2',
   'Viator'
 );
 
@@ -219,7 +219,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   10,
-  'https://www.viator.com/tours/Lisbon/Taste-of-Portugal-17-tastings-tour/d538-88294P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Taste-of-Portugal-17-tastings-tour/d538-88294P1',
   'Viator'
 );
 
@@ -255,7 +255,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   11,
-  'https://www.viator.com/tours/Lisbon/Escape-Room-in-the-Heart-of-Lisbon/d538-5519168P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Escape-Room-in-the-Heart-of-Lisbon/d538-5519168P1',
   'Viator'
 );
 
@@ -291,7 +291,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   12,
-  'https://www.viator.com/tours/Lisbon/Arrabida-Wine-Tour/d538-66870P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Arrabida-Wine-Tour/d538-66870P1',
   'Viator'
 );
 
@@ -327,7 +327,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   13,
-  'https://www.viator.com/tours/Lisbon/Dolphin-Watching-Lisbon/d538-116939P8',
+  'https://www.viator.com/en-GB/tours/Lisbon/Dolphin-Watching-Lisbon/d538-116939P8',
   'Viator'
 );
 
@@ -363,7 +363,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   14,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Awakens-A-Culinary-Crossroads-Reborn-with-Culinary-Backstreets/d538-203526P19',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Awakens-A-Culinary-Crossroads-Reborn-with-Culinary-Backstreets/d538-203526P19',
   'Viator'
 );
 
@@ -399,7 +399,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   15,
-  'https://www.viator.com/tours/Lisbon/Private-Setubal-Region-Wine-Tasting-Tour-Full-Day-from-Lisbon/d538-11392P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Private-Setubal-Region-Wine-Tasting-Tour-Full-Day-from-Lisbon/d538-11392P1',
   'Viator'
 );
 
@@ -435,7 +435,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   16,
-  'https://www.viator.com/tours/Lisbon/Pastel-de-Nata-Workshop-at-REAL-Bakery/d538-86153P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Pastel-de-Nata-Workshop-at-REAL-Bakery/d538-86153P1',
   'Viator'
 );
 
@@ -471,7 +471,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   17,
-  'https://www.viator.com/tours/Lisbon/All-Inclusive-Kayak-Adventure/d538-304603P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/All-Inclusive-Kayak-Adventure/d538-304603P1',
   'Viator'
 );
 
@@ -507,7 +507,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   18,
-  'https://www.viator.com/tours/Lisbon/The-Surf-Instructor/d538-160709P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/The-Surf-Instructor/d538-160709P1',
   'Viator'
 );
 
@@ -543,7 +543,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   19,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Street-Art-Walk-and-Workshop/d538-263176P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Street-Art-Walk-and-Workshop/d538-263176P1',
   'Viator'
 );
 
@@ -579,7 +579,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   20,
-  'https://www.viator.com/tours/Lisbon/Traditional-Portuguese-Cooking-Class/d538-325678P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Traditional-Portuguese-Cooking-Class/d538-325678P1',
   'Viator'
 );
 
@@ -615,7 +615,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   21,
-  'https://www.viator.com/tours/Lisbon/An-intimate-live-Fado-music-show-with-our-amazing-artists/d538-400715P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/An-intimate-live-Fado-music-show-with-our-amazing-artists/d538-400715P1',
   'Viator'
 );
 
@@ -651,7 +651,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   22,
-  'https://www.viator.com/tours/Lisbon/Relaxing-Time-in-a-sailboat-A-different-way-to-look-at-Lisbon/d538-69837P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Relaxing-Time-in-a-sailboat-A-different-way-to-look-at-Lisbon/d538-69837P1',
   'Viator'
 );
 
@@ -687,7 +687,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   23,
-  'https://www.viator.com/tours/Lisbon/Arrabida-Jeep-tour-to-the-most-beautiful-beach-of-Europe/d538-66870P4',
+  'https://www.viator.com/en-GB/tours/Lisbon/Arrabida-Jeep-tour-to-the-most-beautiful-beach-of-Europe/d538-66870P4',
   'Viator'
 );
 
@@ -723,7 +723,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   24,
-  'https://www.viator.com/tours/Lisbon/The-Slave-Trade-in-Lisbon-A-historical-walking-tour/d538-14060P13',
+  'https://www.viator.com/en-GB/tours/Lisbon/The-Slave-Trade-in-Lisbon-A-historical-walking-tour/d538-14060P13',
   'Viator'
 );
 
@@ -759,7 +759,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   25,
-  'https://www.viator.com/tours/Lisbon/Portuguese-Petiscos-Cooking-Class/d538-325678P3',
+  'https://www.viator.com/en-GB/tours/Lisbon/Portuguese-Petiscos-Cooking-Class/d538-325678P3',
   'Viator'
 );
 
@@ -795,7 +795,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   26,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Painting-Workshop-in-Majolica/d538-5636223P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Painting-Workshop-in-Majolica/d538-5636223P1',
   'Viator'
 );
 
@@ -831,7 +831,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   27,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Street-Photography-Photowalks/d538-5614014P2',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Street-Photography-Photowalks/d538-5614014P2',
   'Viator'
 );
 
@@ -867,7 +867,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   28,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Sketching-Tour-Discover-Hidden-Views-and-Art/d538-164947P46',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Sketching-Tour-Discover-Hidden-Views-and-Art/d538-164947P46',
   'Viator'
 );
 
@@ -903,7 +903,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   29,
-  'https://www.viator.com/tours/Lisbon/Private-Lisbon-Photography-Walking-Tour-with-a-Professional-Photographer/d538-7842P37',
+  'https://www.viator.com/en-GB/tours/Lisbon/Private-Lisbon-Photography-Walking-Tour-with-a-Professional-Photographer/d538-7842P37',
   'Viator'
 );
 
@@ -939,7 +939,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   30,
-  'https://www.viator.com/tours/Lisbon/Age-of-Discoveries-Walking-Tour-Belem/d538-268183P7',
+  'https://www.viator.com/en-GB/tours/Lisbon/Age-of-Discoveries-Walking-Tour-Belem/d538-268183P7',
   'Viator'
 );
 

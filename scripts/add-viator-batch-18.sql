@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   97,
-  'https://www.viator.com/tours/Cascais/Surf-Lesson/d28587-13724P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Cascais/Surf-Lesson/d28587-13724P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -73,6 +73,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   98,
-  'https://www.viator.com/tours/Sintra/Vintage-Countryside-Gastronomic-Tour/d50861-282843P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Sintra/Vintage-Countryside-Gastronomic-Tour/d50861-282843P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );

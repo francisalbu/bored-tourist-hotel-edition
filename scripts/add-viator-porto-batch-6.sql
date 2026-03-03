@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   134,
-  'https://www.viator.com/tours/Porto/Private-Tour-Viana-do-Castelo-from-Porto/d26879-57617P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Private-Tour-Viana-do-Castelo-from-Porto/d26879-57617P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -72,7 +72,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   135,
-  'https://www.viator.com/tours/Porto/Craft-Beer-and-Food-Tour/d26879-18121P3?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Craft-Beer-and-Food-Tour/d26879-18121P3?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -108,7 +108,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   136,
-  'https://www.viator.com/tours/Porto/Port-Wine-Cocktails-Workshop-at-Espaco-Porto-Cruz/d26879-66671P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Port-Wine-Cocktails-Workshop-at-Espaco-Porto-Cruz/d26879-66671P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -144,7 +144,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   137,
-  'https://www.viator.com/tours/Porto/Half-Day-Porto-Photo-Tour/d26879-102838P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Half-Day-Porto-Photo-Tour/d26879-102838P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -180,7 +180,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   138,
-  'https://www.viator.com/tours/Porto/Beyond-the-Barrel-From-Decadent-to-Down-home-in-the-Heart-of-Porto/d26879-203526P17?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Beyond-the-Barrel-From-Decadent-to-Down-home-in-the-Heart-of-Porto/d26879-203526P17?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -216,7 +216,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   139,
-  'https://www.viator.com/tours/Porto/From-Porto-to-Gaia-Private-Bike-Tour/d26879-131810P2?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/From-Porto-to-Gaia-Private-Bike-Tour/d26879-131810P2?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -252,7 +252,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   140,
-  'https://www.viator.com/tours/Porto/Douro-4x4-Offtrack-Adventure-from-Porto/d26879-7378P2?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Douro-4x4-Offtrack-Adventure-from-Porto/d26879-7378P2?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -288,7 +288,7 @@ INSERT INTO experiences (
   'Porto',
   true,
   141,
-  'https://www.viator.com/tours/Porto/Pinhao-private-hike/d26879-124583P2?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Porto/Pinhao-private-hike/d26879-124583P2?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

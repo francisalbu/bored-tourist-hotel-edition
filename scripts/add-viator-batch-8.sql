@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   29,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Sketching-Tour-Discover-Hidden-Views-and-Art/d538-164947P46',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Sketching-Tour-Discover-Hidden-Views-and-Art/d538-164947P46',
   'Viator'
 );
 
@@ -72,7 +72,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   30,
-  'https://www.viator.com/tours/Lisbon/Private-Lisbon-Photography-Walking-Tour-with-a-Professional-Photographer/d538-7842P37',
+  'https://www.viator.com/en-GB/tours/Lisbon/Private-Lisbon-Photography-Walking-Tour-with-a-Professional-Photographer/d538-7842P37',
   'Viator'
 );
 
@@ -108,7 +108,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   31,
-  'https://www.viator.com/tours/Lisbon/Age-of-Discoveries-Walking-Tour-Belem/d538-268183P7',
+  'https://www.viator.com/en-GB/tours/Lisbon/Age-of-Discoveries-Walking-Tour-Belem/d538-268183P7',
   'Viator'
 );
 
@@ -144,7 +144,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   32,
-  'https://www.viator.com/tours/Lisbon/Setubal-and-Arrabida-Small-Group-Tour-from-Lisbon/d538-7589P3',
+  'https://www.viator.com/en-GB/tours/Lisbon/Setubal-and-Arrabida-Small-Group-Tour-from-Lisbon/d538-7589P3',
   'Viator'
 );
 
@@ -180,6 +180,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   33,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Surf-Experience/d538-23590P3',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Surf-Experience/d538-23590P3',
   'Viator'
 );

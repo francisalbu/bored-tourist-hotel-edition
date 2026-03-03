@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   51,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Oceanarium-Entrance-Ticket/d538-111503P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Oceanarium-Entrance-Ticket/d538-111503P1',
   'Viator'
 );
 
@@ -72,7 +72,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   52,
-  'https://www.viator.com/tours/Lisbon/Jeep-tour-to-Espichel-Cape-and-Hell-beach-Private/d538-66870P17',
+  'https://www.viator.com/en-GB/tours/Lisbon/Jeep-tour-to-Espichel-Cape-and-Hell-beach-Private/d538-66870P17',
   'Viator'
 );
 
@@ -108,7 +108,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   53,
-  'https://www.viator.com/tours/Lisbon/Lisbon-by-Night-for-up-to-4-people-private-tour/d538-198854P9',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-by-Night-for-up-to-4-people-private-tour/d538-198854P9',
   'Viator'
 );
 
@@ -146,7 +146,7 @@ Please look for the guide holding yellow umbrella near to the entrance of Fado M
   'Lisbon',
   true,
   54,
-  'https://www.viator.com/tours/Lisbon/Fado-Tour/d538-32794P4',
+  'https://www.viator.com/en-GB/tours/Lisbon/Fado-Tour/d538-32794P4',
   'Viator'
 );
 
@@ -182,7 +182,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   55,
-  'https://www.viator.com/tours/Lisbon/Balloon-Ride-with-Complimentary-Drink-from-Coruche/d538-14133P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Balloon-Ride-with-Complimentary-Drink-from-Coruche/d538-14133P1',
   'Viator'
 );
 
@@ -220,7 +220,7 @@ In front of the Hotel Fenix Marques de Pombal',
   'Lisbon',
   true,
   56,
-  'https://www.viator.com/tours/Lisbon/Obidos-and-Nazare-tour-from-Lisbon/d538-101573P40',
+  'https://www.viator.com/en-GB/tours/Lisbon/Obidos-and-Nazare-tour-from-Lisbon/d538-101573P40',
   'Viator'
 );
 

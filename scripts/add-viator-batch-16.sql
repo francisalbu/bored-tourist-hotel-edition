@@ -36,6 +36,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   91,
-  'https://www.viator.com/tours/Lisbon/Introduction-to-Climbing/d538-366484P2?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Lisbon/Introduction-to-Climbing/d538-366484P2?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );

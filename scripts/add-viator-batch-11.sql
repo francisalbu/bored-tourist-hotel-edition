@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   45,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Pena-Palace-and-Garden-Sintra-CaboRoca-Cascais-DayTour/d538-406236P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Pena-Palace-and-Garden-Sintra-CaboRoca-Cascais-DayTour/d538-406236P1',
   'Viator'
 );
 
@@ -72,7 +72,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   46,
-  'https://www.viator.com/tours/Lisbon/Lisbons-Post-Colonial-Feast/d538-203526P27',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbons-Post-Colonial-Feast/d538-203526P27',
   'Viator'
 );
 
@@ -108,7 +108,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   47,
-  'https://www.viator.com/tours/Lisbon/Fado-Tour/d538-24774P7',
+  'https://www.viator.com/en-GB/tours/Lisbon/Fado-Tour/d538-24774P7',
   'Viator'
 );
 
@@ -144,7 +144,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   48,
-  'https://www.viator.com/tours/Lisbon/Land-Rover-Panoramic-Tour-Cascais-Sintra/d538-23208P8',
+  'https://www.viator.com/en-GB/tours/Lisbon/Land-Rover-Panoramic-Tour-Cascais-Sintra/d538-23208P8',
   'Viator'
 );
 
@@ -180,7 +180,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   49,
-  'https://www.viator.com/tours/Lisbon/2-horas-passeio-de-veleiro-ao-por-do-sol/d538-465228P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/2-horas-passeio-de-veleiro-ao-por-do-sol/d538-465228P1',
   'Viator'
 );
 
@@ -216,6 +216,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   50,
-  'https://www.viator.com/tours/Lisbon/Fado-Show-and-Dinner-all-included/d538-16730P3',
+  'https://www.viator.com/en-GB/tours/Lisbon/Fado-Show-and-Dinner-all-included/d538-16730P3',
   'Viator'
 );

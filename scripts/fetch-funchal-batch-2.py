@@ -188,7 +188,7 @@ def build_viator_sql(prod, data, price, display_order):
         highlights = [title]
 
     affiliate_url = (
-        f"https://www.viator.com/tours/{prod['city_slug']}/{prod['url_path']}"
+        f"https://www.viator.com/en-GB/tours/{prod['city_slug']}/{prod['url_path']}"
         f"/d{prod['dest_code']}-{code}?pid=P00285354&mcid=42383&medium=link"
     )
     location_str = start_desc[:100] if start_desc else 'Funchal'

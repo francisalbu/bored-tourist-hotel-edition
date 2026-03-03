@@ -35,7 +35,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   10,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Traditional-Boats-Sunset-Cruise/d538-54249P2',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Traditional-Boats-Sunset-Cruise/d538-54249P2',
   'Viator'
 );
 
@@ -71,7 +71,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   11,
-  'https://www.viator.com/tours/Lisbon/Taste-of-Portugal-17-tastings-tour/d538-88294P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Taste-of-Portugal-17-tastings-tour/d538-88294P1',
   'Viator'
 );
 
@@ -107,7 +107,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   12,
-  'https://www.viator.com/tours/Lisbon/Escape-Room-in-the-Heart-of-Lisbon/d538-5519168P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Escape-Room-in-the-Heart-of-Lisbon/d538-5519168P1',
   'Viator'
 );
 
@@ -143,6 +143,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   13,
-  'https://www.viator.com/tours/Lisbon/Arrabida-Wine-Tour/d538-66870P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Arrabida-Wine-Tour/d538-66870P1',
   'Viator'
 );

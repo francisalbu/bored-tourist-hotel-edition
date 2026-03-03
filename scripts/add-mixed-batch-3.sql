@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   101,
-  'https://www.viator.com/tours/Lisbon/Lisbon-Hills-Electric-Bike-Tour/d538-5509LSB7EBIKETOUR?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Lisbon/Lisbon-Hills-Electric-Bike-Tour/d538-5509LSB7EBIKETOUR?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

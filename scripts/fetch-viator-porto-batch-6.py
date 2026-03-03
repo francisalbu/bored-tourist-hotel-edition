@@ -163,7 +163,7 @@ def main():
 
         display_order = START_DISPLAY_ORDER + i
         affiliate_url = (
-            f"https://www.viator.com/tours/Porto/{prod['url_path']}"
+            f"https://www.viator.com/en-GB/tours/Porto/{prod['url_path']}"
             f"/d26879-{code}?pid=P00285354&mcid=42383&medium=link"
         )
 

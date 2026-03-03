@@ -158,7 +158,7 @@ def main():
         # Build the correct Viator URL
         city_path = prod.get('city_path', 'Lisbon')
         dest = prod.get('dest', 'd538')
-        url = f"https://www.viator.com/tours/{city_path}/{prod['url_path']}/{dest}-{code}"
+        url = f"https://www.viator.com/en-GB/tours/{city_path}/{prod['url_path']}/{dest}-{code}"
 
         max_str = str(max_t) if max_t else 'NULL'
 

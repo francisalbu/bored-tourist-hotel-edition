@@ -73,6 +73,6 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   88,
-  'https://www.viator.com/tours/Lisbon/Entrance-to-the-Biographical-Exhibition-of-Amalia-Rodrigues/d538-474880P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Lisbon/Entrance-to-the-Biographical-Exhibition-of-Amalia-Rodrigues/d538-474880P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );

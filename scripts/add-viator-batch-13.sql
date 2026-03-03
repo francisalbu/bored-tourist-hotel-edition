@@ -36,7 +36,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   57,
-  'https://www.viator.com/tours/Lisbon/Sailing-Tour-on-Tejo-River/d538-279535P1',
+  'https://www.viator.com/en-GB/tours/Lisbon/Sailing-Tour-on-Tejo-River/d538-279535P1',
   'Viator'
 );
 
@@ -72,7 +72,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   58,
-  'https://www.viator.com/tours/Lisbon/Day-Spa/d538-121012P3',
+  'https://www.viator.com/en-GB/tours/Lisbon/Day-Spa/d538-121012P3',
   'Viator'
 );
 
@@ -108,7 +108,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   59,
-  'https://www.viator.com/tours/Lisbon/Private-Traditional-Portuguese-and-Goan-Cooking-Class/d538-7626P564',
+  'https://www.viator.com/en-GB/tours/Lisbon/Private-Traditional-Portuguese-and-Goan-Cooking-Class/d538-7626P564',
   'Viator'
 );
 
@@ -156,7 +156,7 @@ Pick up - Av. da Liberdade, 2 - 1250-144 Lisboa (in front of Hard Rock Café)
   'Lisbon',
   true,
   60,
-  'https://www.viator.com/tours/Setubal-District/Kayak-Tour/d5016-75380P3',
+  'https://www.viator.com/en-GB/tours/Setubal-District/Kayak-Tour/d5016-75380P3',
   'Viator'
 );
 
@@ -192,7 +192,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   61,
-  'https://www.viator.com/tours/Lisbon/The-Jewish-Odyssey-in-Lisbon/d538-11392P9',
+  'https://www.viator.com/en-GB/tours/Lisbon/The-Jewish-Odyssey-in-Lisbon/d538-11392P9',
   'Viator'
 );
 
@@ -228,7 +228,7 @@ INSERT INTO experiences (
   'Lisbon',
   true,
   62,
-  'https://www.viator.com/tours/Lisbon/Hiking-tour-to-footprints-of-dinosaur-in-Espichel-Cape/d538-66870P6',
+  'https://www.viator.com/en-GB/tours/Lisbon/Hiking-tour-to-footprints-of-dinosaur-in-Espichel-Cape/d538-66870P6',
   'Viator'
 );
 

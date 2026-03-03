@@ -35,7 +35,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   189,
-  'https://www.viator.com/tours/Madeira/Santa-Maria-de-Colombo/d5392-50221P2?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/Santa-Maria-de-Colombo/d5392-50221P2?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -73,7 +73,7 @@ The meeting point is at Infante Roundabout right next to “H&M” store at 09.4
   'Funchal',
   true,
   190,
-  'https://www.viator.com/tours/Madeira/Wine-and-Wine-Tour/d5392-15879P2?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/Wine-and-Wine-Tour/d5392-15879P2?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -109,7 +109,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   191,
-  'https://www.viator.com/tours/Funchal/Madeira-Outdoors-Private-Challenging-Walking-Tour-with-Mountain-Guide/d22388-36979P10?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Funchal/Madeira-Outdoors-Private-Challenging-Walking-Tour-with-Mountain-Guide/d22388-36979P10?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -145,7 +145,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   192,
-  'https://www.viator.com/tours/Madeira/RE-CANTO-Food-Experience/d5392-336742P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/RE-CANTO-Food-Experience/d5392-336742P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -181,7 +181,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   193,
-  'https://www.viator.com/tours/Funchal/Levada-do-Caldeirao-Verde-Self-Guided-Hike-in-Madeira/d22388-463149P6?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Funchal/Levada-do-Caldeirao-Verde-Self-Guided-Hike-in-Madeira/d22388-463149P6?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -217,7 +217,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   194,
-  'https://www.viator.com/tours/Funchal/Private-tour-full-day/d22388-209899P2?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Funchal/Private-tour-full-day/d22388-209899P2?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -253,7 +253,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   195,
-  'https://www.viator.com/tours/Funchal/Skywalk-and-Wine-Tasting-4x4-Half-Day-Tour/d22388-16720P16?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Funchal/Skywalk-and-Wine-Tasting-4x4-Half-Day-Tour/d22388-16720P16?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 
@@ -289,7 +289,7 @@ INSERT INTO experiences (
   'Funchal',
   true,
   196,
-  'https://www.viator.com/tours/Madeira/Canyoning/d5392-28388P1?pid=P00285354&mcid=42383&medium=link',
+  'https://www.viator.com/en-GB/tours/Madeira/Canyoning/d5392-28388P1?pid=P00285354&mcid=42383&medium=link',
   'Viator'
 );
 

@@ -152,7 +152,7 @@ def main():
             highlights = [title]
 
         display_order = START_DISPLAY_ORDER + i
-        url = f"https://www.viator.com/tours/Lisbon/{prod['url_path']}/d538-{code}"
+        url = f"https://www.viator.com/en-GB/tours/Lisbon/{prod['url_path']}/d538-{code}"
 
         max_str = str(max_t) if max_t else 'NULL'
 
