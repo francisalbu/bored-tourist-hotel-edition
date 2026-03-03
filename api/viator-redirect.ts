@@ -37,17 +37,6 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Redirect domain not allowed' });
   }
 
-  // Force Viator URLs to English locale
-  if (targetUrl.hostname.includes('viator.com')) {
-    // Remove any existing language prefix like /pt/, /es/, /fr/ etc.
-    targetUrl.pathname = targetUrl.pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?\//, '/en-US/');
-    // If no language prefix was present, add /en-US/ prefix
-    if (!targetUrl.pathname.startsWith('/en-US/')) {
-      targetUrl.pathname = '/en-US' + targetUrl.pathname;
-    }
-    rawUrl = targetUrl.toString();
-  }
-
   // Escape for safe HTML / JS embedding
   const safeUrl = rawUrl
     .replace(/&/g, '&amp;')

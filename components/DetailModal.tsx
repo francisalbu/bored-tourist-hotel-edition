@@ -24,19 +24,8 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
 
 /** Route affiliate links through our redirect endpoint to bypass iOS/Android app interception */
 function affiliateRedirectUrl(url: string): string {
-  // Force Viator links to English locale
-  let finalUrl = url;
-  try {
-    const parsed = new URL(url);
-    if (parsed.hostname.includes('viator.com')) {
-      parsed.pathname = parsed.pathname.replace(/^\/[a-z]{2}(-[A-Z]{2})?\//, '/en-US/');
-      if (!parsed.pathname.startsWith('/en-US/')) {
-        parsed.pathname = '/en-US' + parsed.pathname;
-      }
-      finalUrl = parsed.toString();
-    }
-  } catch {}
-  return `/api/viator-redirect?url=${encodeURIComponent(finalUrl)}`;
+  // Pass the URL exactly as stored — do NOT mangle locale or path
+  return `/api/viator-redirect?url=${encodeURIComponent(url)}`;
 }
 
 interface DetailModalProps {
