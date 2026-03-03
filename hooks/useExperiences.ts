@@ -137,6 +137,8 @@ export function useCategories() {
     { id: 'Local Cooking', label: 'Local Cooking', icon: '🍳' },
     { id: 'Time Stories', label: 'Time Stories', icon: '⏳' },
     { id: 'Micro Adventures', label: 'Micro Adventures', icon: '🎒' },
+    { id: 'Night Explorer', label: 'Nightlife', icon: '🌙' },
+    { id: 'Tickets', label: 'Tickets', icon: '🎟️' },
     { id: '_divider', label: '', icon: '' },
     { id: 'Spa & Wellness', label: 'Spa', icon: '🧖' },
     { id: 'Rentals', label: 'Rentals', icon: '🚲' },
