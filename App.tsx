@@ -28,7 +28,22 @@ function AppContent() {
   const [priceSort, setPriceSort] = useState<'none' | 'asc' | 'desc'>('none');
   
   const { experiences, loading, error } = useExperiences();
-  const categories = useCategories();
+  const allCategories = useCategories();
+
+  // Only show categories that have at least one experience (plus 'all' and dividers)
+  const categories = useMemo(() => {
+    const populated = new Set(experiences.map(e => e.category));
+    return allCategories.filter(cat =>
+      cat.id === 'all' || cat.id === '_divider' || populated.has(cat.id)
+    );
+  }, [allCategories, experiences]);
+
+  // If the selected category has no experiences (e.g. after hotel switch), reset to 'all'
+  useEffect(() => {
+    if (selectedCategory === 'all') return;
+    const populated = new Set(experiences.map(e => e.category));
+    if (!populated.has(selectedCategory)) setSelectedCategory('all');
+  }, [experiences, selectedCategory]);
   
   // User memories - using a default guest session ID
   const userId = 'guest-session-' + (localStorage.getItem('guestSessionId') || (() => {
