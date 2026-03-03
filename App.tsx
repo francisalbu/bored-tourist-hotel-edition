@@ -111,7 +111,7 @@ function AppContent() {
     <div className="h-screen w-full text-slate-900 font-sans selection:bg-emerald-200 selection:text-emerald-900 flex flex-col md:flex-row overflow-hidden" style={{ backgroundColor: 'var(--hotel-bg, #FAFAF8)' }}>
       
       {/* DESKTOP: LEFT PANEL - Chat / Concierge */}
-      <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200/40 z-10">
+      <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200/40 z-10 bg-white">
         <ChatSection onExperienceClick={setSelectedExperience} userId={userId} />
       </div>
       
