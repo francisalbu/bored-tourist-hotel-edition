@@ -251,11 +251,28 @@ export function getHotelConfig(): HotelConfig {
  * Returns null if the fetch fails — caller should fall back to getHotelConfig().
  */
 export async function fetchHotelConfigFromDB(hotelId?: string): Promise<HotelConfig | null> {
-  const id = hotelId ||
-    (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_HOTEL_ID) ||
-    'vila-gale';
-
   try {
+    let id = hotelId ||
+      (typeof import.meta !== 'undefined' ? (import.meta as any).env?.VITE_HOTEL_ID : undefined);
+
+    // If no explicit ID, resolve via subdomain → look up hotel_config.subdomain
+    if (!id || id === 'vila-gale') {
+      if (typeof window !== 'undefined') {
+        const parts = window.location.hostname.split('.');
+        if (parts.length >= 3 && parts[0] !== 'www' && parts[0] !== 'app') {
+          const subdomain = parts[0];
+          const { data: hRow } = await supabase
+            .from('hotel_config')
+            .select('id')
+            .eq('subdomain', subdomain)
+            .single();
+          if (hRow?.id) id = hRow.id as string;
+        }
+      }
+    }
+
+    if (!id) id = 'vila-gale';
+
     const { data, error } = await supabase
       .from('hotel_config')
       .select('*')

@@ -1402,8 +1402,8 @@ Remember: Use IDs and let the visual cards do the work!`;
         <div className="p-3 md:p-6 md:pb-0 pb-0 border-b md:border-0 border-slate-200/30">
           <div className="flex items-center gap-3 mb-2 md:mb-8">
              <img 
-               src="https://storage.googleapis.com/bored_tourist_media/images/WhatsApp%20Image%202026-02-11%20at%2000.12.20.jpeg" 
-             alt="Lisbon Hotel"
+               src={hotel?.logoUrl || hotel?.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp'}
+             alt={hotel?.name || 'Hotel'}
              onClick={handleReset}
              className="h-8 md:h-10 w-auto object-contain cursor-pointer hover:opacity-80 transition-opacity"
            />
