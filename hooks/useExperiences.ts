@@ -39,27 +39,31 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
 }
 
 /**
- * Resolve which hotel to show experiences for.
+ * Resolve the real hotel DB id.
  * Priority:
- *  1. VITE_HOTEL_ID env var (set at build time per Vercel deployment)
- *  2. Subdomain of the current page (e.g. lisb-onhostel.boredtourist.com)
+ *  1. VITE_HOTEL_ID env var (explicit build-time override)
+ *  2. Look up hotel_config by subdomain matching the current hostname
  *  3. null → fall back to global experiences table
  */
-function resolveHotelId(): string | null {
-  // 1. Build-time env var
+async function resolveHotelId(): Promise<string | null> {
+  // 1. Build-time env var (explicit)
   const envId =
     typeof import.meta !== 'undefined'
       ? (import.meta as any).env?.VITE_HOTEL_ID
       : undefined;
   if (envId && envId !== 'vila-gale') return envId as string;
 
-  // 2. Subdomain detection (works for any *.boredtourist.com URL)
+  // 2. Subdomain-based lookup — get real hotel id from hotel_config
   if (typeof window !== 'undefined') {
-    const hostname = window.location.hostname; // e.g. "lisb-onhostel.boredtourist.com"
-    const parts = hostname.split('.');
-    // If there are 3+ parts and the subdomain is not "www" or "app"
+    const parts = window.location.hostname.split('.');
     if (parts.length >= 3 && parts[0] !== 'www' && parts[0] !== 'app') {
-      return parts[0]; // e.g. "lisb-onhostel"
+      const subdomain = parts[0]; // e.g. "lisb-onhostel"
+      const { data } = await supabase
+        .from('hotel_config')
+        .select('id')
+        .eq('subdomain', subdomain)
+        .single();
+      if (data?.id) return data.id as string;
     }
   }
 
@@ -76,12 +80,10 @@ export function useExperiences() {
       try {
         setLoading(true);
 
-        const hotelId = resolveHotelId();
+        const hotelId = await resolveHotelId();
 
         if (hotelId) {
-          // ── Hotel-scoped fetch ──────────────────────────────────────
-          // Read hotel_experiences to get per-hotel is_active + display_order
-          // then join with the full experiences data
+          // Hotel-scoped fetch — join hotel_experiences with experiences
           const { data: hotelRows, error: heError } = await supabase
             .from('hotel_experiences')
             .select('experience_id, display_order, is_active, experiences(*)')
@@ -99,11 +101,10 @@ export function useExperiences() {
             return;
           }
 
-          // Hotel has no catalog rows yet — fall through to global fetch
           console.info(`[useExperiences] No hotel_experiences rows for "${hotelId}", falling back to global list`);
         }
 
-        // ── Global fallback ─────────────────────────────────────────
+        // Global fallback
         const { data, error: expError } = await supabase
           .from('experiences')
           .select('*')
@@ -129,7 +130,7 @@ export function useExperiences() {
 
 export function useCategories() {
   const categories = [
-    { id: 'all', label: 'All', icon: '��' },
+    { id: 'all', label: 'All', icon: '🔥' },
     { id: 'Outdoors', label: 'Outdoors', icon: '🏞️' },
     { id: 'Sports', label: 'Sports', icon: '⚽' },
     { id: 'Culture Dive', label: 'Culture Dive', icon: '🎭' },
