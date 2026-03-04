@@ -1651,41 +1651,30 @@ Remember: Use IDs and let the visual cards do the work!`;
         )}
       </div>
 
-      {/* Coming Soon overlay — blocks input area */}
-      <div className="border-t border-slate-200/40" style={{ backgroundColor: "var(--hotel-surface, #FAFAF8)", paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
-        {/* Frosted overlay on top of the input */}
-        <div className="relative p-3 md:p-6 md:p-10 pt-2">
-          {/* Actual input — rendered but invisible underneath overlay */}
-          <div className="relative group opacity-30 pointer-events-none select-none">
-            <textarea
-              value=""
-              readOnly
-              placeholder="What do you want to do?"
-              className="w-full bg-white border border-slate-200/60 rounded-2xl md:rounded-3xl pl-4 md:pl-6 pr-12 md:pr-14 py-3 md:py-4 min-h-[50px] md:min-h-[60px] max-h-[80px] resize-none outline-none text-sm md:text-base text-slate-900 font-light placeholder-slate-400"
-              rows={1}
-            />
-            <div className="absolute right-2 md:right-3 bottom-2 md:bottom-3">
-              <div className="p-2 bg-slate-900 text-white rounded-full opacity-40">
-                <Send size={16} />
-              </div>
-            </div>
-          </div>
-
-          {/* Premium coming soon overlay */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 backdrop-blur-[2px]">
-            <div className="flex items-center gap-2.5 bg-slate-900/90 text-white px-5 py-3 rounded-2xl shadow-xl border border-white/10">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="opacity-70 animate-spin" style={{ animationDuration: '3s' }}>
-                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
-              </svg>
-              <span className="text-[11px] md:text-xs font-semibold tracking-[0.15em] uppercase">Something better is coming</span>
-            </div>
-            <span className="text-[10px] text-slate-400 tracking-widest uppercase font-light">Bored AI — Tuning in progress</span>
+      <div className="p-3 md:p-6 md:p-10 pt-2 border-t border-slate-200/40" style={{ backgroundColor: "var(--hotel-surface, #FAFAF8)", paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
+        <div className="relative group">
+          <textarea
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="What do you want to do?"
+            className="w-full bg-white border border-slate-200/60 focus:border-slate-400 rounded-2xl md:rounded-3xl pl-4 md:pl-6 pr-12 md:pr-14 py-3 md:py-4 min-h-[50px] md:min-h-[60px] max-h-[80px] md:max-h-[120px] resize-none outline-none text-sm md:text-base text-slate-900 font-light placeholder-slate-400 transition-colors shadow-sm focus:shadow-md"
+            rows={1}
+          />
+          <div className="absolute right-2 md:right-3 bottom-2 md:bottom-3 flex items-center gap-2">
+            <button
+              onClick={handleSend}
+              disabled={!input.trim() || isLoading}
+              className="p-2 bg-slate-900 text-white rounded-full hover:bg-slate-700 disabled:opacity-50 disabled:hover:bg-slate-900 transition-colors"
+            >
+              <Send size={16} className="md:hidden" />
+              <Send size={18} className="hidden md:block" />
+            </button>
           </div>
         </div>
-
-        <div className="px-5 pb-1 flex items-center justify-between text-[10px] text-slate-400 font-light tracking-wide hidden md:flex">
+        <div className="mt-2 md:mt-4 flex items-center justify-between text-[10px] md:text-xs text-slate-400 font-light tracking-wide px-2 hidden md:flex">
           <div className="flex items-center gap-1">
-            <MapPin size={11} />
+            <MapPin size={12} />
             <span>{hotel?.location || 'Portugal'}</span>
           </div>
           <span>Powered by Bored AI</span>
