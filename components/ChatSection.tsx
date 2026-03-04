@@ -1651,6 +1651,12 @@ Remember: Use IDs and let the visual cards do the work!`;
         )}
       </div>
 
+      {/* Tuning banner */}
+      <div className="flex items-center justify-center gap-1.5 py-1.5 px-4 bg-amber-50 border-t border-amber-100">
+        <span className="text-amber-500 text-[10px]">⚙️</span>
+        <span className="text-[10px] font-medium text-amber-600 tracking-wide uppercase">Tuning new stuff — responses may surprise you</span>
+      </div>
+
       <div className="p-3 md:p-6 md:p-10 pt-2 border-t border-slate-200/40" style={{ backgroundColor: "var(--hotel-surface, #FAFAF8)", paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
         <div className="relative group">
           <textarea
