@@ -901,7 +901,7 @@ Extract and respond ONLY with JSON:
 Keep it human, conversational, and insightful - not a database dump.`;
 
       const response = await openai.chat.completions.create({
-        model: 'gpt-4-turbo-preview',
+        model: 'gpt-4o-mini',
         messages: [
           { role: 'system', content: 'You are an expert concierge who remembers meaningful details about guests. Write observations as natural, conversational memories - like notes a thoughtful host would make. Always respond with valid JSON only.' },
           { role: 'user', content: memoryExtractionPrompt }
@@ -1314,11 +1314,15 @@ Remember: Use IDs and let the visual cards do the work!`;
       // Extract memories after every 2-3 conversations
       const newConversationCount = (memory?.conversationCount || 0) + 1;
       if (newConversationCount % 2 === 0) {
-        await extractAndSaveMemories([...messages, userMessage, { 
-          id: (Date.now() + 1).toString(), 
-          role: 'assistant', 
-          text: cleanText 
-        }], openai);
+        try {
+          await extractAndSaveMemories([...messages, userMessage, { 
+            id: (Date.now() + 1).toString(), 
+            role: 'assistant', 
+            text: cleanText 
+          }], openai);
+        } catch (memErr) {
+          console.warn('[Memories] extraction failed silently:', memErr);
+        }
       } else {
         // Just update conversation count
         await updateMemory({ 
