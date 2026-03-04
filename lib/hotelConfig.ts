@@ -295,7 +295,7 @@ export async function fetchHotelConfigFromDB(hotelId?: string): Promise<HotelCon
       latitude: data.latitude ?? undefined,
       longitude: data.longitude ?? undefined,
       theme: data.theme ?? getHotelConfig().theme,
-      staffMembers: data.staff_members ?? [],
+      staffMembers: (data.staff_members && data.staff_members.length > 0) ? data.staff_members : getHotelConfig().staffMembers,
       activityPreferences: data.activity_preferences ?? { style: 'mixed' },
       features: data.features ?? DEFAULT_FEATURES,
       welcomeTitle: data.welcome_title || undefined,

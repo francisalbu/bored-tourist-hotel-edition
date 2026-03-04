@@ -12,10 +12,11 @@ export const HotelPicks: React.FC<HotelPicksProps> = ({ onExperienceClick }) => 
   const [selectedStaff, setSelectedStaff] = useState<number>(0);
   const { experiences } = useExperiences();
   const hotel = useHotel();
-  const STAFF_MEMBERS = hotel.staffMembers;
+  const STAFF_MEMBERS = hotel.staffMembers ?? [];
 
   const staffRecommendations = useMemo(() => {
     const staff = STAFF_MEMBERS[selectedStaff];
+    if (!staff) return experiences.slice(0, 3);
     const filtered = experiences.filter(exp =>
       staff.preferredCategories.some(cat =>
         exp.category.toLowerCase().includes(cat.toLowerCase())
@@ -26,6 +27,8 @@ export const HotelPicks: React.FC<HotelPicksProps> = ({ onExperienceClick }) => 
   }, [selectedStaff, experiences]);
 
   const staff = STAFF_MEMBERS[selectedStaff];
+
+  if (!staff) return null;
 
   return (
     <div className="bg-white px-4 py-8 md:px-10 md:py-10">
