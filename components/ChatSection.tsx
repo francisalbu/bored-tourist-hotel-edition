@@ -963,7 +963,7 @@ Keep it human, conversational, and insightful - not a database dump.`;
     setIsLoading(true);
 
     try {
-      const apiKey = (import.meta.env.VITE_OPENAI_API_KEY || '').trim();
+      const apiKey = (import.meta.env.VITE_OPENAI_API_KEY || '').replace(/\s/g, '');
       if (!apiKey || apiKey === 'sk-proj-your-key-here') {
         throw new Error('OpenAI API key not configured');
       }
