@@ -229,10 +229,59 @@ const BAIRRO_ALTO: HotelConfig = {
 
 // ─────────────────────────────────────────────────────────────────────────────
 
-const HOTEL_CONFIGS: Record<string, HotelConfig> = {
+const HOMING: HotelConfig = {
+  id: 'homing',
+  name: 'Homing',
+  logoUrl: 'https://pq-media.imgix.net/l/c9bd023aa08d3eb35b1150ce1723a98d.jpg?w=360&h=360&q=80&auto=compress&fit=fill&fill=solid&fill-color=ffffff',
+  tagline: 'DISCOVER LISBON',
+  location: 'Lisbon & Surroundings',
+  latitude: 38.7170,
+  longitude: -9.1383,
+  conciergeAvatarUrl: 'https://pq-media.imgix.net/l/c9bd023aa08d3eb35b1150ce1723a98d.jpg?w=360&h=360&q=80&auto=compress&fit=fill&fill=solid&fill-color=ffffff',
+  theme: {
+    primaryColor: '#1a1a1a',
+    primaryTextColor: '#ffffff',
+    accentColor: '#e8b84b',
+    backgroundColor: '#FAFAF8',
+    surfaceColor: '#ffffff',
+    fontHeading: 'Inter',
+    fontBody: 'Inter',
+  },
+  staffMembers: [
+    {
+      name: 'Sofia',
+      role: 'Concierge',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
+      bio: 'Lisbon born and raised. I know the perfect spot for every mood — from hidden tascas to sunrise viewpoints.',
+      preferredCategories: ['Local Cooking', 'Culture Dive'],
+    },
+    {
+      name: 'André',
+      role: 'Guest Experience',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop',
+      bio: 'Former surf instructor turned city guide. I will find you the best adventure for your energy level.',
+      preferredCategories: ['Micro Adventures', 'Outdoors'],
+    },
+    {
+      name: 'Beatriz',
+      role: 'Front Desk',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop',
+      bio: 'Culture lover and fado devotee. Ask me anything about Lisbon history, music or where locals actually eat.',
+      preferredCategories: ['Night Explorer', 'Time Stories'],
+    },
+  ],
+  activityPreferences: {
+    preferredCategories: ['Local Cooking', 'Culture Dive', 'Micro Adventures'],
+    style: 'mixed',
+  },
+  features: { ...DEFAULT_FEATURES, showSpa: false, showRentals: false },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
   'vila-gale': VILA_GALE,
   pestana: PESTANA,
   'bairro-alto': BAIRRO_ALTO,
+  homing: HOMING,
 };
 
 /**
