@@ -278,6 +278,8 @@ const HOMING: HotelConfig = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
+
+const HOTEL_CONFIGS: Record<string, HotelConfig> = {
   'vila-gale': VILA_GALE,
   pestana: PESTANA,
   'bairro-alto': BAIRRO_ALTO,
