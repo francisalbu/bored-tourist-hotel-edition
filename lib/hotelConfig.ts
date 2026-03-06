@@ -278,12 +278,230 @@ const HOMING: HotelConfig = {
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
+// WOT Hotels Group
+// ─────────────────────────────────────────────────────────────────────────────
+
+const WOT_LOGO = 'https://www.portugalventures.pt/wp-content/uploads/2021/01/Portfolio_Wotels_300x300px.png';
+const WOT_SIGNATURE_LOGO = WOT_LOGO;
+
+const WOT_SOUL_CAPARICA: HotelConfig = {
+  id: 'wot-soul-costa-da-caparica',
+  name: 'WOT Soul Costa da Caparica',
+  logoUrl: WOT_LOGO,
+  conciergeAvatarUrl: WOT_LOGO,
+  tagline: 'SURF & SOUL',
+  location: 'Costa da Caparica',
+  latitude: 38.6411,
+  longitude: -9.2353,
+  theme: {
+    primaryColor: '#1a1a1a',
+    primaryTextColor: '#ffffff',
+    accentColor: '#c8873a',
+    backgroundColor: '#FAFAF8',
+    surfaceColor: '#ffffff',
+    fontHeading: 'Inter',
+    fontBody: 'Inter',
+  },
+  staffMembers: [
+    {
+      name: 'João',
+      role: 'Surf Concierge',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
+      bio: 'Grew up on these waves. I know every break, trail and hidden beach along the Caparica coast.',
+      preferredCategories: ['Outdoors', 'Sports', 'Micro Adventures'],
+    },
+    {
+      name: 'Rita',
+      role: 'Guest Experience',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop',
+      bio: 'Local food lover and night owl. Ask me where the locals actually eat — and where the night goes.',
+      preferredCategories: ['Local Cooking', 'Night Explorer'],
+    },
+  ],
+  activityPreferences: {
+    preferredCategories: ['Outdoors', 'Sports', 'Micro Adventures'],
+    style: 'adventure',
+  },
+  features: { ...DEFAULT_FEATURES, showSpa: false },
+};
+
+const WOT_SOUL_LAGOS: HotelConfig = {
+  id: 'wot-soul-lagos-montemar',
+  name: 'WOT Soul Lagos Montemar',
+  logoUrl: WOT_LOGO,
+  conciergeAvatarUrl: WOT_LOGO,
+  tagline: 'ALGARVE YOUR WAY',
+  location: 'Lagos, Algarve',
+  latitude: 37.1090,
+  longitude: -8.6598,
+  theme: {
+    primaryColor: '#1a1a1a',
+    primaryTextColor: '#ffffff',
+    accentColor: '#c8873a',
+    backgroundColor: '#FAFAF8',
+    surfaceColor: '#ffffff',
+    fontHeading: 'Inter',
+    fontBody: 'Inter',
+  },
+  staffMembers: [
+    {
+      name: 'Filipa',
+      role: 'Concierge',
+      avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200&h=200&fit=crop',
+      bio: 'Lagos born, Algarve proud. From hidden grottos to the best seafood spots — I have you covered.',
+      preferredCategories: ['Outdoors', 'Sports'],
+    },
+    {
+      name: 'Nuno',
+      role: 'Activities Manager',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop',
+      bio: 'Kayaking, coasteering, cooking classes — I will find the perfect adventure for your pace.',
+      preferredCategories: ['Micro Adventures', 'Local Cooking'],
+    },
+  ],
+  activityPreferences: {
+    preferredCategories: ['Outdoors', 'Sports', 'Local Cooking'],
+    style: 'adventure',
+  },
+  features: { ...DEFAULT_FEATURES, showSpa: false },
+};
+
+const WOT_SOUL_PORTO: HotelConfig = {
+  id: 'wot-soul-porto',
+  name: 'WOT Soul Porto',
+  logoUrl: WOT_LOGO,
+  conciergeAvatarUrl: WOT_LOGO,
+  tagline: 'SOUL OF THE CITY',
+  location: 'Porto',
+  latitude: 41.1579,
+  longitude: -8.6291,
+  theme: {
+    primaryColor: '#1a1a1a',
+    primaryTextColor: '#ffffff',
+    accentColor: '#c8873a',
+    backgroundColor: '#FAFAF8',
+    surfaceColor: '#ffffff',
+    fontHeading: 'Inter',
+    fontBody: 'Inter',
+  },
+  staffMembers: [
+    {
+      name: 'Beatriz',
+      role: 'Concierge',
+      avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&h=200&fit=crop',
+      bio: 'Porto is my city. I will take you from the best wine cellars to rooftop bars and secret viewpoints.',
+      preferredCategories: ['Culture Dive', 'Night Explorer'],
+    },
+    {
+      name: 'Diogo',
+      role: 'Guest Relations',
+      avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&h=200&fit=crop',
+      bio: 'History buff and foodie. From traditional tascas to contemporary kitchens — Porto has it all.',
+      preferredCategories: ['Local Cooking', 'Time Stories'],
+    },
+  ],
+  activityPreferences: {
+    preferredCategories: ['Culture Dive', 'Local Cooking', 'Night Explorer'],
+    style: 'cultural',
+  },
+  features: DEFAULT_FEATURES,
+};
+
+const ALDEIA_DA_PEDRALVA: HotelConfig = {
+  id: 'aldeiadapedralva',
+  name: 'Aldeia da Pedralva',
+  logoUrl: WOT_SIGNATURE_LOGO,
+  conciergeAvatarUrl: WOT_SIGNATURE_LOGO,
+  tagline: 'THE OTHER ALGARVE',
+  location: 'Vila do Bispo, Algarve',
+  latitude: 37.0583,
+  longitude: -8.8097,
+  theme: {
+    primaryColor: '#2d2417',
+    primaryTextColor: '#ffffff',
+    accentColor: '#a0784a',
+    backgroundColor: '#FAF8F5',
+    surfaceColor: '#ffffff',
+    fontHeading: 'Inter',
+    fontBody: 'Inter',
+  },
+  staffMembers: [
+    {
+      name: 'Miguel',
+      role: 'Nature Guide',
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
+      bio: 'I know every trail in Costa Vicentina. MTB, hiking, surfing — the wild coast is my playground.',
+      preferredCategories: ['Micro Adventures', 'Outdoors'],
+    },
+    {
+      name: 'Catarina',
+      role: 'Concierge',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&h=200&fit=crop',
+      bio: 'Village life is the best life. Local recipes, farmers markets and hidden beaches — ask me anything.',
+      preferredCategories: ['Local Cooking', 'Time Stories'],
+    },
+  ],
+  activityPreferences: {
+    preferredCategories: ['Micro Adventures', 'Outdoors', 'Local Cooking'],
+    style: 'adventure',
+  },
+  features: { ...DEFAULT_FEATURES, showSpa: false, showRentals: false },
+};
+
+const HORTA_DA_MOURA: HotelConfig = {
+  id: 'hortadamoura',
+  name: 'Horta da Moura',
+  logoUrl: WOT_SIGNATURE_LOGO,
+  conciergeAvatarUrl: WOT_SIGNATURE_LOGO,
+  tagline: 'SILENCE & SOUL',
+  location: 'Monsaraz, Alentejo',
+  latitude: 38.4422,
+  longitude: -7.3758,
+  theme: {
+    primaryColor: '#2d2417',
+    primaryTextColor: '#ffffff',
+    accentColor: '#a0784a',
+    backgroundColor: '#FAF8F5',
+    surfaceColor: '#ffffff',
+    fontHeading: 'Inter',
+    fontBody: 'Inter',
+  },
+  staffMembers: [
+    {
+      name: 'Rui',
+      role: 'Hotel Manager',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop',
+      bio: 'Alentejo is a state of mind. Boat trips on Alqueva, olive grove walks, stargazing — I will plan it all.',
+      preferredCategories: ['Micro Adventures', 'Outdoors'],
+    },
+    {
+      name: 'Inês',
+      role: 'Concierge',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&h=200&fit=crop',
+      bio: 'Food and history are my passions. Monsaraz, Évora, local wineries — there is so much to discover here.',
+      preferredCategories: ['Local Cooking', 'Time Stories'],
+    },
+  ],
+  activityPreferences: {
+    preferredCategories: ['Micro Adventures', 'Local Cooking', 'Time Stories'],
+    style: 'cultural',
+  },
+  features: { ...DEFAULT_FEATURES, showSpa: false, showRentals: false },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 const HOTEL_CONFIGS: Record<string, HotelConfig> = {
   'vila-gale': VILA_GALE,
   pestana: PESTANA,
   'bairro-alto': BAIRRO_ALTO,
   homing: HOMING,
+  // WOT Hotels group
+  'wot-soul-costa-da-caparica': WOT_SOUL_CAPARICA,
+  'wot-soul-lagos-montemar': WOT_SOUL_LAGOS,
+  'wot-soul-porto': WOT_SOUL_PORTO,
+  aldeiadapedralva: ALDEIA_DA_PEDRALVA,
+  hortadamoura: HORTA_DA_MOURA,
 };
 
 /**
