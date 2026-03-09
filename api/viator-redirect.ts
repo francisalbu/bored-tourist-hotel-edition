@@ -29,12 +29,28 @@ const ALLOWED_DOMAINS = [
   'getyourguide.com',
 ];
 
-const VIATOR_PID   = 'P00285354';
-const VIATOR_MCID  = '42383';
-// The affiliate cookie-setter URL — loads in a hidden iframe before redirect
-const VIATOR_COOKIE_URL = `https://www.viator.com/en-GB/?pid=${VIATOR_PID}&mcid=${VIATOR_MCID}&medium=link`;
+const VIATOR_PID          = 'P00285354';
+const VIATOR_MCID_DEFAULT = '42383';
 // Params that must be stripped from product URL to avoid "You selected" page
 const VIATOR_STRIP_PARAMS = ['pid', 'mcid', 'medium', 'api_version'];
+
+/** Build the Viator affiliate cookie-setter URL with the correct mcid */
+function viatorCookieUrl(hotelId?: string): string {
+  const mcid = hotelId || VIATOR_MCID_DEFAULT;
+  return `https://www.viator.com/en-GB/?pid=${VIATOR_PID}&mcid=${encodeURIComponent(mcid)}&medium=link`;
+}
+
+/** Inject utm_campaign into GYG URL so bookings are traceable per hotel */
+function buildGygUrl(raw: string, hotelId?: string): string {
+  if (!hotelId) return raw;
+  try {
+    const u = new URL(raw);
+    u.searchParams.set('utm_campaign', hotelId);
+    return u.toString();
+  } catch {
+    return raw;
+  }
+}
 
 /** Remove Viator affiliate query params from a product URL */
 function cleanViatorUrl(raw: string): string {
@@ -65,7 +81,8 @@ function escapeJs(s: string): string {
 }
 
 export default function handler(req: VercelRequest, res: VercelResponse) {
-  const rawUrl = (req.query.url as string) || '';
+  const rawUrl  = (req.query.url    as string) || '';
+  const hotelId  = (req.query.hotelId as string) || '';
 
   // Validate the URL
   let targetUrl: URL;
@@ -80,13 +97,17 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const isViator = targetUrl.hostname.includes('viator.com');
+  const isGYG    = targetUrl.hostname.includes('getyourguide.com');
 
   // For Viator: strip affiliate params so we land on the product directly
   // (cookie is set via hidden iframe instead — avoids "You selected" page)
-  const finalUrl  = isViator ? cleanViatorUrl(rawUrl) : rawUrl;
-  const safeFinal = escapeHtml(finalUrl);
-  const jsFinal   = escapeJs(finalUrl);
-  const safeCookie = escapeHtml(VIATOR_COOKIE_URL);
+  // For GYG: inject utm_campaign so bookings are traceable per hotel
+  const finalUrl   = isViator ? cleanViatorUrl(rawUrl)
+                   : isGYG    ? buildGygUrl(rawUrl, hotelId)
+                   : rawUrl;
+  const safeFinal  = escapeHtml(finalUrl);
+  const jsFinal    = escapeJs(finalUrl);
+  const safeCookie = escapeHtml(viatorCookieUrl(hotelId));
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');

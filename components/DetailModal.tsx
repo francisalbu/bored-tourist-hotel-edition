@@ -23,9 +23,9 @@ function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): nu
 }
 
 /** Route affiliate links through our redirect endpoint to bypass iOS/Android app interception */
-function affiliateRedirectUrl(url: string): string {
-  // Pass the URL exactly as stored — do NOT mangle locale or path
-  return `/api/viator-redirect?url=${encodeURIComponent(url)}`;
+function affiliateRedirectUrl(url: string, hotelId?: string): string {
+  const base = `/api/viator-redirect?url=${encodeURIComponent(url)}`;
+  return hotelId ? `${base}&hotelId=${encodeURIComponent(hotelId)}` : base;
 }
 
 interface DetailModalProps {
@@ -578,7 +578,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
                 {experience.affiliateUrl ? (
                   <>
                     <a
-                      href={affiliateRedirectUrl(experience.affiliateUrl)}
+                      href={affiliateRedirectUrl(experience.affiliateUrl, hotel.id)}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-full flex items-center justify-center gap-2 py-4 text-white font-semibold text-[15px] rounded-2xl transition-all hover:opacity-90 hover:scale-[1.01] active:scale-[0.99] mb-3"
@@ -708,7 +708,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
               </p>
             </div>
             <a
-              href={affiliateRedirectUrl(experience.affiliateUrl)}
+              href={affiliateRedirectUrl(experience.affiliateUrl, hotel.id)}
               target="_blank"
               rel="noopener noreferrer"
               className="px-5 py-2.5 bg-emerald-600 text-white font-semibold text-sm rounded-full transition-colors flex-shrink-0 flex items-center gap-1.5 hover:bg-emerald-700"

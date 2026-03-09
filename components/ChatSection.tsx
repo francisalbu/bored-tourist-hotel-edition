@@ -1,7 +1,6 @@
 import { useHotel } from '../contexts/HotelContext';
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User, MapPin } from 'lucide-react';
-import OpenAI from 'openai';
 import { supabase } from '../lib/supabase';
 import { ExperienceDisplay, EventDisplay } from '../types';
 import { useUserMemories } from '../hooks/useUserMemories';
@@ -863,7 +862,7 @@ export const ChatSection: React.FC<ChatSectionProps> = ({
   }, []);
 
   // Function to extract memories from conversation
-  const extractAndSaveMemories = async (conversationHistory: Message[], openai: OpenAI) => {
+  const extractAndSaveMemories = async (conversationHistory: Message[]) => {
     try {
       const conversationText = conversationHistory
         .map(m => `${m.role}: ${m.text}`)
@@ -900,17 +899,23 @@ Extract and respond ONLY with JSON:
 
 Keep it human, conversational, and insightful - not a database dump.`;
 
-      const response = await openai.chat.completions.create({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: 'You are an expert concierge who remembers meaningful details about guests. Write observations as natural, conversational memories - like notes a thoughtful host would make. Always respond with valid JSON only.' },
-          { role: 'user', content: memoryExtractionPrompt }
-        ],
-        temperature: 0.7,
-        max_tokens: 600
+      const memResponse = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { role: 'system', content: 'You are an expert concierge who remembers meaningful details about guests. Write observations as natural, conversational memories - like notes a thoughtful host would make. Always respond with valid JSON only.' },
+            { role: 'user', content: memoryExtractionPrompt }
+          ],
+          temperature: 0.7,
+          max_tokens: 600
+        })
       });
+      if (!memResponse.ok) throw new Error('Memory extraction failed');
+      const memData = await memResponse.json();
 
-      const extractedData = response.choices[0]?.message?.content;
+      const extractedData = memData.choices[0]?.message?.content;
       if (!extractedData) return;
 
       // Parse JSON response
@@ -963,15 +968,6 @@ Keep it human, conversational, and insightful - not a database dump.`;
     setIsLoading(true);
 
     try {
-      const apiKey = (import.meta.env.VITE_OPENAI_API_KEY || '').replace(/\s/g, '');
-      if (!apiKey || apiKey === 'sk-proj-your-key-here') {
-        throw new Error('OpenAI API key not configured');
-      }
-      const openai = new OpenAI({
-        apiKey,
-        dangerouslyAllowBrowser: true
-      });
-      
       // ── Smart Pre-Filtering: score & rank experiences against user message ──
       const allUserMessages = [...messages.filter(m => m.role === 'user').map(m => m.text), userMessage.text].join(' ');
       const scored = experiences.map(exp => ({
@@ -1261,18 +1257,29 @@ ${todayEvents.length > 0 ? todayEvents.map((e: any) => '[' + e.id + '] ' + e.nam
 
 Remember: Use IDs and let the visual cards do the work!`;
 
-      const response = await openai.chat.completions.create({
-        model: 'gpt-4o',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          ...messages.map(m => ({ role: m.role, content: m.text })),
-          { role: 'user', content: userMessage.text }
-        ],
-        temperature: 0.3,
-        max_tokens: 700
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'gpt-4o',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            ...messages.map(m => ({ role: m.role, content: m.text })),
+            { role: 'user', content: userMessage.text }
+          ],
+          temperature: 0.3,
+          max_tokens: 700
+        })
       });
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        const err: any = new Error(errData.error || 'Chat request failed');
+        err.status = response.status;
+        throw err;
+      }
+      const data = await response.json();
 
-      const aiText = response.choices[0]?.message?.content || "I'm having a moment - mind trying that again?";
+      const aiText = data.choices[0]?.message?.content || "I'm having a moment - mind trying that again?";
       
       // Extract paid experience IDs
       const expIdsMatch = aiText.match(/EXPERIENCE_IDS:\s*\[([\d,\s]+)\]/);
@@ -1319,7 +1326,7 @@ Remember: Use IDs and let the visual cards do the work!`;
             id: (Date.now() + 1).toString(), 
             role: 'assistant', 
             text: cleanText 
-          }], openai);
+          }]);
         } catch (memErr) {
           console.warn('[Memories] extraction failed silently:', memErr);
         }
@@ -1339,9 +1346,7 @@ Remember: Use IDs and let the visual cards do the work!`;
         type: error?.type
       });
       let errorMsg: string;
-      if (error?.message === 'OpenAI API key not configured') {
-        errorMsg = "⚠️ The AI concierge isn't configured yet. Please set up the OpenAI API key.";
-      } else if (error?.status === 401 || error?.code === 'invalid_api_key') {
+      if (error?.status === 401) {
         errorMsg = "⚠️ There's an issue with the AI configuration. Please check the API key.";
       } else if (error?.status === 429) {
         errorMsg = "I'm getting too many requests right now. Give me a moment and try again!";
