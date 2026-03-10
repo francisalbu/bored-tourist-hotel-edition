@@ -26,6 +26,11 @@ function AppContent() {
   const [videoLightboxOpen, setVideoLightboxOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [priceSort, setPriceSort] = useState<'none' | 'asc' | 'desc'>('none');
+
+  // Detect ?exp= immediately (synchronous) so we can suppress the grid flash
+  const [pendingExpId] = useState<string | null>(
+    () => new URLSearchParams(window.location.search).get('exp')
+  );
   
   const { experiences, loading, error } = useExperiences();
   const allCategories = useCategories();
@@ -46,14 +51,10 @@ function AppContent() {
 
   // On load: auto-open experience if ?exp= is in the URL
   useEffect(() => {
-    if (!experiences.length) return;
-    const params = new URLSearchParams(window.location.search);
-    const expId = params.get('exp');
-    if (expId) {
-      const found = experiences.find(e => String(e.id) === expId);
-      if (found) setSelectedExperience(found);
-    }
-  }, [experiences]);
+    if (!experiences.length || !pendingExpId) return;
+    const found = experiences.find(e => String(e.id) === pendingExpId);
+    if (found) setSelectedExperience(found);
+  }, [experiences, pendingExpId]);
 
   // Only show categories that have at least one experience (plus 'all' and dividers)
   const categories = useMemo(() => {
@@ -143,6 +144,18 @@ function AppContent() {
             setTimeout(() => openExperience(exp), 50);
           }}
         />
+      </div>
+    );
+  }
+
+  // If a deep-link ?exp= is pending and experiences haven't loaded yet,
+  // show a full-screen spinner so the grid never flashes before the modal opens
+  const deepLinkLoading = pendingExpId && !selectedExperience && (loading || !experiences.length);
+
+  if (deepLinkLoading) {
+    return (
+      <div className="h-screen w-full flex items-center justify-center" style={{ backgroundColor: 'var(--hotel-bg, #FAFAF8)' }}>
+        <Loader2 className="w-8 h-8 animate-spin text-slate-400" strokeWidth={1.5} />
       </div>
     );
   }
