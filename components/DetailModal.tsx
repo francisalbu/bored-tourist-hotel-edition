@@ -93,7 +93,7 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
         <div className="flex items-center gap-1">
           <button
             onClick={async () => {
-              const shareUrl = experience.affiliateUrl || window.location.href;
+              const shareUrl = `${window.location.origin}${window.location.pathname}?exp=${experience.id}`;
               const shareData = {
                 title: experience.title,
                 text: `Check out this experience: ${experience.title} — ${experience.currency}${experience.price}/guest`,

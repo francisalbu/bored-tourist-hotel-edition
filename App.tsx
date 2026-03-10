@@ -30,6 +30,31 @@ function AppContent() {
   const { experiences, loading, error } = useExperiences();
   const allCategories = useCategories();
 
+  // Deep-link: sync selectedExperience with ?exp= query param
+  const openExperience = (exp: ExperienceDisplay | null) => {
+    setSelectedExperience(exp);
+    if (exp) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('exp', String(exp.id));
+      window.history.pushState({}, '', url.toString());
+    } else {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('exp');
+      window.history.replaceState({}, '', url.toString());
+    }
+  };
+
+  // On load: auto-open experience if ?exp= is in the URL
+  useEffect(() => {
+    if (!experiences.length) return;
+    const params = new URLSearchParams(window.location.search);
+    const expId = params.get('exp');
+    if (expId) {
+      const found = experiences.find(e => String(e.id) === expId);
+      if (found) setSelectedExperience(found);
+    }
+  }, [experiences]);
+
   // Only show categories that have at least one experience (plus 'all' and dividers)
   const categories = useMemo(() => {
     const populated = new Set(experiences.map(e => e.category));
@@ -115,7 +140,7 @@ function AppContent() {
           onBack={() => setCurrentView('discover')}
           onExperienceClick={(exp) => {
             setCurrentView('discover');
-            setTimeout(() => setSelectedExperience(exp), 50);
+            setTimeout(() => openExperience(exp), 50);
           }}
         />
       </div>
@@ -127,7 +152,7 @@ function AppContent() {
       
       {/* DESKTOP: LEFT PANEL - Chat / Concierge */}
       <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200/40 z-10 bg-white">
-        <ChatSection onExperienceClick={setSelectedExperience} userId={userId} />
+        <ChatSection onExperienceClick={openExperience} userId={userId} />
       </div>
       
       {/* DESKTOP: RIGHT PANEL - Memories (Toggle) */}
@@ -212,7 +237,7 @@ function AppContent() {
         <div className="flex-1 px-4 md:px-12 pb-24">
            {/* Hotel Picks View */}
            {showHotelPicks ? (
-             <HotelPicks onExperienceClick={setSelectedExperience} />
+             <HotelPicks onExperienceClick={openExperience} />
            ) : (
              <>
                {/* Loading State */}
@@ -253,7 +278,7 @@ function AppContent() {
                     <VideoCard 
                       key={experience.id} 
                       experience={experience} 
-                      onClick={setSelectedExperience}
+                      onClick={openExperience}
                       onVideoLightbox={setVideoLightboxOpen}
                     />
                   ))}
@@ -287,7 +312,7 @@ function AppContent() {
         <div className="md:hidden fixed inset-0 z-50 bg-white">
           <ChatSection 
             userId={userId} 
-            onExperienceClick={setSelectedExperience}
+            onExperienceClick={openExperience}
             isMobileFullScreen={true}
             onCloseMobileChat={() => setMobileFullScreenChat(false)}
           />
@@ -376,7 +401,7 @@ function AppContent() {
       {selectedExperience && (
         <DetailModal 
           experience={selectedExperience} 
-          onClose={() => setSelectedExperience(null)} 
+          onClose={() => openExperience(null)} 
         />
       )}
     </div>
