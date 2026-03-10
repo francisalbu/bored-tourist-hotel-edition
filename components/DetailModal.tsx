@@ -94,17 +94,12 @@ export const DetailModal: React.FC<DetailModalProps> = ({ experience, onClose })
           <button
             onClick={async () => {
               const shareUrl = `${window.location.origin}${window.location.pathname}?exp=${experience.id}`;
-              const shareData = {
-                title: experience.title,
-                text: `Check out this experience: ${experience.title} — ${experience.currency}${experience.price}/guest`,
-                url: shareUrl,
-              };
               try {
                 if (navigator.share) {
-                  await navigator.share(shareData);
+                  await navigator.share({ url: shareUrl });
                 } else {
-                  await navigator.clipboard.writeText(`${experience.title}\n${shareUrl}`);
-                  alert('Link copied to clipboard!');
+                  await navigator.clipboard.writeText(shareUrl);
+                  alert('Link copied!');
                 }
               } catch (err) {
                 // user cancelled share dialog
