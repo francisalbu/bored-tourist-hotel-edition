@@ -84,6 +84,14 @@ export interface HotelConfig {
   welcomeDescription?: string;
   quickSuggestions?: { emoji: string; label: string; prompt: string }[];
   botConfig?: BotConfig;
+  /** SmartSeer personalization engine — enabled only for specific hotels */
+  smartseerEnabled?: boolean;
+  /**
+   * Viator campaign ID (mcid) for this hotel — used to track which hotel
+   * originated each booking in the Viator affiliate dashboard.
+   * Create one per hotel at: https://suppliers.viator.com → Partner tools → Campaigns
+   */
+  viatorMcid?: string;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -275,6 +283,7 @@ const HOMING: HotelConfig = {
     style: 'mixed',
   },
   features: { ...DEFAULT_FEATURES, showSpa: false, showRentals: false },
+  viatorMcid: 'homing',
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -323,6 +332,7 @@ const WOT_SOUL_CAPARICA: HotelConfig = {
     style: 'adventure',
   },
   features: { ...DEFAULT_FEATURES, showSpa: false },
+  viatorMcid: 'wot-caparica',
 };
 
 const WOT_SOUL_LAGOS: HotelConfig = {
@@ -364,6 +374,7 @@ const WOT_SOUL_LAGOS: HotelConfig = {
     style: 'adventure',
   },
   features: { ...DEFAULT_FEATURES, showSpa: false },
+  viatorMcid: 'wot-lagos',
 };
 
 const WOT_SOUL_PORTO: HotelConfig = {
@@ -405,6 +416,7 @@ const WOT_SOUL_PORTO: HotelConfig = {
     style: 'cultural',
   },
   features: DEFAULT_FEATURES,
+  viatorMcid: 'wot-porto',
 };
 
 const ALDEIA_DA_PEDRALVA: HotelConfig = {
@@ -446,6 +458,7 @@ const ALDEIA_DA_PEDRALVA: HotelConfig = {
     style: 'adventure',
   },
   features: { ...DEFAULT_FEATURES, showSpa: false, showRentals: false },
+  viatorMcid: 'pedralva',
 };
 
 const HORTA_DA_MOURA: HotelConfig = {
@@ -487,6 +500,7 @@ const HORTA_DA_MOURA: HotelConfig = {
     style: 'cultural',
   },
   features: { ...DEFAULT_FEATURES, showSpa: false, showRentals: false },
+  viatorMcid: 'horta-moura',
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -572,6 +586,7 @@ export async function fetchHotelConfigFromDB(hotelId?: string): Promise<HotelCon
       welcomeDescription: data.welcome_description || undefined,
       quickSuggestions: data.quick_suggestions || undefined,
       botConfig: data.bot_config || undefined,
+      smartseerEnabled: data.smartseer_enabled ?? false,
     };
   } catch (err) {
     console.warn('[hotelConfig] Unexpected error fetching from Supabase:', err);

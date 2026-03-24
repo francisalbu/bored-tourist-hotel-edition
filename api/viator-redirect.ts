@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { createClient } from '@supabase/supabase-js';
 
 /**
  * Affiliate Redirect Endpoint (Viator, GetYourGuide, etc.)
@@ -19,7 +20,18 @@ import type { VercelRequest, VercelResponse } from '@vercel/node';
  *         (without affiliate params). The cookie ensures commission
  *         is still tracked for any booking made.
  *
- * Usage: /api/viator-redirect?url=<encoded_affiliate_url>
+ * 3. Per-hotel tracking — each hotel gets a unique mcid so we can identify
+ *    in the Viator dashboard which hotel originated each booking and pay
+ *    commissions correctly.
+ *    mcid mapping (also create these in Viator Partner Portal):
+ *      homing           → homing
+ *      wot-caparica     → wot-caparica
+ *      wot-lagos        → wot-lagos
+ *      wot-porto        → wot-porto
+ *      pedralva         → pedralva
+ *      horta-moura      → horta-moura
+ *
+ * Usage: /api/viator-redirect?url=<encoded_affiliate_url>&hotelId=<hotel_id>&expId=<exp_id>
  */
 
 const ALLOWED_DOMAINS = [
@@ -34,10 +46,53 @@ const VIATOR_MCID_DEFAULT = '42383';
 // Params that must be stripped from product URL to avoid "You selected" page
 const VIATOR_STRIP_PARAMS = ['pid', 'mcid', 'medium', 'api_version'];
 
+/**
+ * Map hotelId → Viator mcid.
+ * These mcids must also be created in the Viator Partner Portal
+ * (https://supplier.viator.com → Partner Tools → Campaigns).
+ * Until they're created there, Viator will fall back to default tracking
+ * but they WILL appear as the campaign label in our own click_log table.
+ */
+const HOTEL_MCID_MAP: Record<string, string> = {
+  'homing':                       'homing',
+  'wot-soul-costa-da-caparica':   'wot-caparica',
+  'wot-soul-lagos-montemar':      'wot-lagos',
+  'wot-soul-porto':               'wot-porto',
+  'aldeiadapedralva':             'pedralva',
+  'hortadamoura':                 'horta-moura',
+  'vila-gale':                    'vila-gale',
+  'pestana':                      'pestana',
+  'bairro-alto':                  'bairro-alto',
+};
+
+function getMcid(hotelId?: string): string {
+  if (!hotelId) return VIATOR_MCID_DEFAULT;
+  return HOTEL_MCID_MAP[hotelId] || hotelId;
+}
+
 /** Build the Viator affiliate cookie-setter URL with the correct mcid */
 function viatorCookieUrl(hotelId?: string): string {
-  const mcid = hotelId || VIATOR_MCID_DEFAULT;
+  const mcid = getMcid(hotelId);
   return `https://www.viator.com/en-GB/?pid=${VIATOR_PID}&mcid=${encodeURIComponent(mcid)}&medium=link`;
+}
+
+/** Log click to Supabase for internal tracking (best-effort, never blocks redirect) */
+async function logClick(hotelId: string, expId: string, url: string, mcid: string) {
+  try {
+    const sb = createClient(
+      process.env.SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!,
+    );
+    await sb.from('affiliate_click_log').insert({
+      hotel_id:    hotelId || null,
+      exp_id:      expId   || null,
+      mcid,
+      destination: url.substring(0, 500),
+      clicked_at:  new Date().toISOString(),
+    });
+  } catch {
+    // non-blocking — never fail the redirect because of logging
+  }
 }
 
 /** Inject utm_campaign into GYG URL so bookings are traceable per hotel */
@@ -83,6 +138,7 @@ function escapeJs(s: string): string {
 export default function handler(req: VercelRequest, res: VercelResponse) {
   const rawUrl  = (req.query.url    as string) || '';
   const hotelId  = (req.query.hotelId as string) || '';
+  const expId    = (req.query.expId   as string) || '';
 
   // Validate the URL
   let targetUrl: URL;
@@ -105,9 +161,13 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   const finalUrl   = isViator ? cleanViatorUrl(rawUrl)
                    : isGYG    ? buildGygUrl(rawUrl, hotelId)
                    : rawUrl;
+  const mcid       = getMcid(hotelId);
   const safeFinal  = escapeHtml(finalUrl);
   const jsFinal    = escapeJs(finalUrl);
   const safeCookie = escapeHtml(viatorCookieUrl(hotelId));
+
+  // Log click async (best-effort, non-blocking)
+  if (hotelId) logClick(hotelId, expId, finalUrl, mcid);
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
