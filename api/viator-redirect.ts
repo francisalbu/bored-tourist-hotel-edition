@@ -1,5 +1,4 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { createClient } from '@supabase/supabase-js';
 
 /**
  * Affiliate Redirect Endpoint (Viator, GetYourGuide, etc.)
@@ -76,22 +75,39 @@ function viatorCookieUrl(hotelId?: string): string {
   return `https://www.viator.com/en-GB/?pid=${VIATOR_PID}&mcid=${encodeURIComponent(mcid)}&medium=link`;
 }
 
-/** Log click to Supabase for internal tracking (best-effort, never blocks redirect) */
+/** Log click to Supabase for internal tracking — uses direct REST fetch (reliable in serverless) */
 async function logClick(hotelId: string, expId: string, url: string, mcid: string) {
+  const supabaseUrl = process.env.SUPABASE_URL;
+  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!supabaseUrl || !supabaseKey) {
+    console.error('[affiliate_click_log] Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY');
+    return;
+  }
   try {
-    const sb = createClient(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    );
-    await sb.from('affiliate_click_log').insert({
-      hotel_id:    hotelId || null,
-      exp_id:      expId   || null,
-      mcid,
-      destination: url.substring(0, 500),
-      clicked_at:  new Date().toISOString(),
+    const resp = await fetch(`${supabaseUrl}/rest/v1/affiliate_click_log`, {
+      method: 'POST',
+      headers: {
+        'apikey':        supabaseKey,
+        'Authorization': `Bearer ${supabaseKey}`,
+        'Content-Type':  'application/json',
+        'Prefer':        'return=minimal',
+      },
+      body: JSON.stringify({
+        hotel_id:    hotelId || 'unknown',
+        exp_id:      expId   || null,
+        mcid,
+        destination: url.substring(0, 500),
+        clicked_at:  new Date().toISOString(),
+      }),
     });
-  } catch {
-    // non-blocking — never fail the redirect because of logging
+    if (!resp.ok) {
+      const txt = await resp.text();
+      console.error('[affiliate_click_log] Insert failed:', resp.status, txt);
+    } else {
+      console.log('[affiliate_click_log] ✅ Logged:', { hotelId, mcid, expId });
+    }
+  } catch (e) {
+    console.error('[affiliate_click_log] Exception:', e);
   }
 }
 
@@ -135,7 +151,7 @@ function escapeJs(s: string): string {
     .replace(/'/g, "\\'");
 }
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: VercelRequest, res: VercelResponse) {
   const rawUrl  = (req.query.url    as string) || '';
   const hotelId  = (req.query.hotelId as string) || '';
   const expId    = (req.query.expId   as string) || '';
@@ -166,8 +182,8 @@ export default function handler(req: VercelRequest, res: VercelResponse) {
   const jsFinal    = escapeJs(finalUrl);
   const safeCookie = escapeHtml(viatorCookieUrl(hotelId));
 
-  // Log click async (best-effort, non-blocking)
-  if (hotelId) logClick(hotelId, expId, finalUrl, mcid);
+  // Await log BEFORE sending response — in serverless, fire-and-forget gets killed
+  if (hotelId) await logClick(hotelId, expId, finalUrl, mcid);
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
