@@ -36,6 +36,7 @@ export interface Experience {
   affiliate_provider?: string;
   review_count?: number;
   user_reviews?: UserReview[];
+  tags?: string[];
 }
 
 // Individual review from Viator/GetYourGuide
@@ -118,6 +119,8 @@ export interface ExperienceDisplay {
   affiliateUrl?: string;
   affiliateProvider?: string;
   userReviews?: UserReview[];
+  tags?: string[];
+  availableToday?: boolean;
 }
 
 export interface Category {

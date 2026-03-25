@@ -36,6 +36,8 @@ export function mapExperienceToDisplay(exp: Experience): ExperienceDisplay {
     affiliateUrl: exp.affiliate_url,
     affiliateProvider: exp.affiliate_provider,
     userReviews: exp.user_reviews || [],
+    tags: exp.tags || [],
+    availableToday: exp.available_today,
   };
 }
 
