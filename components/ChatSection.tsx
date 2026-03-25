@@ -899,11 +899,9 @@ Extract and respond ONLY with JSON:
 
 Keep it human, conversational, and insightful - not a database dump.`;
 
-      const openaiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      if (!openaiKey) throw new Error('OpenAI API key not configured');
-      const memResponse = await fetch('https://api.openai.com/v1/chat/completions', {
+      const memResponse = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'gpt-4o-mini',
           messages: [
@@ -1259,15 +1257,9 @@ ${todayEvents.length > 0 ? todayEvents.map((e: any) => '[' + e.id + '] ' + e.nam
 
 Remember: Use IDs and let the visual cards do the work!`;
 
-      const openaiKey = import.meta.env.VITE_OPENAI_API_KEY;
-      if (!openaiKey) {
-        const err: any = new Error('OpenAI API key not configured');
-        err.status = 401;
-        throw err;
-      }
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'gpt-4o',
           messages: [
