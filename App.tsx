@@ -11,6 +11,9 @@ import { Menu, X, Loader2, Sparkles, ChevronRight, Plane, Search, ArrowUpDown } 
 import { useExperiences, useCategories } from './hooks/useExperiences';
 import { useUserMemories } from './hooks/useUserMemories';
 import { HotelProvider, useHotel } from './contexts/HotelContext';
+import { useSmartSeer }            from './lib/smartseer/use-smartseer';
+import { SmartBanner }             from './components/SmartSeer/SmartBanner';
+import { PersonaDebugPanel }       from './components/SmartSeer/PersonaDebugPanel';
 
 type AppView = 'discover' | 'pre-arrival';
 
@@ -34,6 +37,13 @@ function AppContent() {
   
   const { experiences, loading, error } = useExperiences();
   const allCategories = useCategories();
+
+  // SmartSeer — only active for hotels with smartseerEnabled = true (e.g. lisbon-hostel)
+  const smartSeer = useSmartSeer({
+    hotelId:     hotel.id,
+    experiences,
+    enabled:     hotel.smartseerEnabled ?? false,
+  });
 
   // Deep-link: sync selectedExperience with ?exp= query param
   const openExperience = (exp: ExperienceDisplay | null) => {
@@ -111,7 +121,7 @@ function AppContent() {
   }, []);
 
   const filteredExperiences = useMemo(() => {
-    let result = selectedCategory === 'all' ? experiences : experiences.filter(exp => exp.category === selectedCategory);
+    let result = selectedCategory === 'all' ? smartSeer.ranked : smartSeer.ranked.filter(exp => exp.category === selectedCategory);
     
     // Search filter
     if (searchQuery.trim()) {
@@ -131,7 +141,7 @@ function AppContent() {
     }
     
     return result;
-  }, [selectedCategory, experiences, searchQuery, priceSort]);
+  }, [selectedCategory, smartSeer.ranked, searchQuery, priceSort]);
 
   // Render Pre-Arrival Creator view
   if (currentView === 'pre-arrival') {
@@ -187,11 +197,10 @@ function AppContent() {
       <div className="flex-1 h-full overflow-y-auto relative flex flex-col pb-32 md:pb-0" style={{ backgroundColor: 'var(--hotel-bg, #FAFAF8)' }}>
         
         {/* Header */}
-        <div className="sticky top-0 z-30 backdrop-blur-md px-4 md:px-12 py-4 md:py-8 border-b border-slate-200/40" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
+        <div className="sticky top-0 z-30 backdrop-blur-md px-4 md:px-12 py-3 md:py-4 border-b border-slate-200/40" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
            <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-slate-400 mb-0.5 md:mb-1 font-medium">{hotel.tagline}</span>
-                <span className="text-lg md:text-2xl text-slate-900 font-light tracking-tight">{hotel.location}</span>
+                <span className="text-[11px] md:text-[13px] uppercase tracking-[0.4em] text-slate-500 font-medium">{hotel.tagline}</span>
               </div>
 
               <button 
@@ -204,7 +213,7 @@ function AppContent() {
         </div>
 
         {/* Filters Sticky Bar */}
-        <div className="sticky top-[72px] md:top-[108px] z-20 backdrop-blur-md pb-3 md:pb-6 pt-3 md:pt-4 px-4 md:px-12" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
+        <div className="sticky top-[57px] md:top-[73px] z-20 backdrop-blur-md pb-3 md:pb-6 pt-3 md:pt-4 px-4 md:px-12" style={{ backgroundColor: 'color-mix(in srgb, var(--hotel-bg, #FAFAF8) 95%, transparent)' }}>
            <CategoryFilter 
                 categories={categories}
                 selectedCategory={selectedCategory}
@@ -272,6 +281,18 @@ function AppContent() {
                {/* Content */}
                {!loading && !error && (
              <>
+               {/* SmartSeer Banner — only when active and loaded */}
+               {!smartSeer.loading && smartSeer.smartMessage && (
+                 <div className="mb-6">
+                   <SmartBanner
+                     message={smartSeer.smartMessage}
+                     persona={smartSeer.topPersona as any}
+                     context={smartSeer.context}
+                     onCtaClick={() => { setSelectedCategory('all'); setSearchQuery(''); setPriceSort('none'); }}
+                   />
+                 </div>
+               )}
+
                {/* Section Title */}
                <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-10">
                   <h2 className="text-2xl md:text-4xl text-slate-900 font-light tracking-tight">
@@ -372,34 +393,8 @@ function AppContent() {
             </div>
 
             {/* Drawer items */}
+            {/* Hotel Picks + Pre-Arrival hidden from public menu — accessible via ?picks=1 / ?prearival=1 for demos */}
             <div className="flex-1 overflow-y-auto py-4 px-3">
-              <button
-                onClick={() => { setShowHotelPicks(!showHotelPicks); setShowDrawer(false); }}
-                className="w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-left hover:bg-slate-50 transition-colors group"
-              >
-                <div className="w-9 h-9 rounded-full bg-amber-50 flex items-center justify-center flex-shrink-0">
-                  <Sparkles size={16} strokeWidth={1.5} className="text-amber-500" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-semibold text-slate-900">Hotel Picks</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Staff-curated experiences</p>
-                </div>
-                <ChevronRight size={16} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
-              </button>
-
-              <button
-                onClick={() => { setCurrentView('pre-arrival'); setShowDrawer(false); }}
-                className="w-full flex items-center gap-3.5 px-4 py-3.5 rounded-xl text-left hover:bg-slate-50 transition-colors group"
-              >
-                <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
-                  <Plane size={16} strokeWidth={1.5} className="text-blue-500" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-semibold text-slate-900">Pre-Arrival</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">Plan before you arrive</p>
-                </div>
-                <ChevronRight size={16} className="text-slate-300 group-hover:text-slate-500 transition-colors" />
-              </button>
             </div>
 
             {/* Drawer footer */}
@@ -417,6 +412,15 @@ function AppContent() {
           onClose={() => openExperience(null)} 
         />
       )}
+
+      {/* SmartSeer Debug Panel — visible only with ?debug=smartseer */}
+      <PersonaDebugPanel
+        session={smartSeer.session}
+        personaScores={smartSeer.personaScores}
+        topPersona={smartSeer.topPersona}
+        context={smartSeer.context}
+        loading={smartSeer.loading}
+      />
     </div>
   );
 }
