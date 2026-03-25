@@ -560,13 +560,14 @@ export const ChatSection: React.FC<ChatSectionProps> = ({
   }, [messages]);
 
   // Fetch weather data for Lisbon
+  // Fetch weather data using hotel coordinates
   useEffect(() => {
     async function fetchWeather() {
+      const lat = hotel.latitude ?? 38.7223;
+      const lon = hotel.longitude ?? -9.1393;
       try {
-        // Using Open-Meteo API (100% free, no API key needed!)
-        // Lisbon coordinates: 38.7223° N, 9.1393° W
         const response = await fetch(
-          'https://api.open-meteo.com/v1/forecast?latitude=38.7223&longitude=-9.1393&current=temperature_2m,precipitation,weathercode,windspeed_10m&timezone=Europe/Lisbon'
+          `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,precipitation,weathercode,windspeed_10m&timezone=auto`
         );
         
         if (response.ok) {
@@ -615,8 +616,14 @@ export const ChatSection: React.FC<ChatSectionProps> = ({
     return () => clearInterval(interval);
   }, []);
 
-  // Fetch events data from Agenda LX and Gulbenkian
+  // Fetch events — only for Lisbon-area hotels
   useEffect(() => {
+    const isLisbon = hotel.location?.toLowerCase().includes('lisbon') ||
+                     hotel.location?.toLowerCase().includes('lisboa') ||
+                     (hotel.latitude && hotel.latitude > 38.5 && hotel.latitude < 39.0 &&
+                      hotel.longitude && hotel.longitude > -9.5 && hotel.longitude < -8.8);
+    if (!isLisbon) return; // skip event fetching for non-Lisbon hotels
+
     async function fetchEvents() {
       try {
         // Fetch from both sources in parallel
@@ -1116,7 +1123,10 @@ ${freeSpotsContext}`;
         ? '\n\n📋 CUSTOM INSTRUCTIONS FROM HOTEL:\n' + bot.customInstructions
         : '';
 
-      const systemPrompt = `You are ${botName}, the AI concierge at ${hotel.name} hotel. Your personality: ${personalityDesc}.
+      const systemPrompt = `You are ${botName}, the AI concierge at ${hotel.name}. Your personality: ${personalityDesc}.
+
+🌍 YOUR EXPERTISE:
+You are THE local expert for ${hotel.location}. You know this area like the back of your hand — every hidden gem, every must-do, the best local restaurants, the beaches, the nature spots, everything within reach of this hotel. When a guest asks "what is there to do here" or "what's good nearby", your answers are ALWAYS about ${hotel.location} and the surrounding region. You NEVER default to generic Portugal tips — you give hyper-local, specific recommendations for THIS area.
 
 ${langInstr}
 
