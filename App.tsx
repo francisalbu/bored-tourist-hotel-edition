@@ -393,8 +393,21 @@ function AppContent() {
             </div>
 
             {/* Drawer items */}
-            {/* Hotel Picks + Pre-Arrival hidden from public menu — accessible via ?picks=1 / ?prearival=1 for demos */}
             <div className="flex-1 overflow-y-auto py-4 px-3">
+              {/* Pre-Arrival Planner */}
+              <button
+                onClick={() => { setShowDrawer(false); setCurrentView('pre-arrival'); }}
+                className="w-full flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-slate-50 transition-colors text-left group"
+              >
+                <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+                  <Plane size={15} className="text-emerald-600" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[13px] font-medium text-slate-800">Pre-Arrival Planner</p>
+                  <p className="text-[11px] text-slate-400">Plan your stay before you arrive</p>
+                </div>
+                <ChevronRight size={14} className="text-slate-300 group-hover:text-slate-400 flex-shrink-0" />
+              </button>
             </div>
 
             {/* Drawer footer */}
