@@ -215,11 +215,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const isViator = targetUrl.hostname.includes('viator.com');
   const isGYG    = targetUrl.hostname.includes('getyourguide.com');
 
-  // For Viator: ensure pid=P00285354 is always in the product URL.
-  // This guarantees tracking even when Safari ITP blocks the cookie iframe.
-  // The cookie iframe is still set as a belt-and-suspenders extra.
+  // Safari/iOS detection — Safari ITP blocks cross-origin cookies set via iframes,
+  // so the cookie approach doesn't work there. For Safari we instead keep the pid
+  // in the product URL directly (Viator may show "You selected" as an extra step,
+  // but the user still reaches the product and the booking IS tracked).
+  // For Chrome/Firefox the clean URL + hidden iframe approach works perfectly.
+  const ua        = (req.headers['user-agent'] || '').toString();
+  const isSafari  = /Safari/.test(ua) && !/Chrome/.test(ua) && !/Chromium/.test(ua);
+
+  // For Viator:
+  //   - Safari → keep pid in URL (tracks via URL, user may see "You selected" once)
+  //   - Others → strip pid + set cookie via hidden iframe (goes direct to product page)
   // For GYG: inject utm_campaign so bookings are traceable per hotel.
-  const finalUrl   = isViator ? buildViatorUrl(rawUrl, hotelId)
+  const finalUrl   = isViator
+                   ? (isSafari ? buildViatorUrl(rawUrl, hotelId) : cleanViatorUrl(rawUrl))
                    : isGYG    ? buildGygUrl(rawUrl, hotelId)
                    : rawUrl;
   const mcid       = getMcid(hotelId);
@@ -229,6 +238,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // Await log BEFORE sending response — in serverless, fire-and-forget gets killed
   if (hotelId) await logClick(hotelId, expId, finalUrl, mcid);
+
+  // useCookieFlow: Chrome/Firefox Viator flow (iframe cookie + clean URL)
+  const useCookieFlow = isViator && !isSafari;
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
@@ -261,11 +273,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       <a href="${safeFinal}">Click here if not redirected</a>
     </p>
   </div>
-${isViator ? `
+${useCookieFlow ? `
   <!--
-    Step 1 — hidden iframe sets the Viator affiliate cookie.
-    Once it fires onload we redirect to the clean product URL.
-    Fallback timer (2 s) handles browsers that block cross-origin onload.
+    Chrome/Firefox: hidden iframe sets the Viator affiliate cookie,
+    then we redirect to the clean product URL (no pid = no "You selected" page).
   -->
   <iframe
     id="affframe"
@@ -278,19 +289,17 @@ ${isViator ? `
     function go() {
       if (done) return;
       done = true;
-      // Step 2 — JS redirect bypasses iOS Universal Links AND lands on product
       window.location.replace("${jsFinal}");
     }
     function onCookieReady() {
-      // Short extra pause so cookie is fully written before navigation
       setTimeout(go, 300);
     }
-    // Safety fallback — redirect even if iframe never fires (e.g. Safari ITP)
+    // Fallback — if iframe never fires (e.g. ad-blocker), redirect after 2s
     setTimeout(go, 2000);
   </script>
 ` : `
   <script>
-    // Non-Viator (GYG etc.) — direct JS redirect bypasses Universal Links
+    // Safari/iOS or non-Viator: direct JS redirect (no iframe needed)
     setTimeout(function(){ window.location.replace("${jsFinal}"); }, 400);
   </script>
 `}

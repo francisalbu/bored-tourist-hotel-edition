@@ -332,9 +332,7 @@ function AppContent() {
                {/* Footer - Hidden on mobile */}
            </>
            )}
-               <div className="mt-32 pt-12 border-t border-slate-200/40 text-center hidden md:block">
-                  <p className="text-slate-400 text-[10px] font-light uppercase tracking-[0.3em]">© 2024 Bored Tourist Hotel Edition</p>
-               </div>
+
              </>
            )}
         </div>
