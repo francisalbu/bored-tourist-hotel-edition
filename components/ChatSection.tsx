@@ -1272,6 +1272,7 @@ Remember: Use IDs and let the visual cards do the work!`;
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           model: 'gpt-4o',
+          hotelId: hotel.id,
           messages: [
             { role: 'system', content: systemPrompt },
             ...messages.map(m => ({ role: m.role, content: m.text })),
@@ -1356,8 +1357,8 @@ Remember: Use IDs and let the visual cards do the work!`;
         type: error?.type
       });
       let errorMsg: string;
-      if (error?.status === 401) {
-        errorMsg = "⚠️ There's an issue with the AI configuration. Please check the API key.";
+      if (error?.status === 401 || error?.status === 500) {
+        errorMsg = "I'm having a brief technical issue. Please try again in a moment!";
       } else if (error?.status === 429) {
         errorMsg = "I'm getting too many requests right now. Give me a moment and try again!";
       } else if (error?.code === 'context_length_exceeded' || error?.message?.includes('maximum context')) {
