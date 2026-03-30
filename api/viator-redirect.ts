@@ -53,15 +53,42 @@ const VIATOR_STRIP_PARAMS = ['pid', 'mcid', 'medium', 'api_version'];
  * but they WILL appear as the campaign label in our own click_log table.
  */
 const HOTEL_MCID_MAP: Record<string, string> = {
-  'homing':                       'homing',
-  'wot-soul-costa-da-caparica':   'wot-caparica',
-  'wot-soul-lagos-montemar':      'wot-lagos',
-  'wot-soul-porto':               'wot-porto',
-  'aldeiadapedralva':             'pedralva',
-  'hortadamoura':                 'horta-moura',
-  'vila-gale':                    'vila-gale',
-  'pestana':                      'pestana',
-  'bairro-alto':                  'bairro-alto',
+  // WOT Soul
+  'homing':                           'homing',
+  'wot-soul-costa-da-caparica':       'wot-caparica',
+  'wot-costa-da-caparica-soul':       'wot-caparica',
+  'wot-soul-lagos-montemar':          'wot-lagos',
+  'wot-lagos-montemar-soul':          'wot-lagos',
+  'wot-soul-porto':                   'wot-porto',
+  'wot-porto-soul':                   'wot-porto',
+  'wot-sarrazola-soul':               'wot-sarrazola',
+  'wot-ericeira-soul':                'wot-ericeira',
+  'wot-ocean-soul':                   'wot-ocean',
+  'wot-algarve-soul':                 'wot-algarve',
+  'wot-lodge-soul':                   'wot-lodge',
+  'wot-pateira-soul':                 'wot-pateira',
+  // Editory
+  'editory-porto-palacio':            'editory-porto',
+  'editory-riverside-lisboa':         'editory-riverside',
+  'editory-flor-de-sal-viana':        'editory-viana',
+  'editory-house-ribeira-porto':      'editory-ribeira',
+  'editory-boulevard-aliados-porto':  'editory-boulevard',
+  'editory-garden-baixa-porto':       'editory-garden-porto',
+  'editory-aqualuz-lagos':            'editory-aqualuz',
+  'editory-residence-lagos':          'editory-residence',
+  'editory-ocean-way-funchal':        'editory-funchal',
+  'editory-garden-carmo-funchal':     'editory-carmo',
+  'editory-by-the-sea-lagos':         'editory-sea-lagos',
+  'editory-artist-baixa-porto':       'editory-artist',
+  // Others
+  'aldeiadapedralva':                 'pedralva',
+  'hortadamoura':                     'horta-moura',
+  'vila-gale':                        'vila-gale',
+  'pestana':                          'pestana',
+  'bairro-alto':                      'bairro-alto',
+  'lisbon-hostel':                    'lisbon-hostel',
+  'lisbeyond':                        'lisbeyond',
+  'aldeiadapedralva':                 'pedralva',
 };
 
 function getMcid(hotelId?: string): string {
@@ -108,6 +135,23 @@ async function logClick(hotelId: string, expId: string, url: string, mcid: strin
     }
   } catch (e) {
     console.error('[affiliate_click_log] Exception:', e);
+  }
+}
+
+/**
+ * Ensure Viator product URL always has pid + mcid params.
+ * This is the PRIMARY tracking mechanism — Safari ITP blocks the cookie iframe,
+ * so having the params in the URL is the only reliable fallback.
+ */
+function buildViatorUrl(raw: string, hotelId?: string): string {
+  try {
+    const u = new URL(raw);
+    u.searchParams.set('pid', VIATOR_PID);
+    u.searchParams.set('mcid', getMcid(hotelId));
+    u.searchParams.set('medium', 'link');
+    return u.toString();
+  } catch {
+    return raw;
   }
 }
 
@@ -171,10 +215,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const isViator = targetUrl.hostname.includes('viator.com');
   const isGYG    = targetUrl.hostname.includes('getyourguide.com');
 
-  // For Viator: strip affiliate params so we land on the product directly
-  // (cookie is set via hidden iframe instead — avoids "You selected" page)
-  // For GYG: inject utm_campaign so bookings are traceable per hotel
-  const finalUrl   = isViator ? cleanViatorUrl(rawUrl)
+  // For Viator: ensure pid=P00285354 is always in the product URL.
+  // This guarantees tracking even when Safari ITP blocks the cookie iframe.
+  // The cookie iframe is still set as a belt-and-suspenders extra.
+  // For GYG: inject utm_campaign so bookings are traceable per hotel.
+  const finalUrl   = isViator ? buildViatorUrl(rawUrl, hotelId)
                    : isGYG    ? buildGygUrl(rawUrl, hotelId)
                    : rawUrl;
   const mcid       = getMcid(hotelId);
