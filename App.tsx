@@ -173,10 +173,10 @@ function AppContent() {
   return (
     <div className="h-screen w-full text-slate-900 font-sans selection:bg-emerald-200 selection:text-emerald-900 flex flex-col md:flex-row overflow-hidden" style={{ backgroundColor: 'var(--hotel-bg, #FAFAF8)' }}>
       
-      {/* DESKTOP: LEFT PANEL - Chat / Concierge */}
-      <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200/40 z-10 bg-white">
+      {/* DESKTOP: LEFT PANEL - Chat / Concierge - temporarily hidden */}
+      {/* <div className="hidden md:flex md:w-[45%] lg:w-[40%] xl:w-[35%] h-full border-r border-slate-200/40 z-10 bg-white">
         <ChatSection onExperienceClick={openExperience} userId={userId} />
-      </div>
+      </div> */}
       
       {/* DESKTOP: RIGHT PANEL - Memories (Toggle) */}
       {showMemories && (
@@ -307,7 +307,7 @@ function AppContent() {
                   </span>
                </div>
 
-               <div className="grid grid-cols-1 min-[450px]:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-3 min-[450px]:gap-4 md:gap-5">
+               <div className="grid grid-cols-1 min-[450px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 min-[450px]:gap-4 md:gap-5">
                   {filteredExperiences.map((experience) => (
                     <VideoCard 
                       key={experience.id} 
@@ -339,8 +339,8 @@ function AppContent() {
 
       </div>
 
-      {/* MOBILE ONLY: Full Screen Chat */}
-      {mobileFullScreenChat && (
+      {/* MOBILE ONLY: Full Screen Chat - temporarily hidden */}
+      {/* {mobileFullScreenChat && (
         <div className="md:hidden fixed inset-0 z-50 bg-white">
           <ChatSection 
             userId={userId} 
@@ -349,25 +349,9 @@ function AppContent() {
             onCloseMobileChat={() => setMobileFullScreenChat(false)}
           />
         </div>
-      )}
+      )} */}
 
-      {/* MOBILE ONLY: Chat Button - hidden when video lightbox or detail modal is open */}
-      {!mobileFullScreenChat && !videoLightboxOpen && !selectedExperience && (
-        <button
-          onClick={() => setMobileFullScreenChat(true)}
-          className="md:hidden fixed left-1/2 -translate-x-1/2 z-40 flex items-center gap-2.5 bg-white border border-slate-200/60 rounded-full shadow-lg px-4 py-2.5 hover:shadow-xl transition-all"
-          style={{ bottom: 'max(20px, calc(env(safe-area-inset-bottom) + 8px))' }}
-        >
-          <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
-            <img 
-              src={hotel.conciergeAvatarUrl || 'https://storage.googleapis.com/bored_tourist_media/images/hotel.webp'}
-              alt={`${hotel.name} Concierge`}
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <span className="text-sm font-medium text-slate-700">Ask me anything</span>
-        </button>
-      )}
+      {/* MOBILE ONLY: Chat Button - temporarily hidden */}
 
       {/* ─── Side Drawer ─── */}
       {showDrawer && (
