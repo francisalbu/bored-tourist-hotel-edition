@@ -80,6 +80,12 @@ const HOTEL_MCID_MAP: Record<string, string> = {
   'editory-garden-carmo-funchal':     'editory-carmo',
   'editory-by-the-sea-lagos':         'editory-sea-lagos',
   'editory-artist-baixa-porto':       'editory-artist',
+  // Editory new domains
+  'editoryviana':                     'editory-viana',
+  'editoryfunchal':                   'editory-funchal',
+  'editorylagos':                     'editory-lagos',
+  'editoryporto':                     'editory-porto',
+  'editorylisboa':                    'editory-lisboa',
   // Others
   'aldeiadapedralva':                 'pedralva',
   'hortadamoura':                     'horta-moura',
@@ -215,32 +221,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const isViator = targetUrl.hostname.includes('viator.com');
   const isGYG    = targetUrl.hostname.includes('getyourguide.com');
 
-  // Safari/iOS detection — Safari ITP blocks cross-origin cookies set via iframes,
-  // so the cookie approach doesn't work there. For Safari we instead keep the pid
-  // in the product URL directly (Viator may show "You selected" as an extra step,
-  // but the user still reaches the product and the booking IS tracked).
-  // For Chrome/Firefox the clean URL + hidden iframe approach works perfectly.
-  const ua        = (req.headers['user-agent'] || '').toString();
-  const isSafari  = /Safari/.test(ua) && !/Chrome/.test(ua) && !/Chromium/.test(ua);
-
-  // For Viator:
-  //   - Safari → keep pid in URL (tracks via URL, user may see "You selected" once)
-  //   - Others → strip pid + set cookie via hidden iframe (goes direct to product page)
-  // For GYG: inject utm_campaign so bookings are traceable per hotel.
-  const finalUrl   = isViator
-                   ? (isSafari ? buildViatorUrl(rawUrl, hotelId) : cleanViatorUrl(rawUrl))
+  // Always include affiliate params directly in the URL.
+  // The old iframe/cookie approach is unreliable due to modern browser
+  // third-party cookie blocking (Chrome, Safari, Firefox). Having the params
+  // in the URL is the only reliable way to ensure bookings are tracked.
+  // The user may see a Viator "You selected" intermediate page, but the
+  // booking and commission will always be correctly attributed.
+  const finalUrl   = isViator ? buildViatorUrl(rawUrl, hotelId)
                    : isGYG    ? buildGygUrl(rawUrl, hotelId)
                    : rawUrl;
   const mcid       = getMcid(hotelId);
   const safeFinal  = escapeHtml(finalUrl);
   const jsFinal    = escapeJs(finalUrl);
-  const safeCookie = escapeHtml(viatorCookieUrl(hotelId));
 
   // Await log BEFORE sending response — in serverless, fire-and-forget gets killed
   if (hotelId) await logClick(hotelId, expId, finalUrl, mcid);
 
-  // useCookieFlow: Chrome/Firefox Viator flow (iframe cookie + clean URL)
-  const useCookieFlow = isViator && !isSafari;
+  // Always use direct redirect (no iframe cookie flow)
+  const useCookieFlow = false;
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.setHeader('Cache-Control', 'no-store');
@@ -273,36 +271,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       <a href="${safeFinal}">Click here if not redirected</a>
     </p>
   </div>
-${useCookieFlow ? `
-  <!--
-    Chrome/Firefox: hidden iframe sets the Viator affiliate cookie,
-    then we redirect to the clean product URL (no pid = no "You selected" page).
-  -->
-  <iframe
-    id="affframe"
-    src="${safeCookie}"
-    style="position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none"
-    onload="onCookieReady()"
-  ></iframe>
   <script>
-    var done = false;
-    function go() {
-      if (done) return;
-      done = true;
-      window.location.replace("${jsFinal}");
-    }
-    function onCookieReady() {
-      setTimeout(go, 300);
-    }
-    // Fallback — if iframe never fires (e.g. ad-blocker), redirect after 2s
-    setTimeout(go, 2000);
-  </script>
-` : `
-  <script>
-    // Safari/iOS or non-Viator: direct JS redirect (no iframe needed)
+    // Direct JS redirect — affiliate params are in the URL for reliable tracking
     setTimeout(function(){ window.location.replace("${jsFinal}"); }, 400);
   </script>
-`}
 </body>
 </html>`);
 }
