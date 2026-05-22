@@ -153,8 +153,9 @@ function buildViatorUrl(raw: string, hotelId?: string): string {
   try {
     const u = new URL(raw);
     u.searchParams.set('pid', VIATOR_PID);
-    u.searchParams.set('mcid', getMcid(hotelId));
+    u.searchParams.set('mcid', VIATOR_MCID_DEFAULT); // always 42383 — the account-level mcid
     u.searchParams.set('medium', 'link');
+    if (hotelId) u.searchParams.set('campaign', hotelId); // per-hotel tracking
     return u.toString();
   } catch {
     return raw;
